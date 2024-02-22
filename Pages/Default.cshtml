@@ -1,0 +1,39 @@
+﻿@page
+@model CRM.Pages.DefaultModel
+@Html.AntiForgeryToken()
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+}
+
+
+
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_banner.cshtml")
+
+@*
+@Html.Partial("~/Pages/UserSite/_services.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_know.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_skin.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_infoBox.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_team.cshtml")*@
+
+
+@Html.Partial("~/Pages/UserSite/_products.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_video.cshtml")

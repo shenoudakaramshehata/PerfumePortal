@@ -1,0 +1,117 @@
+﻿@using CRM.Data
+@inject PerfumeContext _context
+@{
+    var AddCountries = _context.Country.Select(e => new { e.CountryId, e.CountryTlen });
+    var AddItem = _context.Item.Select(e => new { e.ItemId, e.ItemTitleEn });
+}
+
+@model CRM.Models.ItemPriceN
+
+<div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="AddModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@sharedResource["Add New Item Price"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-page-handler="AddItemPrice">
+                <div class="modal-body">
+                    <input type="hidden" id="id-field" />
+                    <div class="row g-3">
+                        <div class="col-lg-6">
+                            <div>
+                                <input hidden asp-for="@Model.Country" />
+                                <input hidden asp-for="@Model.Item" />
+
+
+                                <label for="@Model.ItemId"
+                                       class="form-label">@sharedResource["Item Name"]</label>
+                                <select data-val="true" data-val-required="@sharedResource["Please choose a Item"]" asp-for="@Model.ItemId" class="form-select required" aria-label="Default select example" required>
+                                    <option selected value="">@sharedResource["Select Item"]</option>
+
+                                    @{
+                                        if (@AddItem != null)
+                                        {
+                                            foreach (var item in @AddItem)
+
+                                            {
+
+                                                <option value="@item.ItemId">@item.ItemTitleEn</option>
+
+                                            }
+                                        }
+                                    }
+
+                                </select>
+                                <span asp-validation-for="@Model.ItemId" class="text-danger"> </span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.CountryId"
+                                       class="form-label">@sharedResource["Country Name"]</label>
+                                <select data-val="true" data-val-required="@sharedResource["Please choose a country"]" asp-for="@Model.CountryId" class="form-select required" aria-label="Default select example" required>
+                                    <option selected value="">@sharedResource["Choose a Country"]</option>
+
+                                    @{
+                                        if (@AddCountries != null)
+                                        {
+                                            foreach (var item in @AddCountries)
+
+                                            {
+
+                                                <option value="@item.CountryId">@item.CountryTlen</option>
+
+                                            }
+                                        }
+                                    }
+
+                                </select>
+
+                                <span asp-validation-for="@Model.CountryId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.Price" class="form-label">@sharedResource["Price"]</label>
+                                <input type="text" asp-for="@Model.Price" class="form-control" placeholder="@sharedResource["Enter Price"]" required />
+                                <span asp-validation-for="@Model.Price" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.ShippingPrice" class="form-label">@sharedResource["Shipping Price"]</label>
+                                <input type="text" asp-for="@Model.ShippingPrice" class="form-control" data-val="true" data-val-required="@sharedResource["Please enter shipping price"]" placeholder="@sharedResource["Enter Shipping Price"]" required />
+                                <span asp-validation-for="@Model.ShippingPrice" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.BeforePrice" class="form-label">@sharedResource["Before Price"]</label>
+                                <input type="number" min="0" asp-for="@Model.BeforePrice" class="form-control" placeholder="@sharedResource["Enter Before Price"]" required />
+                                <span asp-validation-for="@Model.BeforePrice" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">@sharedResource["Close"]</button>
+                        <button type="submit" class="btn btn-success" id="add-btn">@sharedResource["Add"]</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+

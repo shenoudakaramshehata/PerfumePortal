@@ -1,0 +1,73 @@
+﻿@page
+@model LoginModel
+@using Microsoft.AspNetCore.Localization;
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> sharedResource
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+}
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+
+<div class="page-title-wrap">
+    <div class="page-title-area title-img-one">
+       
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2>@sharedResource["Login"]</h2>
+                    <ul>
+                        <li>
+                            <a href="Default">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span>@sharedResource["Login"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="user-area ptb-100">
+    <div class="container">
+        <div class="user-item">
+            <div class="user-shape">
+                <img src="~/Jeel/images/contact-shape1.png" alt="Shape">
+                <img src="~/Jeel/images/contact-shape2.png" alt="Shape">
+            </div>
+            <h2>@sharedResource["Sign In"]</h2>
+             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form method="post">
+                <div class="form-group">
+                    <input type="email" asp-for="Input.Email" class="form-control" placeholder="@sharedResource["Enter Email"]">
+                </div>
+                <div class="form-group">
+                    <input type="Password" asp-for="Input.Password" class="form-control" placeholder="@sharedResource["Enter password"]">
+                </div>
+               @* <div class="form-group">
+                    <div class="form-check">
+                        <input asp-for="Input.RememberMe" class="form-check-input" type="checkbox"  id="defaultCheck7">
+                        <label class="form-check-label" for="defaultCheck7">
+                           @sharedResource["Accept"]  <a asp-page="Terms">@sharedResource["Terms and Condition"]</a>@sharedResource["and"]  <a href="privacy-policy.html">@sharedResource["Privacy Policy"]</a>
+                        </label>
+                    </div>
+                </div>*@
+                <button type="submit" class="btn common-btn two">@sharedResource["Sign In"]</button>
+              
+                <h4>@sharedResource["Didn't have any account?"] <a asp-page="Register">@sharedResource["Sign Up"]</a></h4>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

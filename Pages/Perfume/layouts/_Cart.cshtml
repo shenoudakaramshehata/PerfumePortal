@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext _db
+@using Microsoft.AspNetCore.Localization;
+
+@{
+    var currUser = await UserManager.GetUserAsync(User);
+}
+
+
+@if (@currUser != null){
+        <li class="onhover-div mobile-cart">
+        <div>
+            <img src="~/assets/Perfume_assets/images/icon/cart.png" class="img-fluid blur-up lazyload" alt=""> <i class="ti-shopping-cart"></i>
+        </div>
+        <span class="cart_qty_cls"></span>
+        <ul class="show-div shopping-cart shoppingCartIconContent">
+            <li class="insert"></li>
+            <li class="cart_view_buttons">
+                <div class="total">
+                    <h5>@sharedResource["Subtotal"] : <span class="totalAmount">$299.00</span></h5>
+                </div>
+            </li>
+            <li class="cart_view_buttons">
+                <div class="buttons"><a asp-page="/Perfume/Cart" class="view-cart">@sharedResource["View_Cart"]</a> <a asp-page="/Perfume/Checkout" class="checkout">@sharedResource["Checkout"]</a></div>
+            </li>
+        </ul>
+    </li>
+}

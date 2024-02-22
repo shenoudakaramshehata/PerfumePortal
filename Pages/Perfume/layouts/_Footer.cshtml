@@ -1,0 +1,155 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext _db
+@inject PerfumeContext _context
+@using Microsoft.AspNetCore.Localization;
+
+@{
+    string adminRoleId = _db.Roles.Where(e => e.Name == "Admin").FirstOrDefault().Id;
+    var UserAdminId = _db.UserRoles.Where(e => e.RoleId == adminRoleId).FirstOrDefault().UserId;
+    var user = UserManager.Users.Where(e => e.Id == UserAdminId).FirstOrDefault();
+    var currentuser = await UserManager.GetUserAsync(User);
+    var facebooksocialLink = _context.SocialMediaLinks.FirstOrDefault().Facebook;
+    var TwittersocialLink = _context.SocialMediaLinks.FirstOrDefault().Twitter;
+    var InstgramsocialLink = _context.SocialMediaLinks.FirstOrDefault().Instgram;
+    var LinkedInsocialLink = _context.SocialMediaLinks.FirstOrDefault().LinkedIn;
+    var Fax = _context.SocialMediaLinks.FirstOrDefault().Fax;
+    var Address = _context.SocialMediaLinks.FirstOrDefault().Address;
+}
+
+<footer class="footer-light">
+    <div class="light-layout">
+        <div class="container">
+            <section class="small-section border-section border-top-0">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="subscribe">
+                            <div>
+                                <h4>@sharedResource["Every_Updates"]</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                        <form asp-page="/index" asp-page-handler="OnSubscribe"
+
+                              class="form-inline subscribe-form auth-form needs-validation" method="post"
+                              id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" >
+
+                            <div class="form-group mx-sm-3">
+
+                                <input type="text" class="form-control" name="EMAIL" id="mce-EMAIL"
+                                       placeholder="@sharedResource["Your_Email"]" required>
+
+                            </div>
+
+                            <button type="submit" class="btn btn-solid" id="mc-submit">@sharedResource["Subscribe"]</button>
+
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <section class="section-b-space light-layout">
+        <div class="container">
+            <div class="row footer-theme partition-f">
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-title footer-mobile-title">
+                        <h4>about</h4>
+                    </div>
+                    <div class="footer-contant">
+                        <div class="footer-logo">
+                            <a asp-page="/Index">
+                                <img src="~/assets/Perfume_assets/images/icon/newlogo.png"
+                                     width="120" height="120" class="img-fluid blur-up lazyload" alt="">
+                            </a>
+                        </div>
+                        <p>
+                            @sharedResource["Welcome to Mashaer website"]
+                          
+                        </p>
+                        <div class="footer-social">
+                            <ul>
+                                   
+                                <li><a href="@facebooksocialLink"><i class="fa fa-facebook-f"></i></a></li>
+                                <li><a href="@LinkedInsocialLink"><i class="fa fa-google-plus"></i></a></li>
+                                <li><a href="@TwittersocialLink"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="@InstgramsocialLink"><i class="fa fa-instagram"></i></a></li>
+                                @*<li><a href="#"><i class="fa fa-rss" aria-hidden="true"></i></a></li>*@
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col offset-xl-1">
+                    <div class="sub-title">
+                        <div class="footer-title">
+                            <h4>@sharedResource["Explore"]</h4>
+                        </div>
+                        <div class="footer-contant">
+                            <ul>
+                                <li><a asp-page="/Perfume/About">@sharedResource["About Us"]</a></li>
+                                <li><a asp-page="/Perfume/Terms">@sharedResource["Terms and Condition"]</a></li>
+                                <li><a asp-page="/Perfume/Privacy">@sharedResource["Privacy"]</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="sub-title">
+                        <div class="footer-title">
+                            <h4>@sharedResource["For Contact"]</h4>
+                        </div>
+                        <div class="footer-contant">
+                            <ul class="contact-list">
+                                <li>
+                                    <i class="fa fa-map-marker"></i>@Address
+                                </li>
+                                <li><i class="fa fa-phone"></i>@sharedResource["CallUs"]: @user.PhoneNumber</li>
+                                <li><i class="fa fa-envelope"></i>@sharedResource["Email"] <a >@user.Email</a></li>
+                                <li><i class="fa fa-fax"></i>@sharedResource["Fax"]: @Fax</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="sub-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-6 col-md-6 col-sm-12">
+                    <div class="footer-end">
+                        <p>
+                            <i class="fa fa-copyright" aria-hidden="true"></i> @sharedResource["All Rights Reserved by MASHAER Site 2022"]
+                            
+                        </p>
+                    </div>
+                </div>
+               @* <div class="col-xl-6 col-md-6 col-sm-12">
+                    <div class="payment-card-bottom">
+                        <ul>
+                            <li>
+                                <a href="#"><img src="~/assets/Perfume_assets/images/icon/visa.png" alt=""></a>
+                            </li>
+                            <li>
+                                <a href="#"><img src="~/assets/Perfume_assets/images/icon/mastercard.png" alt=""></a>
+                            </li>
+                            <li>
+                                <a href="#"><img src="~/assets/Perfume_assets/images/icon/paypal.png" alt=""></a>
+                            </li>
+                            <li>
+                                <a href="#"><img src="~/assets/Perfume_assets/images/icon/american-express.png" alt=""></a>
+                            </li>
+                            <li>
+                                <a href="#"><img src="~/assets/Perfume_assets/images/icon/discover.png" alt=""></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+    </div>
+</footer>

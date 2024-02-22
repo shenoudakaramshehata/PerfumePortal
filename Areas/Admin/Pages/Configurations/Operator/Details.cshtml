@@ -1,0 +1,531 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.Operator.DetailsModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> sharedResource
+ @using Microsoft.AspNetCore.Localization
+@{
+    var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+    ViewBag.Title = @sharedResource["Order Details"];
+    ViewBag.pTitle = @sharedResource["Order Details"];
+    ViewBag.pageTitle = @sharedResource["Order Details"];
+    
+}
+
+
+<div class="row">
+    <div class="col-xl-9">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h5 class="card-title flex-grow-1 mb-0">@Model.OrderReceipt.OrderId</h5>
+                    <div class="flex-shrink-0">
+                        <a  href="/Admin/Configurations/ManageReport/MergeReport?id=@Model.OrderReceipt.OrderId" target="_blank" class="btn btn-success btn-sm"><i class="ri-download-2-fill align-middle me-1"></i>@sharedResource["Reports"]</a>
+
+                        @*<a href="/Admin/Configurations/ManageReport/OrderInvoice?id=@Model.OrderReceipt.OrderId" class="btn btn-success btn-sm"><i class="ri-download-2-fill align-middle me-1"></i>@sharedResource["Order Invoice"]</a>
+                        <a href="/Admin/Configurations/ManageReport/ShippingInvoice?id=@Model.OrderReceipt.OrderId" class="btn btn-success btn-sm"><i class="ri-download-2-fill align-middle me-1"></i>@sharedResource["Shipping Invoice"]</a>*@
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive table-card">
+                    <table class="table table-nowrap align-middle table-borderless mb-0">
+                        <thead class="table-light text-muted">
+                            <tr>
+                                <th scope="col">@sharedResource["Product Details"]</th>
+                                <th scope="col">@sharedResource["Item Price"]</th>
+                                <th scope="col">@sharedResource["Quantity"]</th>
+                                <th scope="col" class="text-end">@sharedResource["Total Amount"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var item in Model.OrderList)
+                                {
+                                    double TotalAmount = item.ItemQuantity * item.ItemPrice;
+
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
+                                                    <img src="~/@item.Item.ItemImage" alt="" class="img-fluid d-block">
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h5 class="fs-16"> @item.Item.ItemTitleEn</h5>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>@item.ItemPrice
+                                            @{
+                                                if (BrowserCulture == "en-US")
+                                                {
+                                                    <span>@Model.CurrencyEN</span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span>@Model.CurrencyNameAr</span>
+
+
+                                                }
+                                            }
+                                        
+                                        </td>
+                                        <td>@item.ItemQuantity</td>
+
+                                        <td class="fw-medium text-end">
+                                            @TotalAmount 
+
+                                             @{
+                                                                 if (BrowserCulture == "en-US")
+                                                                {
+                                                                     <span>@Model.CurrencyEN</span>
+
+                                                                }
+                                                                else
+                                                                {
+                                                        <span>@Model.CurrencyNameAr</span>
+                                       
+                                                                    
+                                                                }}
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            <tr class="border-top border-top-dashed">
+                                <td colspan="3"></td>
+                                <td colspan="2" class="fw-medium p-0">
+                                    <table class="table table-borderless mb-0">
+                                        <tbody>
+                                            <tr>
+                                                <td>@sharedResource["Sub Total :"]</td>
+                                                <td class="text-end">@Model.OrderReceipt.OrderTotal 
+                                                    @{
+                                                                if (BrowserCulture == "en-US")
+                                                                {
+                                                                     <span>@Model.CurrencyEN</span>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@Model.CurrencyNameAr</span>
+                                                                    
+                                                                }
+                                                            }
+                                                
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@sharedResource["Tax :"] (@Model.taxpercentage %)</td>
+                                                @{
+                                                    if (Model.tax == 0)
+                                                    {
+                                                         <td class="text-end">
+                                                    @Model.OrdernetByTax 
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        if(BrowserCulture == "en-US")
+                                                        {
+                                                            <td class="text-end">
+                                                                @Model.OrdernetByTax 
+
+                                                                <span>@Model.CurrencyEN</span>
+                                                                
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-end">
+                                                                @Model.OrdernetByTax
+
+                                                                <span>@Model.CurrencyNameAr</span>
+                                                               
+                                                            </td>
+                                                        }
+                                                    }
+                                                }
+                                               
+                                               
+                                              
+                                            </tr>
+                                            <tr>
+                                                <td>@sharedResource["Shipping Cost :"]</td>
+                                                <td class="text-end">@Model.DeliveryCost
+                                                @{
+                                                                if (BrowserCulture == "en-US")
+                                                                {
+                                                                     <span>@Model.CurrencyEN</span>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@Model.CurrencyNameAr</span>
+                                                                    
+                                                                }
+                                                            }
+                                                
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@sharedResource["Discount"] <span class="text-muted">@sharedResource["(Mashar)"]</span> :</td>
+                                                @{
+                                                    if (@Model.OrderReceipt.OrderDiscount == 0 && Model.OrderReceipt.DiscountAmount == 0)
+                                                    {
+                                                        <td class="text-end">@Model.OrderReceipt.OrderDiscount</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-end">
+                                                            @Model.DiscountAmount
+                                                            @{
+                                                                if (BrowserCulture == "en-US")
+                                                                {
+                                                                    <span>@Model.CurrencyEN</span>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@Model.CurrencyNameAr</span>
+
+                                                                }
+                                                                }
+                                                          </td>
+                                                    }
+                                                    
+                                                    
+                                                }
+                                              
+                                            </tr>
+
+
+                                            <tr class="border-top border-top-dashed">
+                                                <th scope="row">@sharedResource["Total :"]</th>
+                                                <th class="text-end">@Model.approximatedNumber
+                                   @{ if (BrowserCulture == "en-US")
+                                    {
+                                    <span>@Model.CurrencyEN</span>
+
+                                    }
+                                    else
+                                    {
+                                    <span>@Model.CurrencyNameAr</span>
+
+                                                        }
+                                                    }
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div><!--end card-->
+         
+           
+        <div class="card">
+            <div class="card-header">
+                <div class="d-sm-flex align-items-center">
+                    <h5 class="card-title flex-grow-1 mb-0">@sharedResource["Order Status"]</h5>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="profile-timeline">
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                        @{
+                            foreach (var item in Model.OrderTraking)
+                            {
+
+                                <div class="accordion-item border-0">
+                                    <div class="accordion-header" id="headingOne">
+                                        <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 avatar-xs">
+                                                    <div class="avatar-title bg-success rounded-circle">
+                                                        <i class="ri-shopping-bag-line"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="fs-15 mb-0 fw-semibold">@item.OrderStatus.Status - <span class="fw-normal">@item.ActionDate.ToShortDateString()</span></h6>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body ms-2 ps-5 pt-0">
+                                            <h6 class="mb-1">@item.OrderStatus.Status</h6>
+                                            <p class="text-muted">@item.ActionDate.ToShortDateString()</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                        }
+
+                    </div><!--end accordion-->
+                </div>
+            </div>
+        </div><!--end card-->
+        @{
+            if (@Model.OrderReceipt.OrderStatusId == 2)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="home-1" role="tabpanel">
+                                <h5 class="card-title mb-4">@sharedResource["Shipping Info"]</h5>
+
+                                <form method="post" class="mt-4" enctype="multipart/form-data">
+                                    <div class="row g-3">
+                                        <label class="form-label">@sharedResource["Shipping Label"]</label>
+
+                                        <div class="col-lg-12 custom-file">
+                                            <input type="file" name="file" accept=".png, .jpg, .jpeg, .docx, .doc, .pdf" class="custom-file-input" onchange="changephotoname()" id="Photo" required>
+                                            <label class="custom-file-label" for="File" id="photolabel"></label>
+                                        </div><!--end col-->
+                                        <div class="col-lg-12">
+                                            <label for="@Model.order.ShippingNo" class="form-label">@sharedResource["ShippingNo"]</label>
+                                            <input class="form-control bg-light border-light" required asp-for="@Model.order.ShippingNo" id="exampleFormControlTextarea" placeholder=@sharedResource["ShippingNo"] />
+                                        </div><!--end col-->
+                                        <div class="col-12 text-end">
+                                            <button type="submit" class="btn btn-success waves-effect me-4">@sharedResource["Proceed"]</button>
+                                            <a asp-page="./Orders" class="btn btn-primary">@sharedResource["Back"] </a>
+
+                                        </div>
+                                    </div><!--end row-->
+                                </form>
+                            </div><!--end tab-pane-->
+
+
+                        </div><!--end tab-content-->
+                    </div>
+                </div>
+
+                <!--end card-->
+            }
+            if (@Model.OrderReceipt.OrderStatusId == 6)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="home-1" role="tabpanel">
+                                <h5 class="card-title mb-4">@sharedResource["Shipping Info"]</h5>
+                                <div class="col-lg-6">
+
+                                    <embed class="w-50" src="~/@Model.OrderReceipt.ShippingLabel" />
+                                </div><!--end col-->
+                                <div class="col-lg-12">
+                                    <label class="form-label">@sharedResource["ShippingNo"]</label>
+
+                                    <h5 class="form-control bg-light border-light" asp-for="@Model.OrderReceipt.ShippingNo" id="exampleFormControlTextarea">@Model.OrderReceipt.ShippingNo</h5>
+                                </div><!--end col-->
+
+                            </div><!--end row-->
+                        </div><!--end tab-pane-->
+
+
+                    </div><!--end tab-content-->
+                </div>
+
+                <!--end card-->
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="home-1" role="tabpanel">
+                                <h5 class="card-title mb-4">@sharedResource["Edit Shipping Info"]</h5>
+
+                                <form asp-area="Admin" asp-page="/Configurations/Operator/Details" asp-page-handler="EditShippingInfo" asp-route-id="@Model.OrderReceipt.OrderId" class="mt-4" enctype="multipart/form-data">
+                                    <div class="row g-3">
+                                        <label class="form-label">@sharedResource["Shipping Label"]</label>
+
+                                        <div class="col-lg-12 custom-file">
+                                            <input type="file" name="Editfile" accept=".png, .jpg, .jpeg, .docx, .doc, .pdf" class="custom-file-input" onchange="changephotoname()" id="Photo">
+                                            <label class="custom-file-label" for="Editfile" id="photolabel"></label>
+                                        </div><!--end col-->
+                                        <div class="col-lg-12">
+                                            <label for="@Model.order.ShippingNo" class="form-label">@sharedResource["ShippingNo"]</label>
+                                            <input class="form-control bg-light border-light" asp-for="@Model.order.ShippingNo" id="exampleFormControlTextarea" placeholder=@sharedResource["ShippingNo"] />
+                                        </div><!--end col-->
+                                        <div class="col-12 text-end">
+                                            <button type="submit" class="btn btn-success waves-effect me-4">@sharedResource["Edit"]</button>
+                                            <a asp-page="./Orders" class="btn btn-primary">@sharedResource["Back"] </a>
+
+                                        </div>
+                                    </div><!--end row-->
+                                </form>
+                            </div><!--end tab-pane-->
+
+
+                        </div><!--end tab-content-->
+                    </div>
+                </div>
+
+                <!--end card-->
+            }
+        }
+    </div><!--end col-->
+    <div class="col-xl-3">
+        @{
+            if (@Model.OrderReceipt.OrderStatusId == 6)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex">
+                            <h5 class="card-title flex-grow-1 mb-0"><i class="mdi mdi-truck-fast-outline align-middle me-1 text-muted"></i>@sharedResource["Logistics Details"]</h5>
+                            <div class="flex-shrink-0">
+                                <a href="javascript:void(0);" class="badge badge-soft-primary fs-12">@sharedResource["Shipping Order"]</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <lord-icon src="https://cdn.lordicon.com/uetqnvvg.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:80px;height:80px"></lord-icon>
+                            <h5 class="fs-16 mt-2">@sharedResource["Shipping Info"]</h5>
+                            <p class="text-muted mb-0">@sharedResource["No:"]: @Model.OrderReceipt.ShippingNo</p>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--end card-->
+            }
+        }
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex">
+                    <h5 class="card-title flex-grow-1 mb-0">@sharedResource["Customer Details"]</h5>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0 vstack gap-3">
+                    <li>
+                        <div class="d-flex align-items-center">
+
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="fs-15 mb-1">@Model.Customer.CustomerName</h6>
+                                <p class="text-muted mb-0">@sharedResource["Customer"]</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li><i class="ri-mail-line me-2 align-middle text-muted fs-16"></i>@Model.Customer.Email</li>
+                    <li><i class="ri-phone-line me-2 align-middle text-muted fs-16"></i>@Model.Customer.Phone</li>
+                </ul>
+            </div>
+        </div><!--end card-->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="ri-map-pin-line align-middle me-1 text-muted"></i>@sharedResource["Billing Address"]</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled vstack gap-2 fs-14 mb-0">
+                    @{
+                        string Address = Model.customerAddress.CityName + " , " + Model.customerAddress.AreaName;
+                        string Street = Model.customerAddress.BuildingNo + " , " + Model.customerAddress.Address;
+
+                    }
+                    <li class="fw-semibold fs-15">@Model.Customer.CustomerName</li>
+                    <li>@Address</li>
+                    <li>@Street</li>
+
+                </ul>
+            </div>
+        </div><!--end card-->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="ri-map-pin-line align-middle me-1 text-muted"></i>@sharedResource["SHIPPING ADDRESS"] </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled vstack gap-2 fs-14 mb-0">
+                    @{
+                        string ShippingAddress = Model.customerAddress.CityName + " , " + Model.customerAddress.AreaName;
+                        string ShippingStreet = Model.customerAddress.BuildingNo + " , " + Model.customerAddress.Address;
+
+                    }
+                    <li class="fw-semibold fs-15">@Model.Customer.CustomerName</li>
+                    <li>@Address</li>
+                    <li>@Street</li>
+                </ul>
+            </div>
+        </div><!--end card-->
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex">
+                    <h5 class="card-title flex-grow-1 mb-0">@sharedResource["Payment Method"]</h5>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0 vstack gap-3">
+                    <li>
+                        <div class="d-flex align-items-center">
+
+                            <div class="flex-grow-1 ms-3">
+                                @{
+                                    if (BrowserCulture == "en-US")
+                                    {
+                                    
+                                        <h6 class="fs-15 mb-1">@Model.PaymentMethod</h6>
+                                    }
+                                    else
+                                    {
+                                        <h6 class="fs-15 mb-1">@Model.PaymentMethodAR</h6>
+                                    }
+                                }
+    
+                                    
+                                <p class="text-muted mb-0">@sharedResource["Payment Method"]</p>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div><!--end card-->
+        @{
+            if (Model.OrderReceipt.Notes != null)
+            {
+
+                 <div class="card">
+            <div class="card-header">
+                <div class="d-flex">
+                            <h5 class="card-title flex-grow-1 mb-0">@sharedResource["Notes"]</h5>
+
+                </div>
+            </div>
+            <div class="card-body">
+                        <div>
+                            <label for="@Model.OrderReceipt.Notes"
+                               class="form-label">@(sharedResource["Notes"])</label>
+                            <textarea asp-for="@Model.OrderReceipt.Notes" id="DescriptionTLARId"
+                              class="form-control" cols="2" disabled
+                              placeholder="@sharedResource["Enter Notes"]"></textarea>
+                            <span asp-validation-for="@Model.OrderReceipt.Notes" class="text-danger"></span>
+
+                        </div>
+            </div>
+        </div><!--end card-->
+               
+
+                <!--end card-->
+
+              
+            }
+        }
+    </div><!--end col-->
+</div><!--end row-->
+@section scripts{
+
+    <!-- App js -->
+    <script src="~/assets/js/app.js"></script>
+}

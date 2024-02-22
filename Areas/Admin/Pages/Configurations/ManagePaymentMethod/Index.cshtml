@@ -1,0 +1,50 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.ManagePaymentMethod.IndexModel
+@{
+	Layout = "_Layout";
+	
+}
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card" id="List">
+
+			<div class="card-body">
+				<div>
+					<div class="table-responsive table-card">
+						<table id="myTable" class="table  dt-responsive nowrap  align-middle" style="width:100%">
+							<thead class="table-light ">
+								<tr>
+									<th data-ordering="false">@sharedResource["Image"]</th>
+									<th  data-ordering="false">@sharedResource["Arabic Title"]</th>
+									<th  data-ordering="false">@sharedResource["English Title"]</th>
+									<th  data-ordering="false">@sharedResource["Edit"]</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var item in Model.paymentMehods)
+								{
+									string photoPath = "/" + item.PaymentMethodPic;
+
+									<tr >
+										<td class="w-25"> <img class="img-thumbnail rounded w-50" asp-append-version="true" src="@photoPath" alt="Payment Methods" /> </td>
+										
+										<td >@item.PaymentMethodAR </td>
+										<td >@item.PaymentMethodEN</td>
+										<td>  <a asp-route-id="@item.PaymentMethodId" asp-page="./edit" class="btn btn-success">@sharedResource["Edit"]</a></td>
+
+									</tr>
+								}
+							</tbody>
+						</table>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<!--end modal-->
+		</div>
+	</div>
+	<!--end col-->
+</div>

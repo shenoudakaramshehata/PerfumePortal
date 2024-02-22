@@ -1,0 +1,102 @@
+﻿
+@page
+@model CRM.Pages.RegisterModel
+@using Microsoft.AspNetCore.Localization;
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> sharedResource
+
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+}
+
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+<style>
+    .theme-dark h4 a {
+        color: #000 !important;
+    }
+</style>
+
+<div class="page-title-wrap">
+    <div class="page-title-area" style="background-color:#f5f5f5 !important;">
+      
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black">@sharedResource["Register"]</h2>
+                    <ul>
+                        <li>
+                            <a href="/index" class="text-black">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black" >@sharedResource["Register"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="user-area ptb-100">
+    <div class="container">
+        <div class="user-item" style="background-color:#f5f5f5 !important;">
+            <div class="user-shape">
+                <img src="~/Jeel/images/contact-shape1.png" alt="Shape">
+                <img src="~/Jeel/images/contact-shape2.png" alt="Shape">
+            </div>
+            <h2 class="text-dark">@sharedResource["Sign Up"]</h2>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form novalidate="true"  asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" asp-for="Input.FullName" placeholder="@sharedResource["Enter username"]">
+                <span  asp-validation-for="Input.FullName" class="text-danger" ></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                    
+                    <input type="email" asp-for="Input.Email" class="form-control"  placeholder="@sharedResource["Enter Email"]">
+
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+
+                    <input type="text" asp-for="Input.Phone" pattern="^\+\d{1,3}\s?\d{1,}-?\d{1,}$"
+                           title="Please enter a valid phone number with the country code. The format should be '+[country code] [phone number]'." class="form-control" placeholder="@sharedResource["Enter Phone Number"]">
+                    <span asp-validation-for="Input.Phone" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Input.Password" type="Password" class="form-control" placeholder="@sharedResource["Enter password"]">
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+               @* <div class="form-group">
+                    <input type="Password" asp-for="Input.ConfirmPassword" class="form-control" placeholder="@sharedResource["Confirm Password"]">
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+
+                    <div class="help-block with-errors"></div>
+                </div>*@
+                @* <div class="form-group">
+                    <div class="form-check">
+                        <input   class="form-check-input" type="checkbox"  id="defaultCheck7">
+                        <label class="form-check-label text-dark" for="defaultCheck7">
+                            @sharedResource["Accept"]  <a asp-page="Terms" class="text-dark">@sharedResource["Terms and Condition"]</a> @sharedResource["and"]  <a asp-page="Privacy" class="text-dark">@sharedResource["Privacy Policy"]</a>
+                        </label>
+                    </div>
+                </div>*@
+                <button type="submit" class="btn btn-close-white btn-light mb-2" style="border-radius: 0; width:100%;">@sharedResource["Sign Up"]</button>
+               
+                <h4 class ="text-dark">@sharedResource["Have any account?"] <a href="/login" class="text-dark">@sharedResource["Sign In"]</a></h4>
+            </form>
+        </div>
+    </div>
+</div>
+ <partial name="_ValidationScriptsPartial" />

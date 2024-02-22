@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "TableExport@5.2.0",
+      "destination": "wwwroot/TableExport/"
+    },
+    {
+      "library": "FileSaver.js@2.0.5",
+      "destination": "wwwroot/FileSaver.js/"
+    },
+    {
+      "library": "blob-polyfill@7.0.20220408",
+      "destination": "wwwroot/blob-polyfill/"
+    },
+    {
+      "library": "xls@1.0.0",
+      "destination": "wwwroot/xls/"
+    }
+  ]
+}

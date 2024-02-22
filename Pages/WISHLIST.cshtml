@@ -1,0 +1,178 @@
+﻿@page
+@model CRM.Pages.WISHLISTModel
+@Html.AntiForgeryToken()
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+    var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+}
+
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+<div class="page-title-wrap">
+    <div class="page-title-area" style="background-color:#f5f5f5 !important;">
+     
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black">@sharedResource["Wishlist"]</h2>
+                    <ul>
+                        <li>
+                            <a asp-page="Index" class="text-black">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black">@sharedResource["Wishlist"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="cart-area wishlist-area ptb-100">
+    <div class="container">
+        <div class="table-item">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">@sharedResource["Image"]</th>
+                        <th scope="col">@sharedResource["Product Name"]</th>
+                        <th scope="col">@sharedResource["Price"]</th>
+                        <th scope="col">@sharedResource["Add"]</th>
+                        <th scope="col">@sharedResource["Remove"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @{
+
+                        if (@Model.wishlistVms != null)
+                        {
+
+                            @foreach (var item in @Model.wishlistVms)
+                            {
+
+                                <tr>
+                                    <th scope="row">
+                                        <img src="~/@item.ItemImage" alt="Product">
+                                    </th>
+                                    @{
+                                        if (BrowserCulture == "en-US")
+                                        {
+                                            <td>@item.ItemTitleEn</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@item.ItemTitleAr</td>
+                                        }
+
+                                    }
+                                    @{
+                                        if (BrowserCulture == "en-US"){
+                                            <td><span>@item.Price @Model.CurrencyNameEN</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span>@item.Price @Model.CurrencyNameAr</span></td>
+                                        }
+                                    }
+                                    
+                                    @{
+                                        if (@item.OutOfStock == true || @item.Stock==0)
+                                        {
+                                            <td>
+                                                <h4 class="common-btn two">
+                                                    @sharedResource["Out Of Stock"]
+
+                                                </h4>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <a class="btn btn-close-white btn-light text-black fs-5 p-1" style="cursor:pointer; border-radius: 0;" onclick="AddToCart(@item.ItemId)">
+                                                    @sharedResource["Add To Cart"]
+                                                    <i class='bx bx-cart'></i>
+                                                </a>
+                                            </td>
+                                        }
+
+                                    }
+
+
+                                    <td>
+                                        <a onclick="RemoveFromFav(@item.FavouriteItemId)">
+                                            <i class='bx bx-x' style="cursor:pointer"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+
+                    }
+
+
+
+                </tbody>
+            </table>
+        </div>
+        <div class="preview-page">
+            <a asp-page="Index">
+                <i class='bx bx-chevron-left'></i>
+                @sharedResource["ContinueShopping"]
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function AddToCart(item) {
+        console.log(item);
+        $.ajax({
+            type: "GET",
+            url: "/WISHLIST?handler=AddItemToCart",
+            data: { "ItemId": item },
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+
+
+                //console.log(response);
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+
+    }
+    function RemoveFromFav(item) {
+        console.log(item);
+        console.log(item);
+        $.ajax({
+            type: "GET",
+            url: "/WISHLIST?handler=DeleteItemFromFav",
+            data: { "favouriteId": item },
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                if (response) {
+                    window.location.href = '/WISHLIST'
+                }
+                //console.log(response);
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+
+    }
+
+</script>

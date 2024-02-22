@@ -1,0 +1,727 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+   <style>
+
+        @@media (max-width: 991px) {
+                .card {
+                    width: 70%!important;
+                     height: fit-content!important;
+                }
+                .modal{
+                    /*padding: 8rem!important;*/
+                }
+                .modal-content{
+                        padding-right: 2rem;
+                    padding-left: unset;
+                }
+            }
+
+            /* Mobile View */
+            @@media (max-width: 767px) {
+                .card {
+                    width: 100%!important;
+                    height: fit-content!important;
+                }
+                .modal-content{
+            padding-right: 2rem !important;
+                    padding-left: 2rem!important;
+                    /*padding-left: unset!important;*/
+                }
+                /*.modal{
+                    padding: 8rem!important;
+                }*/
+                /*.modal-content{
+                        padding-right: 2rem;
+                    padding-left: 2rem;
+                }*/
+            }
+            
+    .card:before
+    {
+        content:initial !important;
+    }
+.card {
+   
+     border-radius: unset !important;
+     
+     padding: unset!important;
+    }
+</style>
+
+<!-- Button trigger modal -->
+<div class="modal fade" id="QuickViewPoup" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: max-content;">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                @*<h5 class="modal-title" id="exampleModalLabel">@sharedResource["Country Details"]</h5>*@
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close" id="close-modal"></button>
+            </div>
+            <div class="card " style="height: 34rem; width: 55rem;padding-top: 2rem!important;">
+                <div class="card-body" style="flex: 1 1 auto;padding: 0;" id="dynamicCodeContainer">
+                 @* <div class="product-details-area ptb-100">
+<div class="container">
+<div class="row align-items-center">
+<div class="col-lg-6">
+<div class="shop-item">
+<div class="top">
+<img src="assets/images/shop/shop1.jpg" alt="Shop">
+<ul>
+<li>
+<a href="cart.html" target="_blank">
+<i class="bx bx-cart"></i>
+</a>
+</li>
+<li>
+<a href="wishlist.html" target="_blank">
+<i class='bx bxs-heart'></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-lg-6">
+<div class="shop-details">
+<h2>Organic Cream Wash</h2>
+<ul class="reviews">
+<li>
+<h3>$150.00</h3>
+</li>
+<li>
+<i class="bx bxs-star checked"></i>
+</li>
+<li>
+<i class="bx bxs-star checked"></i>
+</li>
+<li>
+<i class="bx bxs-star"></i>
+</li>
+<li>
+<i class="bx bxs-star"></i>
+</li>
+<li>
+<i class="bx bxs-star"></i>
+</li>
+<li>
+<span>(2 Reviews)</span>
+</li>
+</ul>
+<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae nulla ad repellat laboriosam. Quos doloribus illo quibusdam placeat sequi incidunt praesentium porro laudantium</p>
+<ul class="tag">
+<li>SKU: <span>041</span></li>
+<li>Category: <span>Cosmetic</span></li>
+<li>Tag: <span>Cosmetic</span></li>
+</ul>
+<ul class="cart">
+<li>
+<ul class="number">
+<li>
+<span class="minus">-</span>
+<input type="text" value="1" />
+<span class="plus">+</span>
+</li>
+</ul>
+</li>
+<li>
+<a class="common-btn two" href="cart.html">
+Add To Cart
+<i class="fas fa-shopping-basket"></i>
+</a>
+</li>
+</ul>
+<a class="wishlist-btn" href="wishlist.html">
+<i class='bx bx-heart'></i>
+Add To Heart
+</a>
+</div>
+</div>
+</div>
+<div class="send-review-area">
+<ul class="nav nav-pills" id="pills-tab" role="tablist">
+<li class="nav-item" role="presentation">
+<a class="nav-link active common-btn two" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Description</a>
+</li>
+ <li class="nav-item" role="presentation">
+<a class="nav-link common-btn two" id="pills-profile-tab" data-bs-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Reviews</a>
+</li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+<div class="describe-item">
+<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p>
+<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful</p>
+<ul>
+<li>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed</li>
+<li>Nonumy eirmod tempor invidunt ut labore et dolore magna</li>
+<li>Aliquyam erat, sed diam voluptua. At vero eos et accusam et</li>
+<li>Duo dolores et ea rebum. Stet clita kasd gubergren, no sea </li>
+<li>Sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit</li>
+<li>Consetetur sadipscing elitr, sed diam nonumy eirmod tempor</li>
+<li>Invidunt ut labore et dolore magna aliquyam erat</li>
+</ul>
+</div>
+</div>
+<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+<ul class="review-item">
+<li>
+<img src="assets/images/shop/comment1.jpg" alt="Review">
+<h3>James Bond</h3>
+<span>12th April, 2020</span>
+<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus saepe consequatur quia eligendi, aut quaerat dolore soluta tenetur suscipit quo sed, alias iure. Expedita, omnis. Tempora iusto unde hic recusandae</p>
+<ul class="reviews">
+<li>
+<i class="bx bxs-star checked"></i>
+</li>
+<li>
+<i class="bx bxs-star checked"></i>
+</li>
+<li>
+<i class="bx bxs-star checked"></i>
+</li>
+<li>
+<i class="bx bxs-star checked"></i>
+</li>
+<li>
+<i class="bx bxs-star"></i>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="review-item">
+<li>
+<img src="assets/images/shop/comment2.jpg" alt="Review">
+<h3>Angela Hopper</h3>
+<span>13th April, 2020</span>
+<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus saepe consequatur quia eligendi, aut quaerat dolore soluta tenetur suscipit quo sed, alias iure. Expedita, omnis. Tempora iusto unde hic recusandae</p>
+<ul class="reviews">
+<li>
+<i class="bx bxs-star checked"></i>
+</li>
+<li>
+<i class="bx bxs-star checked"></i>
+</li>
+<li>
+<i class="bx bxs-star checked"></i>
+</li>
+<li>
+<i class="bx bxs-star checked"></i>
+</li>
+<li>
+<i class="bx bxs-star"></i>
+</li>
+</ul>
+</li>
+</ul>
+<div class="review-form">
+<h3>Leave A Review</h3>
+<form>
+<div class="row">
+<div class="col-lg-6">
+<div class="form-group">
+<input type="text" class="form-control" placeholder="Name">
+</div>
+</div>
+<div class="col-lg-6">
+<div class="form-group">
+<input type="email" class="form-control" placeholder="Email">
+</div>
+</div>
+<div class="col-lg-12">
+<div class="form-group">
+<textarea id="your-review" rows="8" class="form-control" placeholder="Your Review"></textarea>
+</div>
+</div>
+<div class="col-lg-12">
+<button type="submit" class="btn common-btn two">Post A Review</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+                    *@
+                    
+
+                </div>
+            </div><!--end card-->
+            <div class="modal-footer">
+                <div class="hstack gap-2 justify-content-end">
+                    <button type="button" class="btn btn-light"
+                            data-bs-dismiss="modal">
+                        @sharedResource["Close"]
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    //function QuickView(ItemId) {
+    //        console.log(ItemId)
+    //        console.log("Qucik View")
+    //        const dynamicCodeContainer = document.getElementById("dynamicCodeContainer");
+    //        var country = localStorage.getItem('Country')
+    //        var lang = localStorage.getItem("lang")
+    //       // Create the main container
+    //            const mainContainer = document.createElement("div");
+    //            mainContainer.classList.add("product-details-area", "ptb-100");
+
+    //            // Create the inner container
+    //            const container = document.createElement("div");
+    //            container.classList.add("container");
+    //            mainContainer.appendChild(container);
+
+    //            // Create the row
+    //            const row = document.createElement("div");
+    //            row.classList.add("row", "align-items-center", "justify-content-around");
+    //            container.appendChild(row);
+
+    //            // Create the first column
+    //            const col1 = document.createElement("div");
+    //            col1.classList.add("col-sm-6", "col-lg-4");
+    //            row.appendChild(col1);
+
+    //            // Create the shop item container
+    //            const shopItem = document.createElement("div");
+    //            shopItem.classList.add("shop-item");
+    //            col1.appendChild(shopItem);
+
+    //            // Create the top section
+    //            const topSection = document.createElement("div");
+    //            topSection.classList.add("top");
+    //            shopItem.appendChild(topSection);
+
+    //            // Check if the item is out of stock
+    //            if (response.items.OutOfStock) {
+    //                const outOfStockImage = document.createElement("img");
+    //                outOfStockImage.src = "~/images/out-of-stock.png";
+    //                outOfStockImage.setAttribute("asp-append-version", "true");
+    //                outOfStockImage.style.position = "absolute";
+    //                outOfStockImage.style.right = "0px";
+    //                outOfStockImage.style.bottom = "0px";
+    //                outOfStockImage.style.width = "100px";
+    //                outOfStockImage.style.height = "100px";
+    //                topSection.appendChild(outOfStockImage);
+    //            }
+
+    //            const productImage = document.createElement("img");
+    //            productImage.src = "/" + response.items.ItemImage;
+    //            productImage.alt = "Shop";
+    //            topSection.appendChild(productImage);
+
+    //            // Create the second column
+    //            const col2 = document.createElement("div");
+    //            col2.classList.add("col-lg-6");
+    //            row.appendChild(col2);
+
+    //            // Create the shop details container
+    //            const shopDetails = document.createElement("div");
+    //            shopDetails.classList.add("shop-details");
+    //            col2.appendChild(shopDetails);
+
+    //            // Create the heading
+    //            const heading = document.createElement("h2");
+    //            heading.innerHTML = lang == "en" ? response.items.ItemTitleEn : response.items.ItemTitleAr;
+    //            shopDetails.appendChild(heading);
+
+    //            // Create the reviews section
+    //            const reviewsList = document.createElement("ul");
+    //            reviewsList.classList.add("reviews");
+    //            shopDetails.appendChild(reviewsList);
+
+    //            const listItem = document.createElement("li");
+    //            reviewsList.appendChild(listItem);
+
+    //            const priceParagraph = document.createElement("p");
+    //            priceParagraph.id = "itemprice";
+    //            priceParagraph.value = response.itemPriceN;
+    //            listItem.appendChild(priceParagraph);
+
+    //            const priceValue = document.createElement("span");
+    //            priceValue.innerHTML = response.CurrencyNameEN;
+    //            priceParagraph.appendChild(priceValue);
+
+    //            // Create the navigation pills
+    //            const navPills = document.createElement("ul");
+    //            navPills.classList.add("nav", "nav-pills");
+    //            navPills.id = "pills-tab";
+    //            navPills.role = "tablist";
+    //            shopDetails.appendChild(navPills);
+
+    //            const navItem = document.createElement("li");
+    //            navItem.classList.add("nav-item");
+    //            navItem.role = "presentation";
+    //            navPills.appendChild(navItem);
+
+    //            const navItemHeading = document.createElement("h4");
+    //            navItemHeading.classList.add("active", "two");
+    //            navItemHeading.innerHTML = "@sharedResource["Description"]";
+    //            navItem.appendChild(navItemHeading);
+
+    //            // Create the product details
+    //            const detailsList = document.createElement("ul");
+    //            shopDetails.appendChild(detailsList);
+
+    //            const detailsListItem = document.createElement("li");
+    //            detailsListItem.innerHTML = lang == "en" ? response.items.ItemDescriptionEn : response.items.ItemDescriptionAr;
+    //            detailsList.appendChild(detailsListItem);
+
+    //            const weightListItem = document.createElement("li");
+    //            weightListItem.innerHTML = "@sharedResource["Product Weight"]: " + response.items.Weight;
+    //            detailsList.appendChild(weightListItem);
+
+    //            // Create the tag section
+    //            const tagList = document.createElement("ul");
+    //            tagList.classList.add("tag");
+    //            shopDetails.appendChild(tagList);
+
+    //            const tagListItem = document.createElement("li");
+    //            tagListItem.innerHTML = lang == "en" ? "@sharedResource["Category"] <span>" + response.items.CategoryTlen + "</span>" : "@sharedResource["Category"] <span>" + response.items.CategoryTlar + "</span>";
+    //            tagList.appendChild(tagListItem);
+
+    //            // Create the cart section
+    //            const cartList = document.createElement("ul");
+    //            cartList.classList.add("cart");
+    //            shopDetails.appendChild(cartList);
+
+    //            const cartListItem1 = document.createElement("li");
+    //            cartList.appendChild(cartListItem1);
+
+    //            const numberList = document.createElement("ul");
+    //            numberList.classList.add("number");
+    //            cartListItem1.appendChild(numberList);
+
+    //            const numberListItem = document.createElement("li");
+    //            numberList.appendChild(numberListItem);
+
+    //            const decreaseLink = document.createElement("a");
+    //            decreaseLink.onclick = DeacreaseQuickViewQuantity;
+    //            numberListItem.appendChild(decreaseLink);
+
+    //            const minusSpan = document.createElement("span");
+    //            minusSpan.classList.add("minus");
+    //            minusSpan.innerHTML = "-";
+    //            decreaseLink.appendChild(minusSpan);
+
+    //            const quantityInput = document.createElement("input");
+    //            quantityInput.type = "text";
+    //            quantityInput.id = "QuantityID";
+    //            quantityInput.classList.add("w-25");
+    //            quantityInput.value = "1";
+    //            quantityInput.min = "1";
+    //            numberListItem.appendChild(quantityInput);
+
+    //            const plusSpan = document.createElement("span");
+    //            plusSpan.classList.add("plus");
+    //            plusSpan.innerHTML = "+";
+    //            numberListItem.appendChild(plusSpan);
+
+    //            const cartListItem2 = document.createElement("li");
+    //            cartList.appendChild(cartListItem2);
+
+    //            if (response.items.OutOfStock) {
+    //                const disabledButton = document.createElement("button");
+    //                disabledButton.classList.add("btn", "btn-light", "common-btn", "fs-5");
+    //                disabledButton.style.backgroundColor = "#000";
+    //                disabledButton.style.color = "white";
+    //                disabledButton.disabled = true;
+    //                disabledButton.innerHTML = "@sharedResource["Out of Stock"]";
+    //                cartListItem2.appendChild(disabledButton);
+    //            } else {
+    //                const addButton = document.createElement("button");
+    //                addButton.type = "button";
+    //                addButton.onclick = function () {
+    //                    AddProductstocart(response.items.ItemId, response.itemPriceN);
+    //                };
+    //                addButton.classList.add("btn", "btn-close-white", "btn-light", "fs-5");
+    //                addButton.style.borderRadius = "0";
+    //                addButton.setAttribute("asp-route-id", response.items.ItemId);
+    //                addButton.innerHTML = "@sharedResource["Add To Cart"]";
+    //                cartListItem2.appendChild(addButton);
+    //            }
+
+    //            // Create the favorite button
+    //            const favoriteButton = document.createElement("button");
+    //            favoriteButton.type = "submit";
+    //            favoriteButton.classList.add("btn", "btn-light");
+    //            favoriteButton.setAttribute("asp-page-handler", "AddToFavorite");
+    //            favoriteButton.setAttribute("asp-route-id", response.items.ItemId);
+    //            favoriteButton.style.color = "#000";
+    //            favoriteButton.innerHTML = response.items.IsFavorite ? '<i class="bx bxs-heart" style="color: #000;"></i> @sharedResource["Remove from favorite"]' : '<i class="bx bx-heart"></i> @sharedResource["Add to favorite"]';
+    //            shopDetails.appendChild(favoriteButton);
+
+    //            // Append the main container to the dynamicCodeContainer
+    //            dynamicCodeContainer.appendChild(mainContainer);
+            
+          
+    //        $('#QuickViewPoup').modal('show');
+    //    }
+
+
+
+    function QuickView(ItemId) {
+            console.log(ItemId)
+            console.log("Qucik View")
+            const dynamicCodeContainer = document.getElementById("dynamicCodeContainer");
+            var country = localStorage.getItem('Country')
+            var lang = localStorage.getItem("lang")
+            $.ajax({
+                type: "GET",
+                url: "/Index?handler=QuickViewItems",
+                data: { "ItemId": ItemId, "country": country },
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response)
+                    dynamicCodeContainer.innerHTML = `
+       
+        <div class="product-details-area ">
+            <div class="container">
+                <div class="row align-items-center justify-content-around">
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="shop-item">
+                            <div class="top">
+                                           ${(response.items.OutOfStock || response.items.Stock === 0)
+                        ? `
+            <div style="position: relative;">
+                <img src="/images/out-of-stock.png" asp-append-version="true" style="position: absolute; right: 0; bottom: 0; width: 100px; height: 100px;" />
+                <img src="${'/' + response.items.ItemImage}" alt="Shop" />
+            </div>`
+                        : `<img src="${'/' + response.items.ItemImage}" alt="Shop" />`
+                    }
+                              
+                            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="shop-details">
+                            ${lang == "en"
+                                ? `<h2>${response.items.ItemTitleEn}</h2>`
+                                : `<h2>${response.items.ItemTitleAr}</h2>`
+                            }
+                            <ul class="reviews">
+                                <li>
+                                    ${
+                                      lang == "en"
+                            ? `<p id="itemprice" value="${response.itemPriceN}">${response.itemPriceN} <span>${response.CurrencyNameEN}</span></p>`
+                                        : `<p id="itemprice" value="${response.itemPriceN}">${response.itemPriceN} <span>${response.CurrencyNameAr}</span></p>`
+                                    }
+                                </li>
+                            </ul>
+                            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <h4 class="active two">@sharedResource["Description"]</h4>
+                                </li>
+                            </ul>
+                            <ul>
+                                ${
+                                  lang == "en"
+                                    ? `<li>${response.items.ItemDescriptionEn}</li>`
+                                    : `<li>${response.items.ItemDescriptionAr}</li>`
+                                }
+                                <li>
+                                    @sharedResource["Product Weight"]:
+                                            ${response.items.Weight}
+                                </li>
+                            </ul>
+                            <ul class="tag">
+                                ${
+                                  lang == "en"
+                                    ? `<li>@sharedResource["Category"] <span>${response.items.CategoryTlen}</span></li>`
+                            : `<li>@sharedResource["Category"] <span>${response.items.CategoryTlar}</span></li>`
+                                }
+                                    </ul> 
+                                    
+                                        <ul class="cart">
+                                            <li>
+                                                <ul class="number">
+                                                    <li>
+
+                                                                          <span  onclick="DeacreaseQuickViewQuantity()" class="minus">-</span>
+                                                          
+                                                                  <input class="ItemQuaCl" id="QuantityID" type="text"  value="1"  min="1">
+                                                   <span onclick="IncreaseQuickViewQuantity()" class="plus">+</span>
+                                                                
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                    ${(response.items.OutOfStock || response.items.Stock === 0)
+                        ? `<button class="btn btn-light common-btn fs-5" style="background-color: #000; color:white;" disabled>@sharedResource["Out Of Stock"]</button>`
+                            : `<button type="button" onclick="AddProductstocart(${response.items.ItemId},${response.itemPriceN})" class="btn btn-close-white btn-light fs-5" style="border-radius: 0;" asp-route-id="${response.items.ItemId}">@sharedResource["Add To Cart"]</button>`
+                        }
+                                            </li>
+                                        </ul>
+                                     
+                                ${
+                                  response.IsFavorite
+                                    ? `<button type="button" class="btn btn-light" onclick="AddFavourite(${response.items.ItemId})" style="color: #000;">
+                                            <i class="bx bxs-heart" style="color: #000;"></i>
+                                            @sharedResource["Remove from favorite"]
+                                        </button>`
+                                    : `<button class="btn btn-light" type="button" onclick="AddFavourite(${response.items.ItemId})" style="color: #000;">
+                                            <i class="bx bx-heart"></i>
+                                            @sharedResource["Add to favorite"]
+                                        </button>`
+                                }
+                           
+
+                                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`;
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+            
+          var quantityInput = document.getElementById('QuantityID');
+            console.log(quantityInput.value + "TOtalquantityInput")
+
+            $('#QuickViewPoup').modal('show');
+        }
+    function DeacreaseQuickViewQuantity() {
+        console.log("DeacreaseQuickViewQuantity")
+         var quantityInput = document.getElementById("QuantityID");
+    var currentQuantity = parseInt(quantityInput.value);
+    if (currentQuantity > 1) {
+        quantityInput.value = currentQuantity - 1;
+    }
+    console.log(quantityInput.value + "quantityInput")
+    }
+       function IncreaseQuickViewQuantity(){
+            var quantityInput = document.getElementById('QuantityID');
+        var currentValue = parseInt(quantityInput.value);
+
+        quantityInput.value = currentValue + 1;
+       }
+
+        function AddProductstocart(ItemId, priceCart) {
+        console.log(priceCart);
+        var QuantityID = document.getElementById("QuantityID").value;
+        var quatityidparse = parseInt(QuantityID)
+        console.log(QuantityID)
+        var itemPrice = document.getElementById("itemprice").value;
+        console.log(itemPrice)
+        var Country = localStorage.getItem('Country');
+        console.log(Country)
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=AddToCart",
+            data: { ItemId: ItemId, priceCart: priceCart, Country: Country },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+        })
+            .done(function (result) {
+                console.log(result);
+
+                var itemObject = {
+
+                    "ItemTitleEn": result.items.ItemTitleEn,
+                    "ItemTitleAr": result.items.ItemTitleAr,
+                    "ItemImage": result.items.ItemImage,
+                    "ItemId": result.items.ItemId,
+                    "priceCart": priceCart,
+                    "Qunatity": QuantityID,
+                    "DeliveryCost": result.CountryShoppingCost
+                };
+                console.log(itemObject)
+
+                var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+                console.log(cartItems)
+                var Found = false;
+                if (!cartItems) {
+                    cartItems = [];
+                    cartItems.push(itemObject);
+                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                    console.log(cartItems)
+                }
+                else {
+                    console.log(cartItems)
+                    if (result.items.OutOfStock == false) {
+                        console.log(cartItems)
+                        for (var i = 0; i < cartItems.length; i++) {
+                            if (cartItems[i].ItemId == ItemId) {
+                                var parsequantitylocal = parseInt(cartItems[i].Qunatity)
+                                cartItems[i].Qunatity = parsequantitylocal + quatityidparse;
+                                console.log(cartItems[i].Qunatity)
+                                Found = true;
+                            }
+                        }
+                        if (Found == false) {
+                            cartItems.push(itemObject);
+
+                        }
+                        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+                        console.log(JSON.parse(localStorage.getItem('cartItems')))
+                    }
+
+
+                }
+                ShoppingCartIcon();
+                StorageinSession()
+
+                //if (result) {
+
+                //    //var country = localStorage.getItem("countryId");
+                //    // getItems(categIdglobal, country);
+                //    //window.location.href = '/default'
+                //}
+                //else {
+                //    window.location.href = '/Login'
+                //}
+            });
+    }
+           function AddFavourite(ItemId){
+
+                $.ajax({
+            type: "POST",
+            url: "/Index?handler=AddToFavorite",
+            data: { ItemId: ItemId },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+        })
+            .done(function (result) {
+                console.log(result);
+                if(result==false){
+                    window.location.href = "login";
+                }
+                else{
+                    window.location.href = "Index";
+                }
+              
+            });
+           } 
+</script>

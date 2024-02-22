@@ -1,0 +1,76 @@
+﻿@{
+}
+
+@model CRM.Models.Coupon
+
+<div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="AddModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@(sharedResource["Add New Coupon"])</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-area="Admin" asp-page="/ManageCoupon/Index" asp-page-handler="AddCoupon">
+                <div class="modal-body">
+                    <input type="hidden" id="id-field" />
+                    <div class="row g-3">
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.Serial" class="form-label">@(sharedResource["Serial"])</label>
+                                <input data-val-required="@sharedResource["Enter the Serial number"]" type="text" asp-for="@Model.Serial" class="form-control" placeholder="@sharedResource["Enter Serial"]" required />
+                                <span asp-validation-for="@Model.Serial" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.ExpirationDate" class="form-label">@sharedResource["Expiration date"]</label>
+                                <input data-val-required="@sharedResource["Enter the Expiration Date"]" type="date" value="2022-01-31" asp-for="@Model.ExpirationDate" class="form-control" placeholder="@sharedResource["Enter Expiration date"]" required />
+                                <span asp-validation-for="@Model.ExpirationDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.IssueDate" class="form-label">@sharedResource["Issue date"]</label>
+                                <input data-val-required="@sharedResource["Enter the Issue date"]" type="date" value="2022-01-31" asp-for="@Model.IssueDate" class="form-control" placeholder="@sharedResource["Enter Issue date"]" required />
+                                <span asp-validation-for="@Model.IssueDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.Amount" class="form-label">@sharedResource["Amount"]</label>
+                                <input data-val-required="@sharedResource["Enter the Amount"]" min="1" type="number" asp-for="@Model.Amount" id="company_name-field" class="form-control" placeholder="@sharedResource["Enter Amount"]" required />
+                                <span asp-validation-for="@Model.Amount" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.CouponTypeId" class="form-label">@sharedResource["Coupon Type"]</label>
+                                <select data-val-required="@sharedResource["Select The Coupon Type"]" asp-for="@Model.CouponTypeId" asp-items="ViewBag.selectCouponTypeList" id="company_name-field" class="form-select" required>
+                                    <option value="" disabled selected>@(sharedResource["Choose Coupon Type"])</option>
+                                </select>
+                                <span asp-validation-for="@Model.CouponTypeId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-check">
+                                <input asp-for="@Model.Used" class="form-check-input" type="checkbox" id="default">
+                                <label for="@Model.Used" class="form-check-label">@sharedResource["Used"]</label>
+                                <span asp-validation-for="@Model.Used" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">@sharedResource["Close"]</button>
+                        <button type="submit" asp-page="Index" asp-page-handler="AddCoupon" class="btn btn-success" id="add-btn">@sharedResource["Add"]</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

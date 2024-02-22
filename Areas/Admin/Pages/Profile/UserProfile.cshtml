@@ -1,0 +1,164 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Profile.UserProfileModel
+@Html.AntiForgeryToken()
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+}
+@{
+    ViewBag.Title = "Profile";
+    Layout = "_Layout";
+}
+
+        
+                    <div class="profile-foreground position-relative mx-n4 mt-n4">
+                        <div class="profile-wid-bg">
+                            <img src="~/assets/images/profile-bg.jpg" alt="Profile Background" class="profile-wid-img" />
+                        </div>
+                    </div>
+                    <div class="pt-4 mb-4 mb-lg-3 pb-lg-4">
+                        <div class="row g-4">
+                            <div class="col-auto">
+                                 @{
+                    if (@Model.userProfileVM.Pic == null)
+                    {
+                         <div class="avatar-lg">
+               
+
+                                    <img src="~/assets/images/users/avatar-1.jpg" alt="Profile Image"
+                                         class="img-thumbnail rounded-circle" />
+                                </div>
+                    }
+                    else
+                    {
+                         <div class="avatar-lg">
+               
+
+                                    <img src="~/@Model.userProfileVM.Pic" alt="Profile Image"
+                                         class="img-thumbnail rounded-circle" />
+                                </div>
+                    }
+                }
+                               
+                            </div>
+                            <!--end col-->
+                            <div class="col">
+                                <div class="p-2">
+                                    <h3 class="text-white mb-1">@Model.userProfileVM.FullName</h3>
+                                    <p class="text-white-75">@sharedResource["Admin"]</p>
+                                
+                                </div>
+                            </div>
+                            
+
+                        </div>
+                        <!--end row-->
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div>
+                               <div class="d-flex">
+                                    
+                                    <div class="flex-shrink-0">
+                                        <a onclick="editButtonClick()" class="btn btn-success">
+                                            <i  class="ri-edit-box-line align-bottom"></i> @sharedResource["Edit Profile"]
+                                        </a>
+                                    </div>
+                                </div>
+                               
+                                <div class="tab-content pt-4 text-muted">
+                                    <div class="tab-pane active" id="overview-tab" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-xxl-12">
+                                               
+
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title mb-3">@sharedResource["Profile Details"]</h5>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-borderless mb-0">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th class="ps-0" scope="row">@sharedResource["Full Name :"]</th>
+                                                                        <td class="text-muted">@Model.userProfileVM.FullName</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th class="ps-0" scope="row">@sharedResource["Mobile :"]</th>
+                                                                        <td class="text-muted">@Model.userProfileVM.Mobile</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th class="ps-0" scope="row">@sharedResource["E-mail :"]</th>
+                                                                        <td class="text-muted">@Model.userProfileVM.Email</td>
+                                                                    </tr>
+                                                                   
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div><!-- end card body -->
+                                                </div><!-- end card -->
+                                            </div>
+                                            <!--end col-->
+                                           
+
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                        <!--end row-->
+                                    </div>
+                                    
+                                    
+                                   
+                                </div>
+                                <!--end tab-content-->
+                            </div>
+                        </div>
+              <partial name="_EditPopup" model="@Model.userProfileVM" view-data="ViewData" />
+
+@section scripts{
+    <!-- list.js min js -->
+       <script src="~/assets/libs/list.js/list.min.js"></script>
+    <script src="~/assets/libs/list.pagination.js/list.pagination.min.js"></script>
+    <!-- crm leads init -->
+    <script src="~/assets/js/pages/crm-leads.init.js"></script>
+}
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+   <script>
+       function editButtonClick() {
+        console.log("ok");
+        $.ajax({
+            type: "GET",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            }
+            ,
+            url: "/Admin/Profile/UserProfile?handler=SingleUserForEdit",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                 console.log(response);
+                if (response.UserPic == null)
+                {
+                    document.getElementsByClassName('userImgCla')[0].src = "/assets/images/users/avatar-1.jpg";
+                }else{
+                    console.log(typeof(response.UserPic));
+                    document.getElementsByClassName('userImgCla')[0].src = "/" + response.UserPic
+               
+                }
+                
+                document.getElementById("UserPicHiddenId").value = response.UserPic
+                document.getElementById("UserNameId").value = response.FullName
+                document.getElementById("UserMobileId").value = response.PhoneNumber
+                $('#showEditModal').modal('show');
+
+
+            },
+
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+   </script>

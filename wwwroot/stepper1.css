@@ -1,0 +1,137 @@
+
+@font-face {
+    font-family: Inter, sans-serif;
+    src: url("https://cdn.tabby.ai/static/fonts/Inter-Regular.woff");
+    font-weight: 400;
+}
+.tabby-promo__graph {
+    padding: 0 18px 10px;
+    display: flex;
+    flex-flow: row nowrap;
+    --active-ellipsis-color: #3eedbf;
+    --inactive-ellipsis-color: #d1ced4;
+    --dark-ellipsis-color: #54545c;
+
+    @media (max-width: 340px) {
+        padding: 0 10px 10px;
+    }
+
+    @media (max-width: 400px) {
+        padding: 0 5px 10px;
+    }
+
+    & .tabby-promo__graph__ellipse
+
+{
+    display: inline-block;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 100%;
+    border: 1px solid #acacb6;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+    box-sizing: border-box;
+    &.tabby-promo__graph__ellipse_big
+
+{
+    height: 40px;
+    min-width: 40px;
+}
+
+&.tabby-promo__graph__ellipse_active {
+    border: 1px solid var(--active-ellipsis-color);
+}
+
+&.tabby-promo__graph__ellipse_dark {
+    border: 1px solid var(--dark-ellipsis-color);
+}
+
+&::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    box-sizing: border-box;
+    top: 0;
+}
+
+& .tabby-promo__graph__ellipse-section-1 {
+    background: linear-gradient(90deg, #fff 50%, transparent 50%), linear-gradient(0deg, transparent 50%, var(--active-ellipsis-color) 50%);
+    height: 100%;
+}
+
+& .tabby-promo__graph__ellipse-section-1_dark {
+    background: linear-gradient(90deg, #fff 50%, transparent 50%), linear-gradient(0deg, transparent 50%, var(--dark-ellipsis-color) 50%);
+}
+
+& .tabby-promo__graph__ellipse-section-2 {
+    background: linear-gradient( 90deg, transparent 50%, var(--inactive-ellipsis-color) 50% );
+    height: 100%;
+}
+
+& .tabby-promo__graph__ellipse-section-2_dark {
+    background: linear-gradient( 90deg, transparent 50%, var(--dark-ellipsis-color) 50% );
+}
+
+& .tabby-promo__graph__ellipse-section-3 {
+    background: linear-gradient( 180deg, transparent 50%, var(--inactive-ellipsis-color) 50% ), linear-gradient( 90deg, transparent 50%, var(--inactive-ellipsis-color) 50% );
+    height: 100%;
+}
+
+& .tabby-promo__graph__ellipse-section-3_dark {
+    background: linear-gradient( 180deg, transparent 50%, var(--dark-ellipsis-color) 50% ), linear-gradient(90deg, transparent 50%, var(--dark-ellipsis-color) 50%);
+}
+
+& .tabby-promo__graph__ellipse-section-4 {
+    background: var(--inactive-ellipsis-color);
+    height: 100%;
+}
+
+& .tabby-promo__graph__ellipse-section-4_dark {
+    background: var(--dark-ellipsis-color);
+}
+
+}
+
+& .tabby-promo__graph__ellipse-divider {
+    height: 32px;
+    width: 43px;
+    position: relative;
+    &::after
+
+{
+    content: "";
+    position: absolute;
+    height: 1px;
+    top: 50%;
+    width: 100%;
+    background-color: #acacb6;
+}
+
+}
+
+& .tabby-promo__graph__ellipse-divider_active::after {
+    background-color: var(--active-ellipsis-color);
+}
+
+& .tabby-promo__graph__ellipse-divider_dark::after {
+    background-color: var(--dark-ellipsis-color);
+}
+
+& .tabby-promo__graph__ellipse-divider_big {
+    height: 40px;
+}
+}
+.styles__tabby-promo__graph--d0747 .styles__tabby-promo__graph__ellipse--4e44a::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    box-sizing: border-box;
+     top: 0; 
+}

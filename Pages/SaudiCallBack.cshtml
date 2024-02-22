@@ -1,0 +1,216 @@
+﻿@page
+@model CRM.Pages.SaudiCallBackModel
+
+@{
+    ViewData["Title"] = "Pay";
+       Layout = "~/Pages/UserSite/_FattorahLayout.cshtml";
+}
+
+<title> MASHAER Pay</title>
+<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
+<link rel="shortcut icon" href="/assets/Perfume_assets/images/icon/logo.png">
+<script src="https://kit.fontawesome.com/fb2a8bbabd.js" crossorigin="anonymous"></script>
+<style>
+    .get-area {
+        background-image: url("~/Jeel/images/banner/banner-shape6.png") !important;
+    }
+</style>
+
+<section class="get-area two col-8 m-auto">
+    <div class="container">
+        <div class="get-content" style="background-color: #F5F5F5 !important;">
+            <div class="get-shape">
+                <img src="~/Jeel/images/get-shape1.png" alt="Shape">
+                <img src="~/Jeel/images/get-shape2.png" alt="Shape">
+            </div>
+            <div class="section-title">
+                @{
+                    if (@Model.fattorahPaymentResult != null)
+                    {
+
+
+                        if (@Model.fattorahPaymentResult.InvoiceStatus == "Paid")
+                        {
+                            <div class="border border-5  border-dark mb-4" style="border-radius:200px; height:200px; width:200px; margin:0 auto;">
+                                <i id="" style="color: #000;" class="fa-9x fst-normal fw-bolder text-success">✓</i>
+                            </div>
+                            <h1 style="color: #000;">@sharedResource["Operation Successed"]</h1>
+                            //<h1 style="color: #ffffff;">عملية الدفع تمت بنجاح</h1>
+
+                            //<p>@sharedResource["Thank you for Your Subscribtion"]</p>
+                        }
+                        else
+                        {
+                            <div class="border border-5 border-dark mb-4" style="border-radius:200px; height:200px; width:200px; margin:0 auto;text-align:center">
+                                <i class="fas fa-times fa-9x m-4" style="color: red;"></i>
+                            </div>
+                            <h1 class="text-dark">@sharedResource["Operation Failed"]</h1>
+                            <p class="text-dark">
+                                <span class="text-dark">@sharedResource["Oops! Something went wrong ;"]</span>
+                            </p>
+                            //<h1>لقد فشلت عملية الدفع</h1>
+                            //<p>
+                            //    هناك خطأ ما حدث
+                            //    <br />
+                            //    أثناء محاولة سحب الأموال من حسابك
+                            //</p>
+                        }
+                    }
+
+                }
+            </div>
+            <a class="common-btn two text-dark" href="/">@sharedResource["Back to Home Page"]</a>
+        </div>
+    </div>
+</section>
+
+
+@*
+    <div class="card">
+        @{
+            if(@Model.fattorahPaymentResult!=null){
+
+
+            if(@Model.fattorahPaymentResult.InvoiceStatus == "Paid")
+            {
+              <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+            <i id="" style="color: #9ABC66;" class="checkmark m">✓</i>
+            </div>
+            //<h1 style="color: #88B04B;">@sharedResource["Operation Successed"]</h1>
+            <h1 style="color: #88B04B;">عملية الدفع تمت بنجاح</h1>
+
+                //<p>@sharedResource["Thank you for Your Subscribtion"]</p>
+            }
+            else
+           {
+                <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;text-align:center">
+                <i class="fas fa-times m" style="color: red;"></i>
+                </div>
+        //<h1>@sharedResource["Operation Failed"]</h1>
+        //   <p>
+        //    @sharedResource["Oops! Something went wrong ;"]
+        //    <br />
+        //    @sharedResource["While trying to reserve money from your account!"]
+        //</p>
+             <h1>لقد فشلت عملية الدفع</h1>
+           <p>
+            هناك خطأ ما حدث
+            <br />
+            أثناء محاولة سحب الأموال من حسابك
+        </p>
+         }
+            }
+
+        }
+
+    </div>*@
+
+
+@*<title> MASHAER Pay</title>
+<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
+<link rel="shortcut icon" href="/assets/Perfume_assets/images/icon/logo.png">
+<script src="https://kit.fontawesome.com/fb2a8bbabd.js" crossorigin="anonymous"></script>
+<style>
+    .get-area {
+        background-image: url("~/Jeel/images/banner/banner-shape6.png") !important;
+    }
+</style>
+
+<section class="get-area two col-8 m-auto">
+    <div class="container">
+        <div class="get-content" style="background-color: #F5F5F5 !important;">
+            <div class="get-shape">
+                <img src="~/Jeel/images/get-shape1.png" alt="Shape">
+                <img src="~/Jeel/images/get-shape2.png" alt="Shape">
+            </div>
+            <div class="section-title">
+                @{
+                    if (@Model.PaymentStatus != null)
+                    {
+
+
+                        if (@Model.PaymentStatus == "CAPTURED")
+                        {
+                            <div class="border border-5  border-dark mb-4" style="border-radius:200px; height:200px; width:200px; margin:0 auto;">
+                                <i id="" style="color: #000;" class="fa-9x fst-normal fw-bolder text-success">✓</i>
+                            </div>
+                            <h1 style="color: #000;">@sharedResource["Operation Successed"]</h1>
+                            //<h1 style="color: #ffffff;">عملية الدفع تمت بنجاح</h1>
+
+                            //<p>@sharedResource["Thank you for Your Subscribtion"]</p>
+                        }
+                        else
+                        {
+                            <div class="border border-5 border-dark mb-4" style="border-radius:200px; height:200px; width:200px; margin:0 auto;text-align:center">
+                                <i class="fas fa-times fa-9x m-4" style="color: red;"></i>
+                            </div>
+                            <h1 class="text-dark">@sharedResource["Operation Failed"]</h1>
+                            <p class="text-dark">
+                                <span class="text-dark">@sharedResource["Oops! Something went wrong ;"]</span>
+                            </p>
+                            //<h1>لقد فشلت عملية الدفع</h1>
+                            //<p>
+                            //    هناك خطأ ما حدث
+                            //    <br />
+                            //    أثناء محاولة سحب الأموال من حسابك
+                            //</p>
+                        }
+                    }
+
+                }
+            </div>
+            <a class="common-btn two text-dark" href="/">@sharedResource["Back to Home Page"]</a>
+        </div>
+    </div>
+</section>*@
+
+
+@*
+    <div class="card">
+        @{
+            if(@Model.fattorahPaymentResult!=null){
+
+
+            if(@Model.fattorahPaymentResult.InvoiceStatus == "Paid")
+            {
+              <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+            <i id="" style="color: #9ABC66;" class="checkmark m">✓</i>
+            </div>
+            //<h1 style="color: #88B04B;">@sharedResource["Operation Successed"]</h1>
+            <h1 style="color: #88B04B;">عملية الدفع تمت بنجاح</h1>
+
+                //<p>@sharedResource["Thank you for Your Subscribtion"]</p>
+            }
+            else
+           {
+                <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;text-align:center">
+                <i class="fas fa-times m" style="color: red;"></i>
+                </div>
+        //<h1>@sharedResource["Operation Failed"]</h1>
+        //   <p>
+        //    @sharedResource["Oops! Something went wrong ;"]
+        //    <br />
+        //    @sharedResource["While trying to reserve money from your account!"]
+        //</p>
+             <h1>لقد فشلت عملية الدفع</h1>
+           <p>
+            هناك خطأ ما حدث
+            <br />
+            أثناء محاولة سحب الأموال من حسابك
+        </p>
+         }
+            }
+
+        }
+
+    </div>*@
+
+<script>
+    function RemoveFromShoppingCart() {
+        var cartItemsData = localStorage.getItem("cartItems");
+
+        localStorage.removeItem('cartItems');
+
+    }
+    window.onload = RemoveFromShoppingCart
+</script>

@@ -1,0 +1,110 @@
+﻿@page
+@model CRM.Pages.ProductDetailsModel
+@{
+    Layout = "_Layout2";
+}
+<div id="product_details">
+    <!-- section start -->
+    <section>
+        <div class="collection-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="product-slick">
+                        </div>
+                        <div class="row">
+                            <div class="col-12 p-0">
+                                <div class="slider-nav">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 rtl-text">
+                        <div class="product-right">
+                            <h2 id="title_product_detail_view"></h2>
+                            <h3 class="itme_price"></h3>
+                            <p class="description_product_detail_view mb-2 fs-6"></p>
+                            <div class="product-buttons d-flex">
+                                <button class="btn btn-solid addToCart_preview" id="cartEffect">@sharedResource["Add_To_Cart"]</button>
+                                <div class="qty-box ms-2">
+                                    <div class="input-group">
+                                        <span class="input-group-prepend">
+                                            <button type="button"
+                                                    class="btn quantity-left-minus" data-type="minus" data-field="">
+                                                <i class="ti-angle-left"></i>
+                                            </button>
+                                        </span>
+                                        <input type="text" name="quantity" class="form-control input-number"
+                                               value="1"> <span class="input-group-prepend">
+                                            <button type="button"
+                                                    class="btn quantity-right-plus" data-type="plus" data-field="">
+                                                <i class="ti-angle-right"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                               @* <a href="javascript:void(0)" id="cartEffect"
+                                   class="btn btn-solid hover-solid btn-animation">
+                                    <i class="fa fa-shopping-cart me-1"
+                                       aria-hidden="true"></i> @sharedResource["Add_To_Cart"]
+                                </a>*@ 
+                                @*<a href="#" class="btn btn-solid">
+                                    <i class="fa fa-bookmark fz-16 me-2" aria-hidden="true"></i>@sharedResource["Wishlist"]
+                                </a>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Section ends -->
+    <!-- product-tab starts -->
+    <section class="tab-product mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-lg-12">
+                    <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="top-home-tab" data-bs-toggle="tab"
+                               href="#top-home" role="tab" aria-selected="true">
+                                <i class="icofont icofont-ui-home"></i>@sharedResource["Perfume_Details"]
+                            </a>
+                            <div class="material-border"></div>
+                        </li>
+                    </ul>
+                    <div class="tab-content nav-material" id="top-tabContent">
+                        <div class="tab-pane fade show active" id="top-home" role="tabpanel"
+                             aria-labelledby="top-home-tab">
+                            <div class="product-tab-discription">
+                                <div class="part">
+                                    <p class="description_product_detail_view"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- product-tab ends -->
+@*    <!-- product section start -->
+    <section class="section-b-space ratio_asos">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 product-related">
+                    <h2>@sharedResource["Related_Products"]</h2>
+                </div>
+            </div>
+            <div class="row search-product">
+                <div class="col-xl-2 col-md-4 col-6">
+                    @Html.Partial("./layouts/_Product")
+                </div>
+                <div class="col-xl-2 col-md-4 col-6">
+                    @Html.Partial("./layouts/_Product")
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- product section end -->*@
+</div>

@@ -1,0 +1,2 @@
+{"status":"error","errorType":"bad_data","error":"could not capture: could not capture more than not captured yet: 1.88"}
+

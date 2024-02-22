@@ -1,0 +1,78 @@
+﻿@{
+}
+@model List<CRM.ViewModels.OrderFiltterModel>
+<table class="table table-nowrap align-middle" id="orderTable">
+    <thead class="text-muted table-light">
+        <tr class="text-uppercase">
+            
+
+            <th class="sort" data-sort="id">@sharedResource["Order Id"]</th>
+            <th class="sort" data-sort="customer_name">@sharedResource["Customer"]</th>
+            @*                                    <th class="sort" data-sort="email">@sharedResource["Country"]</th>
+            *@
+            <th class="sort" data-sort="payment">@sharedResource["Email"]</th>
+
+            <th class="sort" data-sort="phone">@sharedResource["Phone"]</th>
+            <th class="sort" data-sort="product_name">@sharedResource["Address"]</th>
+            <th class="sort" data-sort="date">@sharedResource["Order Date"]</th>
+            <th class="sort" data-sort="amount">@sharedResource["Total"]</th>
+            <th class="sort" data-sort="status">@sharedResource["Status"]</th>
+            <th class="sort" data-sort="city">@sharedResource["Actions"]</th>
+        </tr>
+    </thead>
+    <tbody class="list form-check-all">
+        @{
+
+            foreach (var item in @Model)
+
+            {
+                <tr>
+
+                    <td class="id">
+                        <a href="/Admin/Configurations/Operator/Details?id=@item.OrderId"
+                       class="fw-medium link-primary">@item.OrderId</a>
+                    </td>
+                    <td class="customer_name">@item.CusName</td>
+                    <td class="payment">@item.Email</td>
+
+                    <td class="phone">@item.Phone</td>
+                    <td class="product_name">@item.CusAddress</td>
+                    <td class="email">
+                        @item.OrderDate.ToShortDateString()
+                    </td>
+                    <td class="amount">@item.NetOrder</td>
+                    <td class="status">
+                        <span class="badge badge-soft-warning text-uppercase">@item.Status</span>
+                    </td>
+                    <td>
+                        <ul class="list-inline hstack gap-2 mb-0">
+                            <li class="list-inline-item" data-bs-toggle="tooltip"
+                            data-bs-trigger="hover" data-bs-placement="top"
+                            title="View">
+                                <a href="/Admin/Configurations/Operator/Details?id=@item.OrderId"
+                               class="text-primary d-inline-block">
+                                    <i class="ri-eye-fill fs-16"></i>
+                                </a>
+                            </li>
+
+
+
+                            <li class="list-inline-item" data-bs-toggle="tooltip"
+                            data-bs-trigger="hover" data-bs-placement="top"
+                            title="Edit">
+                                <a href="/Admin/Configurations/Operator/EditOrder?id=@item.OrderId"
+                               class="text-primary d-inline-block">
+                                    <i class="ri-pencil-fill fs-16"></i>
+                                </a>
+                            </li>
+
+                           
+
+                        </ul>
+                    </td>
+                </tr>
+
+            }
+        }
+    </tbody>
+</table>

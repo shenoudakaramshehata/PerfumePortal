@@ -1,0 +1,112 @@
+﻿@using CRM.Data
+@using Microsoft.AspNetCore.Localization;
+@inject PerfumeContext _context
+@{
+    var locale = Context.Features.Get<IRequestCultureFeature>();
+
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+    var Items = _context.Item.Select(e => new { e.ItemId, e.ItemTitleAr, e.ItemTitleEn });
+}
+@model CRM.Models.OrderItem
+
+<div class="modal fade" id="showEditItemModal" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@(sharedResource["Edit"])</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-area="Admin" asp-page="/Configurations/ManageCreateOrder/AddOrderItems" asp-page-handler="EditItem" asp-route-Id="@Model.OrderId" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" id="id-field" />
+                    <div class="row g-3">
+
+
+                        <!--end col-->
+                        <div class="col-lg-12 hidden">
+                            <div>
+                                <input id="ItemOrderId" asp-for="@Model.ItemId" hidden />
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12 hidden">
+                            <div>
+                                <input id="OrderItemsId" asp-for="@Model.OrderId" hidden />
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <label asp-for="@Model.ItemId" for="car-rental-name">@sharedResource["Items"] <small class="text-danger">*</small></label>
+
+                            <select data-val="true" data-val-required="@sharedResource["Select Item"]" id="editItemOrderId" name="item" class="form-select required" aria-label="Default select example" required>
+                                <option selected value="Select Type" disabled>@sharedResource["Choose Item"]</option>
+
+                                @{
+                                    if (Items != null)
+                                    {
+                                        foreach (var item in Items)
+                                        {
+                                            
+                                                if (@BrowserCulture == "en-US")
+                                                {
+                                                    <option value="@item.ItemId">@item.ItemTitleEn</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.ItemId">@item.ItemTitleAr</option>
+
+                                                }
+                                            
+                                        }
+                                    }
+                                }
+
+                            </select>
+                            <span asp-validation-for="@Model.ItemId" class="text-alert"></span>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.ItemQuantity" class="form-label">@sharedResource["Quantity"]</label>
+                                <input type="number" asp-for="@Model.ItemQuantity" id="ItemQuantityItemId"
+                                       data-val="true" min="1"
+                                       data-val-required="@sharedResource["Enter Quantity"]"
+                                       class="form-control"
+                                       placeholder="@sharedResource["Enter Quantity"]" />
+                                <span asp-validation-for="@Model.ItemQuantity" class="text-danger"></span>
+                            </div>
+                        </div>
+                       
+                       
+                        <!--End Customer-->
+                        <!--Order-->
+
+
+                        
+                        <!--end col-->
+                        <!--end col-->
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light"
+                                data-bs-dismiss="modal">
+                            @sharedResource["Close"]
+                        </button>
+                        <button type="submit" class="btn btn-success"
+                                id="add-btn">
+                            @sharedResource["Save"]
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

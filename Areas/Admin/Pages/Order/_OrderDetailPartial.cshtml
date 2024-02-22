@@ -1,0 +1,27 @@
+﻿@using CRM.Data
+@using Microsoft.AspNetCore.Localization;
+@inject PerfumeContext _context
+@{
+    var locale = Context.Features.Get<IRequestCultureFeature>();
+
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+}
+@model CRM.Models.Order
+
+<input type="hidden" id="id-field" />
+<h1>@Model.OrderId</h1>
+<!--end row-->
+                
+<div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light"
+                data-bs-dismiss="modal">
+            @sharedResource["Close"]
+        </button>
+        <button type="submit" class="btn btn-success"
+                id="add-btn">
+            @sharedResource["Save"]
+        </button>
+
+    </div>
+</div>

@@ -1,0 +1,41 @@
+﻿<div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@sharedResource["EditAddress"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form_edit_address">
+                    <div class="form-group mb-3 col-md-12 col-sm-12 col-xs-12">
+                        <div class="field-label">@sharedResource["Country"]</div>
+                        <select class="form-control mb-3" id="country_address_edit" required></select>
+                    </div>
+                    <div class="form-group mt-3 col-md-12 col-sm-12 col-xs-12">
+                        <div class="field-label">@sharedResource["City"]</div>
+                        <input type="text" class="form-control" id="CityName_edit" value="" placeholder="@sharedResource["City"]" required>
+                    </div>
+                    <div class="form-group mt-3 col-md-12 col-sm-12 col-xs-12">
+                        <div class="field-label">@sharedResource["Address"]</div>
+                        <input type="text" class="form-control" id="Address_edit" value="" placeholder="@sharedResource["Address"]" required>
+                    </div>
+                    <div class="form-group mt-3 col-md-12 col-sm-12 col-xs-12">
+                        <div class="field-label">@sharedResource["Area"]</div>
+                        <input type="text" class="form-control" id="AreaName_edit" value="" placeholder="@sharedResource["Area"]" required>
+                    </div>
+                    <div class="form-group mt-3 col-md-12 col-sm-12 col-xs-12">
+                        <div class="field-label">@sharedResource["BuildingNo"]</div>
+                        <input type="text" class="form-control" id="BuildingNo_edit" value="" placeholder="@sharedResource["BuildingNo"]" required>
+                    </div>
+                    <div class="form-group mt-3 col-md-12 col-sm-12 col-xs-12">
+                        <div class="field-label">@sharedResource["Mobile"]</div>
+                        <input type="text" class="form-control" id="Mobile_edit" value="" placeholder="@sharedResource["Mobile"]" required>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@sharedResource["Back"]</button>
+                    <button type="submit" class="btn btn-primary btn-submit-edit-address">@sharedResource["Submit"]</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

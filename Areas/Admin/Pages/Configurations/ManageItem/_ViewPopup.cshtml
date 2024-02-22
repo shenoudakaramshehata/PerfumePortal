@@ -1,0 +1,81 @@
+﻿@using CRM.Data
+@inject PerfumeContext _context
+@model CRM.Models.Item
+@using Microsoft.EntityFrameworkCore
+
+@{
+    var itemprice = _context.itemPriceNs.Include(e => e.Country).Where(e => e.ItemId == Model.ItemId).ToList();
+}
+<div class="modal fade" id="QuickViewPoup" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@(sharedResource["View Item"])</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <div class="position-relative d-inline-block">
+
+                                <div class="avatar-lg p-1">
+                                    <div class="avatar-title bg-light rounded-circle">
+                                        <img src="~/assets/images/users/multi-user.jpg" id="ViewPicId" class="avatar-md rounded-circle object-cover" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="table-card  text-center">
+                        <table class="table mb-3">
+                            <tbody>
+
+                                <tr>
+                                    <td class="fw-medium w-50">@sharedResource["TlAr"]</td>
+                                    <td id="ViewTLARId"></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">@sharedResource["TlEn"]</td>
+                                    <td id="ViewTLENId"></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">@sharedResource["Active"]</td>
+                                    <td id="ViewIsActiveId"></td>
+                                </tr>
+
+                            </tbody>
+                        </table><!--end table-->
+
+                        <table class="table ">
+                            <thead>
+                                <tr>
+                                    <td class="fw-bold w-50 ">@sharedResource["Country Name"]</td>
+                                    <td class="fw-bold w-50">@sharedResource["Price"]</td>
+                                </tr>
+                            </thead>
+                            <tbody id="viewItemDetails">
+                               
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div><!--end card-->
+            <div class="modal-footer">
+                <div class="hstack gap-2 justify-content-end">
+                    <button type="button" class="btn btn-light"
+                            data-bs-dismiss="modal">
+                        @sharedResource["Close"]
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

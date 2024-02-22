@@ -1,0 +1,98 @@
+﻿@using CRM.Data
+@inject PerfumeContext _context
+@{
+    var coutries = _context.Country.Select(e => new { e.CountryId, e.CountryTlen, e.CountryTlar, e.IsActive }).Where(e => e.IsActive == true);
+}
+@model CRM.Models.ShippingMatrix
+
+<div class="modal fade" id="showEditModal" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@sharedResource["Edit Shipping Matrix"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-area="Admin" asp-page="/Configurations/ManageShippingMatrix/Index" asp-page-handler="EditShippingMatrix" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" id="idfield" asp-for="@Model.ShippingMatrixId" />
+                    <div class="row g-3">
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.CountryId" class="form-label">@sharedResource["Country"]</label>
+                                <select data-val-required="@sharedResource["Select The Country"]" asp-for="@Model.CountryId" asp-items="ViewBag.countriesList" id="CountryId" class="form-select" required>
+                                    <option value="" disabled selected>@(sharedResource["Choose Country"])</option>
+                                    @{
+                                        foreach (var country in coutries)
+                                        {
+                                            <option value="@country.CountryId">@country.CountryTlar</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="@Model.CountryId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-lg-6">
+                                <div>
+                                    <label for="@Model.ActualPrice" class="form-label">@sharedResource["Actual Price"]</label>
+                                    <input data-val="true" data-val-required="@sharedResource["Please Enter Actual Price"]" type="number" asp-for="@Model.ActualPrice" class="form-control" id="EActualPrice" placeholder="@sharedResource["Enter Actual Price"]" required />
+                                    <span asp-validation-for="@Model.ActualPrice" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div>
+                                    <label for="@Model.AramexPrice" class="form-label">@sharedResource["Aramex Price"]</label>
+                                    <input data-val="true" data-val-required="@sharedResource["Please Enter Aramex Price"]" type="number" asp-for="@Model.AramexPrice" class="form-control" id="Aramex" placeholder="@sharedResource["Enter Aramex Price"]" required />
+                                    <span asp-validation-for="@Model.AramexPrice" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-lg-6">
+                                <div>
+                                    <label for="@Model.FromWeight" class="form-label">@sharedResource["From Weight"]</label>
+                                    <input data-val="true" pattern="\d+(\.\d{1,2})?" title="Please enter a valid decimal value." data-val-required="@sharedResource["Please Enter From Weight"]" type="text" asp-for="@Model.FromWeight" class="form-control" id="FromW" placeholder="@sharedResource["Enter From Weight"]" required />
+                                    <span asp-validation-for="@Model.FromWeight" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div>
+                                    <label for="@Model.ToWeight" class="form-label">@sharedResource["To Weight"]</label>
+                                    <input data-val="true" pattern="\d+(\.\d{1,2})?" title="Please enter a valid decimal value." data-val-required="@sharedResource["Please Enter To Weight"]" type="text" asp-for="@Model.ToWeight" class="form-control" id="ToW" placeholder="@sharedResource["Enter To Weight"]" required />
+                                    <span asp-validation-for="@Model.ToWeight" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light"
+                                data-bs-dismiss="modal">
+                            @sharedResource["Close"]
+                        </button>
+                        <button type="submit" class="btn btn-success"
+                                id="add-btn">
+                            @sharedResource["Save"]
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@* <script>
+    // Apply formatting and validation for decimal inputs
+    document.addEventListener('input', function (e) {
+        if (e.target.tagName.toLowerCase() === 'input' && e.target.type === 'text') {
+            if (e.target.value !== '') {
+                e.target.value = parseFloat(e.target.value.replace(',', '.')).toFixed(2);
+            }
+        }
+    });
+</script> *@

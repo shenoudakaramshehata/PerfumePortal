@@ -1,0 +1,18 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.Operator.ThankYouModel
+@{
+}
+
+<div class="tab-pane fade active show" id="pills-finish" role="tabpanel" aria-labelledby="pills-finish-tab">
+    <div class="text-center py-5">
+
+        <div class="mb-4">
+            <lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop" colors="primary:#0ab39c,secondary:#405189" style="width:120px;height:120px"></lord-icon>
+        </div>
+        <h5>@sharedResource["Thank you ! Your Order is Completed !"]</h5>
+        <p class="text-muted">
+            @sharedResource["You will receive an order confirmation email with details of your order."]</p>
+
+        <h3 class="fw-semibold">@sharedResource["Order ID:"] <a href="/admin/Configurations/Operator/Details?Id=@Model.OrderNo" class="text-decoration-underline">@Model.OrderNo</a></h3>
+    </div>
+</div>

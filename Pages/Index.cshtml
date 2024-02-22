@@ -1,0 +1,259 @@
+﻿@page
+@model IndexModel
+
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject PerfumeContext _context
+@{
+
+    var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+    var ItemsInCart = 0;
+    var currentuser = await UserManager.GetUserAsync(User);
+    if (currentuser != null)
+    {
+        var CustomerId = _context.CustomerNs.Where(c => c.Email == currentuser.Email).FirstOrDefault().CustomerId;
+        var cartNumbers = _context.ShoppingCart.Where(s => s.CustomerId == CustomerId).Count();
+        ItemsInCart = cartNumbers;
+    };
+
+}
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+
+<link href="~/css/ionicons.min.css" rel="stylesheet" />
+@*<link href="~/css/style.css" rel="stylesheet" />
+*@<style>
+      .form-check-input:checked {
+          background-color: #000;
+          border-color: #000;
+      }
+
+      /*.number li {
+                      list-style-type: none;
+                      display: flex !important;
+                  }*/
+</style>
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+
+
+<!--offcanvas-->
+@*@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+*@
+
+@Html.Partial("~/Pages/UserSite/_banner.cshtml")
+@Html.Partial("~/Pages/UserSite/_products.cshtml")
+
+<!---Language and country popup----->
+<script src="~/js/jquery.min.js"></script>
+
+<script src="~/js/popper.js"></script>
+
+<script src="~/js/bootstrap.min.js"></script>
+<script src="~/js/main.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+
+
+
+<script>
+
+
+
+
+    /////display language and country popup
+
+
+
+
+    //OnLoad
+    //window.onload = chooseCountry
+    //function loadFunctions(){
+    //    chooseCountry();
+
+    //    GetProducts();
+    //    //ShoppingCartIcon();
+    //    //StorageinSession();
+    //    //displayLocalization();
+    //}
+
+    //function displayshoppingcart() {
+
+    //    var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+    //    console.log(cartItems)
+    //    console.log(cartItems.length)
+    //    var shoppingCartlength = cartItems.length
+    //    const viewPagesName = document.querySelector("#pages");
+    //    if (cartItems.length > 0) {
+    //        viewPagesName.innerHTML += `
+    //                     <a  class="cart" role="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
+    //                                    <i class='bx bx-cart' onclick="Displayitems()" style="color:#6b6b6b;"></i>
+    //                                        <span>${shoppingCartlength}</span>
+    //                                </a> `
+    //    }
+    //}
+
+
+    ///////Submit popup
+    function Submit() {
+
+
+        const radioButtons = document.getElementsByName('card');
+        let isSelected = false;
+        console.log(radioButtons)
+        let selectedValue;
+        for (let i = 0; i < radioButtons.length; i++) {
+            if (radioButtons[i].checked) {
+                selectedValue = radioButtons[i].value;
+                localStorage.setItem("Country", selectedValue);
+                isSelected = true;
+                break;
+            }
+        }
+        if (!isSelected) {
+            console.log("ddd")
+            radioButtons[0].setAttribute("required", "");
+        }
+        var selectcountry = localStorage.getItem("Country");
+        console.log(selectcountry)
+        localStorage.setItem("lang", "ar");
+         window.location.href = "/API/Setting/ChangeLanguage?culture=ar-EG&url=/";
+        removeModalBackdrop();
+         //window.location.href = "/Index"
+
+        //  var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+        //console.log(cartItems)
+
+        //if(cartItems.length>0){
+        //    var shoppingCartlength = cartItems.length
+        //    const viewPagesName = document.querySelector("#shoppingIcon");
+        //    //if (cartItems.length > 0) {
+        //    viewPagesName.innerHTML += `
+        //                     <a  class="cart" role="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
+        //                                    <i class='bx bx-cart' onclick="Displayitems()" style="color:#6b6b6b;"></i>
+        //                                        <span>${shoppingCartlength}</span>
+        //                                </a> `
+        //}
+
+        //}
+    }
+    $(window).on('beforeunload', function () {
+        removeModalBackdrop();
+    });
+
+    function removeModalBackdrop() {
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open');
+    }
+          
+
+           //function IncreaseQuantity(ItemId){
+           //     var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+           //     for(var i =0; i<cartItems.length;i++){
+           //         if(cartItems[i].ItemId==ItemId){
+           //             console.log("asde")
+           //             cartItems[i].Qunatity++;
+           //             console.log(cartItems[i].Qunatity)
+
+           //         }
+           //     }
+           //     var updatedCartItemsJson = JSON.stringify(cartItems);
+           //     localStorage.setItem("cartItems", updatedCartItemsJson);
+           //     StorageinSession()
+           //     DisplayCartItems();
+           //}
+
+           // function DeacreaseQuantity(ItemId) {
+           //          var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+           //     for(var i =0; i<cartItems.length;i++){
+           //         if(cartItems[i].ItemId==ItemId){
+           //             if (cartItems[i].Qunatity>1){
+           //                 console.log("asde")
+           //                 cartItems[i].Qunatity--;
+           //                 console.log(cartItems[i].Qunatity)
+           //             }
+
+
+           //         }
+           //     }
+           //     var updatedCartItemsJson = JSON.stringify(cartItems);
+           //     localStorage.setItem("cartItems", updatedCartItemsJson);
+           //     StorageinSession()
+           //     DisplayCartItems();
+           //}
+
+           // function removeFromCart(ItemId) {
+           //     var cartData = JSON.parse(localStorage.getItem("cartItems"));
+           //     var productIndex = -1;
+           //     for (var i = 0; i < cartData.length; i++) {
+           //         if (cartData[i].ItemId == ItemId) {
+           //             productIndex = i;
+           //             break;
+           //         }
+           //     }
+           //     if (productIndex !== -1) {
+           //         cartData.splice(productIndex, 1);
+           //     }
+           //     localStorage.setItem("cartItems", JSON.stringify(cartData));
+
+           //     StorageinSession()
+           //     location.href = "/Index"
+           // }
+
+
+            //function StorageinSession(){
+            //        var cartItemsData = JSON.parse(localStorage.getItem("cartItems"));
+            //    console.log("fayoda")
+            //    var parsecartItems = JSON.stringify(cartItemsData)
+            //    console.log(typeof (parsecartItems))
+            //    $.ajax({
+            //        type: "POST",
+            //        url: "/Index?handler=Storedata",
+            //        data: { "parsecartItems": parsecartItems },
+            //        beforeSend: function (xhr) {
+            //            xhr.setRequestHeader("XSRF-TOKEN",
+            //                $('input:hidden[name="__RequestVerificationToken"]').val());
+            //        },
+
+            //        headers: {
+            //            RequestVerificationToken:
+            //                $('input:hidden[name="__RequestVerificationToken"]').val()
+            //        },
+
+            //        success: function (response) {
+            //            console.log(response)
+            //            //document.getElementById("shippingicon").innerHTML = response
+
+
+            //        },
+            //        failure: function (response) {
+            //            alert(response);
+            //        }
+            //    });
+
+            //        //sessionStorage.setItem('cartItemsData', JSON.stringify(cartItemsData));
+            //}
+
+
+
+</script>
+
+
+
+
+
+
+
+
+

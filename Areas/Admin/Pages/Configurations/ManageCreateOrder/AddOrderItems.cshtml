@@ -1,0 +1,837 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.ManageCreateOrder.AddOrderItemsModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> sharedResource
+@using Microsoft.AspNetCore.Localization
+@using CRM.Data
+@using Microsoft.AspNetCore.Localization;
+@inject PerfumeContext _context
+
+@{
+    var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+    ViewBag.Title = @sharedResource["Checkout"];
+    ViewBag.pTitle = @sharedResource["Checkout"];
+    ViewBag.pageTitle = @sharedResource["Checkout"];
+        var Items = _context.Item.Select(e => new { e.ItemId, e.ItemTitleAr, e.ItemTitleEn });
+
+
+}
+<div class="row">
+    <div class="col-xl-9">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h5 class="card-title flex-grow-1 mb-0">@Model.OrderReceipt.OrderId</h5>
+                    <div class="flex-shrink-0">
+                        <a class="edit-item-btn" href="javascript:void(0)" data-bs-toggle="modal">
+                            <i class="ri-pencil-fill align-bottom text-muted" onclick="editButtonClick(@Model.OrderReceipt.OrderId)"></i>
+                        </a>
+                        @*                        <a  href="/Admin/Configurations/ManageReport/MergeReport?id=@Model.OrderReceipt.OrderId" target="_blank" class="btn btn-success btn-sm"><i class="ri-download-2-fill align-middle me-1"></i>@sharedResource["Reports"]</a>
+                        *@
+                        @*<a href="/Admin/Configurations/ManageReport/OrderInvoice?id=@Model.OrderReceipt.OrderId" class="btn btn-success btn-sm"><i class="ri-download-2-fill align-middle me-1"></i>@sharedResource["Order Invoice"]</a>
+                        <a href="/Admin/Configurations/ManageReport/ShippingInvoice?id=@Model.OrderReceipt.OrderId" class="btn btn-success btn-sm"><i class="ri-download-2-fill align-middle me-1"></i>@sharedResource["Shipping Invoice"]</a>*@
+
+                    </div>
+                </div>
+            </div>
+            
+
+                    
+                        <div class="card-body">
+                <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#AddModal" fdprocessedid="9fqy5m"><i class="ri-add-line align-bottom me-1"></i>@sharedResource["Add Item"]</button>
+                <div class="table-responsive table-card" style="margin-top:1rem">
+                    <table class="table table-nowrap align-middle table-borderless mb-0">
+                        <thead class="table-light text-muted">
+                            <tr>
+                                <th scope="col">@sharedResource["Product Details"]</th>
+                                <th scope="col">@sharedResource["Item Price"]</th>
+                                <th scope="col">@sharedResource["Quantity"]</th>
+                                <th scope="col" class="text-end">@sharedResource["Total Amount"]</th>
+                                <th scope="col" class="text-end">@sharedResource["Actions"]</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var item in Model.OrderList)
+                                {
+                                    double TotalAmount = item.ItemQuantity * item.ItemPrice;
+
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
+                                                    <img src="~/@item.Item.ItemImage" alt="" class="img-fluid d-block">
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h5 class="fs-16"> @item.Item.ItemTitleEn</h5>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @item.ItemPrice
+                                            @{
+                                                if (BrowserCulture == "en-US")
+                                                {
+                                                    <span>@Model.CurrencyEN</span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span>@Model.CurrencyNameAr</span>
+
+
+                                                }
+                                            }
+
+                                        </td>
+                                        <td>@item.ItemQuantity</td>
+
+                                        <td class="fw-medium text-end">
+                                            @TotalAmount
+
+                                            @{
+                                                if (BrowserCulture == "en-US")
+                                                {
+                                                    <span>@Model.CurrencyEN</span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span>@Model.CurrencyNameAr</span>
+
+
+                                                }
+                                            }
+                                        </td>
+                                        <td class="fw-medium text-end">
+                                            <ul>
+
+                                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                    <a class="edit-item-btn" href="javascript:void(0)" data-bs-toggle="modal">
+                                                        <i class="ri-pencil-fill align-bottom text-muted" onclick="editItemButtonClick(@item.OrderId,@item.ItemId)"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">
+                                                    <a class="remove-item-btn" data-bs-toggle="modal" href="javascript:void(0)">
+                                                        <i class="ri-delete-bin-fill align-bottom text-muted" onclick="deleteItem(@item.OrderId)"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+                            <tr class="border-top border-top-dashed">
+                                <td colspan="3"></td>
+                                <td colspan="2" class="fw-medium p-0">
+                                    <table class="table table-borderless mb-0">
+                                        <tbody>
+                                            <tr>
+                                                <td>@sharedResource["Sub Total :"]</td>
+                                                <td class="text-end">
+                                                    @Model.OrderReceipt.OrderTotal
+                                                    @{
+                                                        if (BrowserCulture == "en-US")
+                                                        {
+                                                            <span>@Model.CurrencyEN</span>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>@Model.CurrencyNameAr</span>
+
+                                                        }
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@sharedResource["Tax :"] (@Model.taxpercentage %)</td>
+                                                @{
+                                                    if (Model.tax == 0)
+                                                    {
+                                                        <td class="text-end">
+                                                            @Model.OrdernetByTax
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (BrowserCulture == "en-US")
+                                                        {
+                                                            <td class="text-end">
+                                                                @Model.OrdernetByTax
+
+                                                                <span>@Model.CurrencyEN</span>
+
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-end">
+                                                                @Model.OrdernetByTax
+
+                                                                <span>@Model.CurrencyNameAr</span>
+
+                                                            </td>
+                                                        }
+                                                    }
+                                                }
+
+
+
+                                            </tr>
+                                            <tr>
+                                                <td>@sharedResource["Shipping Cost :"]</td>
+                                                <td class="text-end">
+                                                    @Model.DeliverCost
+                                                    @{
+                                                        if (BrowserCulture == "en-US")
+                                                        {
+                                                            <span>@Model.CurrencyEN</span>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>@Model.CurrencyNameAr</span>
+
+                                                        }
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@sharedResource["Discount"] <span class="text-muted">@sharedResource["(Mashar)"]</span> :</td>
+                                                @{
+                                                    if (@Model.OrderReceipt.OrderDiscount == 0 && Model.OrderReceipt.DiscountAmount == 0)
+                                                    {
+                                                        <td class="text-end">@Model.OrderReceipt.OrderDiscount</td>
+                                                    }
+
+                                                    else
+                                                    {
+                                                        <td class="text-end">
+                                                            @Model.DiscountAmount
+
+                                                        </td>
+                                                    }
+                                                }
+
+                                            </tr>
+
+
+                                            <tr class="border-top border-top-dashed">
+                                                <th scope="row">@sharedResource["Total :"]</th>
+                                                <th class="text-end">
+                                                    @Model.approximatedNumber
+                                                    @{
+                                                        if (BrowserCulture == "en-US")
+                                                        {
+                                                            <span>@Model.CurrencyEN</span>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>@Model.CurrencyNameAr</span>
+
+                                                        }
+                                                    }
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+                    
+
+
+
+                
+
+        </div><!--end card-->
+
+      
+        <form method="post" id="orderForm" asp-route-Id="@Model.OrderReceipt.OrderId" onsubmit="return checkOrderItemsAndSubmitForm()">
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+
+                        <label for="@Model.OrderReceipt"
+                               class="form-label">@(sharedResource["Notes"])</label>
+                        <textarea name="orderNotes"  id="OrderNotesInput"
+                                  class="form-control" cols="2"
+                                  placeholder="@sharedResource["Enter Notes"]"></textarea>
+                        <span asp-validation-for="@Model.OrderReceipt" class="text-danger"></span>
+
+
+                    </div>
+
+                </div>
+            </div>
+        <div class="tab-pane fade active show" id="pills-payment" role="tabpanel" aria-labelledby="pills-payment-tab">
+            <div>
+                <h5 class="mb-1">@sharedResource["Payment Selection"]</h5>
+                <p class="text-muted mb-4">@sharedResource["Please select and enter your billing information"]</p>
+            </div>
+
+            <div class="row g-4">
+                @{
+
+
+                    var MyfattorahEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 1).FirstOrDefault().PaymentMethodEN;
+                    var MyfattorahAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 1).FirstOrDefault().PaymentMethodAR;
+                    var CashEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 2).FirstOrDefault().PaymentMethodEN;
+                    var CashAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 2).FirstOrDefault().PaymentMethodAR;
+                }
+                <div class="col-lg-4 col-sm-6">
+                    <div data-bs-toggle="collapse"
+                         data-bs-target="#paymentmethodCollapse" aria-expanded="true"
+                         aria-controls="paymentmethodCollapse">
+                        <div class="form-check card-radio">
+                            <input id="paymentMethod02" name="paymentMethod" value="@Model.FattorahPaymentId"
+                                   type="radio" class="form-check-input" required checked>
+                            <label class="form-check-label" for="paymentMethod02">
+                                <span class="fs-16 text-muted me-2">
+                                    <i class="ri-bank-card-fill align-bottom"></i>
+                                </span>
+                                <span class="fs-14 text-wrap">
+                                    @{
+                                        if (BrowserCulture == "en-US")
+                                        {
+                                            @MyfattorahEN
+                                        }
+                                        else
+                                        {
+
+                                            @MyfattorahAR
+
+                                        }
+                                    }
+
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-sm-6">
+                    <div data-bs-toggle="collapse"
+                         data-bs-target="#paymentmethodCollapse.show"
+                         aria-expanded="false" aria-controls="paymentmethodCollapse">
+                        <div class="form-check card-radio">
+                            <input id="paymentMethod03" name="paymentMethod" value="@Model.CahshPaymentId"
+                                   type="radio" class="form-check-input">
+                            <label class="form-check-label" for="paymentMethod03">
+                                <span class="fs-16 text-muted me-2">
+                                    <i class="ri-money-dollar-box-fill align-bottom"></i>
+                                </span>
+
+                                @{
+                                    <img src="~/Jeel/images/cash.jpg" style="width: 7%!important;" class="w-25">
+
+                                    if (BrowserCulture == "en-US")
+                                    {
+                                        <span class="fs-14 text-wrap">
+
+
+                                            @CashEN
+                                        </span>
+
+                                    }
+                                    else
+                                    {
+                                        <span class="fs-14 text-wrap">
+
+
+                                            @CashAR
+                                        </span>
+
+                                    }
+
+                                }
+
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="d-flex align-items-start gap-3 mt-4">
+                <button type="submit" class="btn btn-primary btn-label right ms-auto"><i class="ri-shopping-basket-line label-icon align-middle fs-16 ms-2"></i>Complete Order</button>
+            </div>
+        </div>
+        </form>
+    </div><!--end col-->
+    <div class="col-xl-3">
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex">
+                    <h5 class="card-title flex-grow-1 mb-0">@sharedResource["Customer Details"]</h5>
+                    <div class="d-flex">
+                        <a class="edit-item-btn" href="javascript:void(0)" data-bs-toggle="modal">
+                            <i class="ri-pencil-fill align-bottom text-muted" onclick="editcustomerInfoButtonClick(@Model.OrderReceipt.OrderId)"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0 vstack gap-3">
+                    <li>
+                        <div class="d-flex align-items-center">
+
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="fs-15 mb-1">@Model.Customer.CustomerName</h6>
+                                <p class="text-muted mb-0">@sharedResource["Customer"]</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li><i class="ri-mail-line me-2 align-middle text-muted fs-16"></i>@Model.Customer.Email</li>
+                    <li><i class="ri-phone-line me-2 align-middle text-muted fs-16"></i>@Model.Customer.Phone</li>
+                </ul>
+            </div>
+        </div><!--end card-->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="ri-map-pin-line align-middle me-1 text-muted"></i>@sharedResource["Billing Address"]</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled vstack gap-2 fs-14 mb-0">
+                    @{
+                        string Address = Model.customerAddress.CityName + " , " + Model.customerAddress.AreaName;
+                        string Street = Model.customerAddress.BuildingNo + " , " + Model.customerAddress.Address;
+
+                    }
+                    <li class="fw-semibold fs-15">@Model.Customer.CustomerName</li>
+                    <li>@Address</li>
+                    <li>@Street</li>
+
+                </ul>
+            </div>
+        </div><!--end card-->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="ri-map-pin-line align-middle me-1 text-muted"></i>@sharedResource["SHIPPING ADDRESS"] </h5>
+
+                <span>
+                    <a class="edit-item-btn" href="javascript:void(0)" data-bs-toggle="modal">
+                        <i class="ri-pencil-fill align-bottom text-muted" onclick="editcustomerAddressButtonClick(@Model.OrderReceipt.OrderId)"></i>
+                    </a>
+                </span>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled vstack gap-2 fs-14 mb-0">
+                    @{
+                        string ShippingAddress = Model.customerAddress.CityName + " , " + Model.customerAddress.AreaName;
+                        string ShippingStreet = Model.customerAddress.BuildingNo + " , " + Model.customerAddress.Address;
+
+                    }
+                    <li class="fw-semibold fs-15">@Model.Customer.CustomerName</li>
+                    <li>@Address</li>
+                    <li>@Street</li>
+                </ul>
+            </div>
+        </div><!--end card-->
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex">
+                    <h5 class="card-title flex-grow-1 mb-0">@sharedResource["Payment Method"]</h5>
+                    <span class="d-flex">
+                        <a class="edit-item-btn" href="javascript:void(0)" data-bs-toggle="modal">
+                            <i class="ri-pencil-fill align-bottom text-muted" onclick="editpaymentmethodButtonClick(@Model.OrderReceipt.OrderId)"></i>
+                        </a>
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0 vstack gap-3">
+                    <li>
+                        <div class="d-flex align-items-center">
+
+                            <div class="flex-grow-1 ms-3">
+                                @{
+                                    if (BrowserCulture == "en-US")
+                                    {
+
+                                        <h6 class="fs-15 mb-1">@Model.PaymentMethod</h6>
+                                    }
+                                    else
+                                    {
+                                        <h6 class="fs-15 mb-1">@Model.PaymentMethodAR</h6>
+                                    }
+                                }
+
+
+                                <p class="text-muted mb-0">@sharedResource["Payment Method"]</p>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div><!--end card-->
+    </div><!--end col-->
+</div><!--end row-->
+
+<div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="AddModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@(sharedResource["Add Item"])</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-area="Admin" id="myFormItem" asp-page="/Configurations/ManageCreateOrder/AddOrderItems" asp-page-handler="AddItem" asp-route-Id="@Model.OrderReceipt.OrderId" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" id="id-field" />
+                    <div class="row g-3">
+
+
+                        <!--end col-->
+                       @* <div class="col-lg-12 hidden">
+                            <div>
+                                <input id="ItemId" asp-for="@Model.ItemId" hidden />
+                            </div>
+                        </div>*@
+
+
+                       @* <div class="col-lg-12 hidden">
+                            <div>
+                                <input id="OrderItemId" asp-for="@Model.OrderId" hidden />
+                            </div>
+                        </div>*@
+
+                        <div class="col-lg-12">
+                            <label  for="car-rental-name">@sharedResource["Items"] <small class="text-danger">*</small></label>
+
+                            <select data-val="true" data-val-required="@sharedResource["Select Item"]" id="editItemId" name="item" class="form-select required" aria-label="Default select example" required>
+                                <option selected value="Select Type" disabled>@sharedResource["Choose Item"]</option>
+
+                                @{
+                                    if (Items != null)
+                                    {
+                                        foreach (var item in Items)
+                                        {
+
+                                            if (@BrowserCulture == "en-US")
+                                            {
+                                                <option value="@item.ItemId">@item.ItemTitleEn</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ItemId">@item.ItemTitleAr</option>
+
+                                            }
+
+                                        }
+                                    }
+                                }
+
+                            </select>
+                            <span asp-validation-for="@Model.orderItem.ItemId" class="text-alert"></span>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.orderItem.ItemQuantity" class="form-label">@sharedResource["Quantity"]</label>
+                                <input type="number" asp-for="@Model.orderItem.ItemQuantity" id="ItemQuantityId"
+                                       data-val="true" min="1"
+                                       data-val-required="@sharedResource["Enter Quantity"]"
+                                       class="form-control"
+                                       placeholder="@sharedResource["Enter Quantity"]" />
+                                <span asp-validation-for="@Model.orderItem.ItemQuantity" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <!--End Customer-->
+                        <!--Order-->
+                        <!--end col-->
+                        <!--end col-->
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light"
+                                data-bs-dismiss="modal">
+                            @sharedResource["Close"]
+                        </button>
+                        <button type="submit" class="btn btn-success"
+                                id="add-btnItem">
+                            @sharedResource["Save"]
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<partial name="_EditOrderPopup" model="@Model.editOrder" view-data="ViewData" />
+<partial name="_EditItemPopup" model="@Model.orderItem" view-data="ViewData" />
+<partial name="_EditPaymentMethodPopup" model="@Model.order" view-data="ViewData" />
+<partial name="_EditCustomerPopup" model="@Model.customerVM" view-data="ViewData" />
+
+<partial name="_EditCustomerAddressPopup" model="@Model.customerVM" view-data="ViewData" />
+
+<partial name="_DatchDelete" model="@Model.orderItem" view-data="ViewData" />
+<script src="~/assets/js/app.js"></script>
+<script>
+    function checkOrderItemsAndSubmitForm() {
+        // Check if there are any order items
+        var orderItemsExist = @Json.Serialize(Model.OrderList.Any());
+
+        if (orderItemsExist) {
+            // Allow the form to be submitted
+            return true;
+        } else {
+            // Prevent form submission and display an error message or take any desired action
+            alert('No order items found. Please add items to your order.');
+            // Alternatively, you can show a message on the page to inform the user about the issue.
+            return false;
+        }
+    }
+
+   
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var submitButton = document.getElementById("add-btnItem");
+        var form = document.getElementById("myFormItem"); // Change 'myForm' to your form's ID
+
+        submitButton.addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            if (!submitButton.disabled) {
+                submitButton.disabled = true; // Disable the button to prevent multiple submissions
+                form.submit(); // Manually trigger the form submission
+            }
+        });
+    });
+
+
+     function editItemButtonClick(OrderId, ItemId) {
+        console.log(OrderId);
+        console.log(ItemId);
+        
+        $.ajax({
+            type: "GET",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            }
+            ,
+            url: "/Admin/Configurations/ManageCreateOrder/AddOrderItems?handler=SingleItemForEdit",
+
+            data: { "OrderId": OrderId, "ItemId": ItemId },
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                document.getElementById("OrderItemsId").value = response.OrderId
+                document.getElementById("ItemOrderId").value = response.ItemId
+                
+                document.getElementById("editItemOrderId").value = response.ItemId;
+                document.getElementById("ItemQuantityItemId").value = response.ItemQuantity
+                //document.getElementById("editcouId").value = response.CouponTypeId
+                //document.getElementById("EUsedId").checked = response.Used
+
+                $('#showEditItemModal').modal('show');
+
+
+            },
+
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+    
+    function editcustomerInfoButtonClick(OrderId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            }
+            ,
+            url: "/Admin/Configurations/ManageCreateOrder/AddOrderItems?handler=SingleCustomerForEdit",
+
+            data: { "OrderId": OrderId },
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                document.getElementById("OrderCustomerID").value = OrderId
+                
+                document.getElementById("CustomerID").value = response.CustomerId
+                //document.getElementById("CustomerAddressID").value = response.CustomerAddressId
+                document.getElementById("CustomerNameId").value = response.CustomerName
+                document.getElementById("EmailId").value = response.Email
+                document.getElementById("MobileId").value = response.Mobile
+
+                //document.getElementById("AddressId").value = response.Address
+                //document.getElementById("CityNameId").value = response.CityName
+                //document.getElementById("AreaNameId").value = response.AreaName
+                //document.getElementById("BuildingNoId").value = response.BuildingNo
+                //document.getElementById("CountryId").value = response.CountryId
+
+
+                console.log(response);
+                $('#showCustomerEditModal').modal('show');
+            },
+
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+
+
+    function editcustomerAddressButtonClick(OrderId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            }
+            ,
+            url: "/Admin/Configurations/ManageCreateOrder/AddOrderItems?handler=SingleCustomerAddressForEdit",
+
+            data: { "OrderId": OrderId },
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                document.getElementById("OrderCustomerAddressID").value = OrderId
+
+                document.getElementById("CustomerAddressID").value = response.CustomerAddressId
+               
+                document.getElementById("AddressId").value = response.Address
+                document.getElementById("CityNameId").value = response.CityName
+                document.getElementById("AreaNameId").value = response.AreaName
+                document.getElementById("BuildingNoId").value = response.BuildingNo
+                
+                console.log(response);
+                $('#showCustomerAddressEditModal').modal('show');
+            },
+
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+    function editButtonClick(OrderId) {
+        console.log(OrderId);
+
+
+        $.ajax({
+            type: "GET",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            }
+            ,
+            url: "/Admin/Configurations/ManageCreateOrder/AddOrderItems?handler=SingleorderForEdit",
+
+            data: { "OrderId": OrderId },
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                document.getElementById("OrderId").value = response.OrderId
+                document.getElementById("discountAmount").value = response.DiscountAmount
+                const orderDate = new Date(response.OrderDate);
+             const formattedDate=   orderDate.toLocaleDateString('en-us', { year: "numeric", month: "short", day: "numeric" })
+                //const formattedDate = orderDate.format('D MMM YYYY')
+                //const formattedDate = orderDate.toLocaleDateString("en-GB", {
+                //    day: '2-digit', // Two-digit day (e.g., '03')
+                //    month: 'short', // Abbreviated month name (e.g., 'Sep')
+                //    year: 'numeric'  // Four-digit year (e.g., '2023')
+                //});
+                //const parts = formattedDate.split(' ');
+                //if (parts.length === 3) {
+                //    parts[1] = parts[1].toLowerCase();
+                //}
+                //const finalFormattedDate = parts.join(' ');
+
+                document.getElementById("demo-datepicker").value = formattedDate;                //document.getElementById("EAmountId").value = response.Amount
+                //document.getElementById("editcouId").value = response.CouponTypeId
+                //document.getElementById("EUsedId").checked = response.Used
+
+                $('#showEditModal').modal('show');
+
+
+            },
+
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+
+   
+    function editpaymentmethodButtonClick(OrderId) {
+        console.log(OrderId);
+
+
+        $.ajax({
+            type: "GET",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            }
+            ,
+            url: "/Admin/Configurations/ManageCreateOrder/AddOrderItems?handler=SinglepaymentMethodForEdit",
+
+            data: { "OrderId": OrderId },
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                document.getElementById("OrderPaymentId").value = response.OrderId
+                document.getElementById("PaymentMethodId").value = response.PaymentMethodId
+
+                $('#showEditPaymentMethodModal').modal('show');
+
+
+            },
+
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+    
+    function deleteItem(OrderId) {
+        console.log(OrderId);
+        $.ajax({
+            type: "GET",
+            url: "/Admin/Configurations/ManageCreateOrder/AddOrderItems?handler=SingleItemForDelete",
+            data: { "OrderId": OrderId },
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                document.getElementById("DeleteOrderId").value = response.OrderId
+                $('#deleteRecordModal').modal('show');
+
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,128 @@
+﻿@{
+}
+@model CRM.Models.Country
+
+<div class="modal fade" id="showEditModal" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@sharedResource["Edit Country"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-area="Admin" asp-page="/Configurations/ManageCountry/Index" asp-page-handler="EditCountry" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" id="id-field" />
+                    <div class="row g-3">
+                        <div class="col-lg-12">
+                            <div class="text-center col-lg-12">
+                                <div class="position-relative d-inline-block">
+                                    <div class="position-absolute bottom-0 end-0">
+                                        <label for="EditCountryfile" class="mb-0" data-bs-toggle="tooltip" data-bs-placement="right" title="Select Image">
+                                            <div class="avatar-xs cursor-pointer">
+                                                <div class="avatar-title bg-light border rounded-circle text-muted">
+                                                    <i class="ri-image-fill"></i>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <input class="form-control d-none" name="EditCountryfile" id="EditCountryfile" type="file"
+                                               accept="image/*">
+                                    </div>
+                                    <div class="avatar-lg p-1">
+                                        <div class="avatar-title bg-light rounded-circle">
+                                            <img src="~/assets/images/users/user-dummy-img.jpg" id="lead-img" class="avatar-md rounded-circle object-cover itemImgCla" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 class="fs-13 mt-3">@(sharedResource["Image"])</h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <input asp-for="@Model.CountryId" id="CountryHiddenId" hidden/>
+
+                                <input asp-for="@Model.Pic" id="PicHiddenId" hidden>
+
+                                @*<input asp-for="@Model.CountryTlen" id="CountryTLENId" hidden>
+                                  <input asp-for="@Model.OrderIndex" id="CountryOrderIndexId" hidden>*@
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.CountryTlar"
+                                       class="form-label">@sharedResource["Country Arabic Title"]</label>
+                                <input type="text" asp-for="@Model.CountryTlar" id="CountryTlarId"
+                                       data-val-required="@sharedResource["Enter the Country Arabic Title"]"
+                                       class="form-control"
+                                       placeholder="@sharedResource["Enter the Country Arabic Title"]" required />
+                                <span asp-validation-for="@Model.CountryTlar" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.CountryTlen"
+                                       class="form-label">@sharedResource["Country English Title"]</label>
+                                <input type="text" asp-for="@Model.CountryTlen" id="CountryTlenId"
+                                       data-val-required="@sharedResource["Country the English Title"]"
+                                       class="form-control"
+                                       placeholder="@sharedResource["Country the English Title"]" required />
+                                <span asp-validation-for="@Model.CountryTlen" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.ShippingCost"
+                                       class="form-label">@sharedResource["Shipping Cost"]</label>
+                                <input type="text" asp-for="@Model.ShippingCost"  id="CountryShippingCostId"
+                                     data-val-required="@sharedResource["Enter The Shipping Cost"]" 
+                                       class="form-control"
+                                       placeholder="@sharedResource["Enter ShippingCost"]" required />
+                                <span asp-validation-for="@Model.ShippingCost" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.tax"
+                                       class="form-label">@sharedResource["Tax"]</label>
+                                <input type="number" min="0" max="100" asp-for="@Model.tax" id="taxId"
+                                       data-val-required="@sharedResource["Enter Tax"]"
+                                       class="form-control"
+                                       placeholder="@sharedResource["Enter Tax"]"  />
+                                <span asp-validation-for="@Model.tax" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+               
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light"
+                                data-bs-dismiss="modal">
+                            @sharedResource["Close"]
+                        </button>
+                        <button type="submit" class="btn btn-success"
+                                id="add-btn">
+                            @sharedResource["Save"]
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

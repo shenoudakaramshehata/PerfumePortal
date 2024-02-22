@@ -1,0 +1,195 @@
+﻿<!-- ========== App Menu ========== -->
+<div class="app-menu navbar-menu">
+    <!-- LOGO -->
+    <div class="navbar-brand-box">
+        <!-- Dark Logo-->
+        <a asp-area="Admin" asp-page="/index" class="logo logo-dark">
+            <span class="logo-sm">
+                <img src="~/assets/Perfume_assets/images/icon/newlogo.png" class="img-fluid w-100" alt="Mashaer Logo" style="height: 105px;padding-top: 20px" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="~/assets/Perfume_assets/images/icon/newlogo.png" class="img-fluid w-100" alt="Mashaer Logo" style="height: 105px;padding-top: 20px" height="17">
+            </span>
+        </a>
+        <!-- Light Logo-->
+        <a asp-area="Admin" asp-page="/index" class="logo logo-light">
+            <span class="logo-sm">
+                <img src="~/assets/Perfume_assets/images/icon/newlogo.png" class="img-fluid w-100" alt="Mashaer Logo"  style="height: 105px;padding-top: 20px" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="~/assets/Perfume_assets/images/icon/newlogo.png" class="img-fluid w-100" alt="Mashaer Logo" style="height: 105px;padding-top: 20px" height="17">
+            </span>
+        </a>
+        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
+            <i class="ri-record-circle-line"></i>
+        </button>
+    </div>
+
+    <div id="scrollbar">
+        <div class="container-fluid">
+
+            <div id="two-column-menu">
+            </div>
+            <ul class="navbar-nav" id="navbar-nav">
+                @{
+        if ((User.Identity.IsAuthenticated && (User.IsInRole("Admin") )))
+        {
+
+ <li class="menu-title"><span >@sharedResource["Dashboard"]</span></li>
+                <li class="nav-item">
+                    <a asp-area="Admin" asp-page="/index" class="nav-link menu-link" aria-expanded="false"><i class="ri-rocket-line"></i> <span >@sharedResource["Statistics Dashboard"]</span> </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarLayouts">
+                        <i class="ri-layout-3-line"></i> <span >@sharedResource["Configurations"]</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarLayouts">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a asp-area="Admin" asp-page="/Configurations/ManageCategory/index" class="nav-link">@sharedResource["Categories"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-area="Admin" asp-page="/Configurations/ManageCountry/index" class="nav-link">@sharedResource["Countries"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-area="Admin" asp-page="/Configurations/ManageCoupon/index" class="nav-link">@sharedResource["Coupons"]</a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a asp-area="Admin" asp-page="/Configurations/ManageItem/index" class="nav-link">@sharedResource["Items"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-area="Admin" asp-page="/Configurations/ManageItemPrice/index" class="nav-link">@sharedResource["Item Price"]</a>
+                            </li>
+                                    <li class="nav-item">
+                                        <a asp-area="Admin" asp-page="/Configurations/ManageShippingMatrix/index" class="nav-link">@sharedResource["Shipping Matrix"]</a>
+                                    </li>
+                            <li class="nav-item">
+                                        <a asp-area="Admin" asp-page="/Order/OrderManager" class="nav-link">@sharedResource["Orders"]</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a asp-area="Admin" asp-page="/Configurations/ManageCreateOrder/CreateOrder" class="nav-link">@sharedResource["Create Order"]</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a asp-area="Admin" asp-page="/Order/Orders" class="nav-link">@sharedResource["Orders DataGrid"]</a>
+                                    </li>
+                                    
+                            @*<li class="nav-item">
+                                <a asp-area="Admin" asp-page="/Configurations/ManagePageContent/index" class="nav-link">@sharedResource["Page Content"]</a>
+                            </li>*@
+                           
+                           
+                            @*<li class="nav-item">
+                                <a href="@Url.Action("Hovered", "Layouts")" target="_blank" class="nav-link" data-key="t-hovered">Hovered</a>
+                            </li>*@
+                        </ul>
+                    </div>
+                </li> <!-- end Dashboard Menu -->
+
+                                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#ReportsLayouts" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarLayouts">
+                        <i class="ri-layout-3-line"></i> <span >@sharedResource["Reports"]</span>
+                    </a>
+                            <div class="collapse menu-dropdown" id="ReportsLayouts">
+                        <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a asp-area="Admin" asp-page="/Configurations/ManageReport/OrdersReport" class="nav-link">@sharedResource["Orders Report"]</a>
+                                    </li>
+                            <li class="nav-item">
+                                        <a asp-area="Admin" asp-page="/Configurations/ManageReport/FinancialReport" class="nav-link">@sharedResource["Financial Report"]</a>
+                            </li>
+                            <li class="nav-item">
+                                        <a asp-area="Admin" asp-page="/Configurations/ManageReport/ItemReport" class="nav-link">@sharedResource["Order Details Report"]</a>
+                            </li>
+                            
+                            
+                            
+                           
+                        </ul>
+                    </div>
+                </li> <!-- end Dashboard Menu -->
+
+
+
+                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
+                       aria-expanded="false" aria-controls="sidebarLayouts">
+                         <i class="ri-share-line"></i> <span >@sharedResource["System Configurations"]</span>
+                    </a>
+                    <div class="collapse menu-dropdown"  id="sidebarAuth">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a asp-area="Admin" asp-page="/UserMessages/index" class="nav-link menu-link" class="nav-link" >@sharedResource["Customer Messages"]</a>
+
+                            </li>
+                             <li class="nav-item">
+                                <a asp-area="Admin" asp-page="/SystemConfiguration/SocialLinks/index" class="nav-link menu-link" class="nav-link" >@sharedResource["Means of communication"]</a>
+
+                            </li>
+                             <li class="nav-item">
+                                <a asp-area="Admin" asp-page="/Configurations/ManagePageContent/index"  class="nav-link menu-link" class="nav-link" >@sharedResource["Page Content"]</a>
+
+                            </li>
+                                    <li class="nav-item">
+                                        <a asp-area="Admin" asp-page="/Configurations/ManagePublicHeader/index" class="nav-link menu-link" class="nav-link">@sharedResource["Public Banner"]</a>
+
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-area="Admin" asp-page="/Configurations/ManageNewLetters/index" class="nav-link menu-link" class="nav-link">@sharedResource["NewLetters"]</a>
+
+                                    </li>
+                            
+                        
+                        </ul>
+                    </div>
+                </li> <!-- end Dashboard Menu -->
+                        <li class="nav-item">
+                            <a asp-area="Admin" asp-page="/Users/Index" class="nav-link menu-link" aria-expanded="false"><i class="ri-account-circle-line"></i> <span>@sharedResource["Users"]</span> </a>
+                        </li>
+                <li class="nav-item">
+                    <a asp-area="Admin" asp-page="/Profile/UserProfile" class="nav-link menu-link" aria-expanded="false"><i class="ri-account-circle-line"></i> <span >@sharedResource["Profile"]</span> </a>
+                </li>    
+            }
+                    
+                        if ((User.Identity.IsAuthenticated && User.IsInRole("Operator"))){
+
+                             <li class="menu-title"><span >@sharedResource["Operator"]</span></li>
+                <li class="nav-item">
+                    <a asp-area="Admin" asp-page="/Configurations/Operator/Orders" class="nav-link menu-link" aria-expanded="false"><i class="ri-rocket-line"></i> <span >@sharedResource["Operator"]</span> </a>
+                </li>
+                        <li class="nav-item">
+                            <a asp-area="Admin" asp-page="/Configurations/ManageCreateOrder/CreateOrder" class="nav-link menu-link" aria-expanded="false"><i class="ri-rocket-line"></i> <span>@sharedResource["Create Order"]</span> </a>
+
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="Admin" asp-page="/Configurations/Operator/Customers" class="nav-link menu-link" aria-expanded="false"><i class="ri-rocket-line"></i> <span>@sharedResource["Customers"]</span> </a>
+                        </li>
+
+
+                        }
+
+                    if ((User.Identity.IsAuthenticated && User.IsInRole("Store")))
+                    {
+
+                        <li class="menu-title"><span>@sharedResource["Store"]</span></li>
+                        <li class="nav-item">
+                            <a asp-area="Admin" asp-page="/Configurations/ManageStoredOrder/Orders" class="nav-link menu-link" aria-expanded="false"><i class="ri-rocket-line"></i> <span>@sharedResource["Store"]</span> </a>
+                        </li>
+                    }
+
+    }
+               
+                
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
+<!-- Left Sidebar End -->
+<!-- Vertical Overlay-->
+<div class="vertical-overlay"></div>

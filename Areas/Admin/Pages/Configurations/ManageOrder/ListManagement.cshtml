@@ -1,0 +1,480 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.ManageOrder.ListManagementModel
+@Html.AntiForgeryToken()
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    Layout = "_Layout";
+}
+<!-- Add this to your HTML head section -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<div class="row">
+    <div class="col-xl-4 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            @sharedResource["Initated"]
+                        </p>
+                    </div>
+
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                            <span class="counter-value" data-target="@Model.InitatedCount">0</span>
+                        </h4>
+
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-soft-success rounded fs-3">
+                            <i class="bx bx-user-circle text-warning"></i>
+                        </span>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+
+    <div class="col-xl-4 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            @sharedResource["Paid"]
+                        </p>
+                    </div>
+
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                            <span class="counter-value" data-target="@Model.PaidCount">0</span>
+                        </h4>
+
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-soft-info rounded fs-3">
+                            <i class="bx bx-shopping-bag text-info"></i>
+                        </span>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+    <div class="col-xl-4 col-md-6">
+        <!-- card -->
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            @sharedResource["Not Paid"]
+                        </p>
+                    </div>
+
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                            <span class="counter-value" data-target="@Model.Notpaid">0</span>
+                        </h4>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-soft-primary rounded fs-3">
+                            <i class="bx bx-wallet text-primary"></i>
+                        </span>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+</div>
+<div class="row">
+    <div class="col-xl-4 col-md-6">
+
+        <!-- card -->
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            @sharedResource["Processing"]
+                        </p>
+                    </div>
+
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                            <span class="counter-value" data-target="@Model.Processing">0</span>
+                        </h4>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-soft-warning rounded fs-3">
+                            <i class="bx bx-shopping-bag text-info"></i>
+
+                        </span>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+    <div class="col-xl-4 col-md-6">
+
+        <!-- card -->
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            @sharedResource["Packing"]
+                        </p>
+                    </div>
+
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                            <span class="counter-value" data-target="@Model.Packing">0</span>
+                        </h4>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-soft-warning rounded fs-3">
+                            <i class="bx bx-dollar-circle text-success"></i>
+
+                        </span>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+
+    <div class="col-xl-4 col-md-6">
+
+        <!-- card -->
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            @sharedResource["OnDelivery"]
+                        </p>
+                    </div>
+
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <div>
+                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                            <span class="counter-value" data-target="@Model.Ondelivery">0</span>
+                        </h4>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-soft-warning rounded fs-3">
+                            <i class="bx bx-dollar-circle text-success"></i>
+
+                        </span>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+</div> <!-- end row-->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card" id="orderList">
+    <!--begin::Toolbar-->
+            <input type="text" asp-for="@Model.url" value="@Model.url" hidden id="UrlId" />
+            <div class="card-header  border-0">
+                <div class="d-flex align-items-center">
+                    <h5 class="card-title mb-0 flex-grow-1">@sharedResource["Orders History"]</h5>
+                </div>
+            </div>
+            <div class="card-body border border-dashed border-end-0 border-start-0">
+                <form method="post">
+                    <div class="row g-3">
+                        <div class="col-xxl-5 col-sm-6">
+                            <div class="search-box">
+                                <input type="text" class="form-control search"
+                                       placeholder=@sharedResource["Search for..."]>
+                                <i class="ri-search-line search-icon"></i>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-xxl-2 col-sm-6">
+                            <div>
+                                <input type="text" class="form-control" data-provider="flatpickr"
+                                       data-date-format="d M, Y" data-range-date="true" asp-for="@Model.orderFilter.date"
+                                       id="demo-datepicker" placeholder=@sharedResource["Select date"]>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-xxl-2 col-sm-4">
+                            <div>
+                                <select class="form-control" data-choices data-choices-search-false asp-for="@Model.orderFilter.status" id="idStatus">
+                                    <option value="">@sharedResource["Select Status"]</option>
+                                    @{
+                                        if (@Model.statuses != null)
+                                        {
+                                            foreach (var item in @Model.statuses)
+
+                                            {
+
+                                                <option value="@item.OrderStatusId">@item.Status</option>
+                                            }
+                                        }
+
+
+                                    }
+
+
+                                </select>
+
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-xxl-2 col-sm-4">
+                            <div>
+                                <select class="form-control" data-choices data-choices-search-false
+                                        id="idPayment" asp-for="@Model.orderFilter.country">
+                                    <option value="">@sharedResource["Select Country"]</option>
+
+                                    @{
+                                        if (@Model.countries != null)
+                                        {
+                                            foreach (var item in @Model.countries)
+
+                                            {
+
+                                                <option value="@item.CountryId">@item.CountryTlen</option>
+                                            }
+                                        }
+
+
+                                    }
+
+
+
+                                </select>
+
+
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <!--end col-->
+                        <div class="col-xxl-1 col-sm-4">
+                            <div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="ri-equalizer-fill me-1 align-bottom"></i>
+                                    @sharedResource["Filters"]
+                                </button>
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </form>
+            </div>
+            <div class="card-body pt-0">
+                <div>
+                    <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active All py-3" data-bs-toggle="tab" id="All"
+                               href="#home1" role="tab" aria-selected="true">
+                                <i class="ri-store-2-fill me-1 align-bottom"></i>@sharedResource[ "All Orders"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-3 OnDelivery" data-bs-toggle="tab" id="OnDelivery"
+                               href="#ondelivered" role="tab" aria-selected="false">
+                                <i class="ri-checkbox-circle-line me-1 align-bottom"></i> @sharedResource[ "Delivered"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-3 Processing" data-bs-toggle="tab" id="Processing"
+                               href="#processing" role="tab" aria-selected="false">
+                                <i class="ri-truck-line me-1 align-bottom"></i> @sharedResource["Processing"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-3 Packing" data-bs-toggle="tab" id="Packing"
+                               href="#packing" role="tab" aria-selected="false">
+                                <i class="ri-arrow-left-right-fill me-1 align-bottom"></i> @sharedResource["Packing"]
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <div id="orderpageTable" class="card-body">
+                        <table id="orderTable" class="table table-nowrap align-middle">
+                            <thead class="text-muted table-light">
+                                <tr class="text-uppercase">
+                                    <th class="sort" data-sort="id">@sharedResource["Order Id"]</th>
+                                    <th class="sort" data-sort="customer_name">@sharedResource["Customer"]</th>
+                                    <th class="sort" data-sort="product_name">@sharedResource["Address"]</th>
+                                    <th class="sort" data-sort="date">@sharedResource["Order Date"]</th>
+                                    <th class="sort" data-sort="amount">@sharedResource["Total"]</th>
+                                    <th class="sort" data-sort="payment">@sharedResource["Country"]</th>
+                                    <th class="sort" data-sort="status">@sharedResource["Status"]</th>
+                                    <th class="sort" data-sort="city">@sharedResource["Actions"]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div class="noresult" style="display: none">
+                            <div class="text-center">
+                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
+                                           trigger="loop" colors="primary:#405189,secondary:#0ab39c"
+                                           style="width:75px;height:75px">
+                                </lord-icon>
+                                <h5 class="mt-2">@sharedResource["Sorry! No Result Found"]</h5>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+    </div>
+    </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
+
+
+@section styles{
+    <!-- Sweet Alert css-->
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+}
+      
+
+    <!--end row-->
+
+    @section scripts{
+    <!-- list.js min js -->
+    <script src="~/assets/libs/list.js/list.min.js"></script>
+
+    <!--list pagination js-->
+    <script src="~/assets/libs/list.pagination.js/list.pagination.min.js"></script>
+
+    <!-- ecommerce-order init js -->
+    <script src="~/assets/js/pages/ecommerce-order.init.js"></script>
+
+    <!-- Sweet Alerts js -->
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+
+    <!-- App js -->
+    <script src="~/assets/js/app.js"></script>
+}
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <script>
+    $(document).ready(function () {
+        var domainUrl = document.getElementById("UrlId").value;
+
+        $("#orderTable").DataTable({
+            "proccessing": true,
+            "serverSide": true,
+            "ajax": {
+                url: "/Admin/Configurations/ManageOrder/ListManagement",
+                type: 'POST',
+                headers: { 'XSRF-TOKEN': $('@Html.AntiForgeryToken()').val() }
+            },
+
+            "columnDefs": [
+                {
+                    "targets": -1,
+                    "data": null,
+                    "render": function (data, type, row, meta) {
+                        var actionsHtml = '<ul class="list-inline hstack gap-2 mb-0">';
+                        actionsHtml += '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Invoice">';
+                        actionsHtml += '<a href="' + domainUrl + '/Admin/Configurations/ManageOrder/OrderDetails?id=' + row.OrderId + '" class="btn"><i class="ri-eye-fill fs-16"></i></a>';
+                        actionsHtml += '</li>';
+                        actionsHtml += '<li class="list-inline-item" data - bs - toggle="tooltip" data - bs - trigger="hover" data - bs - placement="top" title = "Edit" >';
+                        actionsHtml += ' <a class="edit-item-btn" href = "/Admin/Configurations/ManageOrder/EditOrder?id=' + row.OrderId + '" data - bs - toggle="modal" >';
+                        actionsHtml += '   <i class="ri-pencil-fill align-bottom text-muted" > </i>';
+                        actionsHtml += '</a></li>';
+                        if (row.StatusId == 5 || row.StatusId == 6 || row.StatusId == 7) {
+                            actionsHtml += '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Print ShippingLabel">';
+                            actionsHtml += '<a class="text-primary d-inline-block" onclick="printPreview(' + row.OrderId + ')">';
+                            actionsHtml += '<i class="ri-print fs-16"></i></a></li>';
+                        }
+
+                        actionsHtml += '</ul>';
+                        return actionsHtml;
+                    },
+                    "sortable": false
+                },
+                { "name": "OrderId", "data": "OrderId", "targets": 0, "visible": true},
+                { "name": "CusName", "data": "CusName", "targets": 1, "visible": true, "className": "customer_name" },
+                { "name": "CusAddress", "data": "CusAddress", "targets": 2, "className": "product_name" },
+                { "name": "OrderDate", "data": "OrderDate", "targets": 3,
+                    "render": function (data, type, row) {
+                        return moment(data).format("DD/MM/YYYY");
+                    }, "className": "date"
+                },
+                { "name": "NetOrder", "data": "NetOrder", "targets": 4,
+                    "render": function (data, type, row) {
+                        return Math.round(data);
+                    }, "className": "amount"
+                },
+                { "name": "Country", "data": "Country", "targets": 5, "className": "payment" },
+                { "name": "Status", "data": "Status", "targets": 6, "className": "status" }
+
+
+
+            ],
+            "order": [[4, "desc"]],
+            "language": {
+                "lengthMenu": "Show _MENU_",
+            },
+            "dom":
+                "<'row'" +
+                "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
+                "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
+                ">" +
+
+                "<'table-responsive'tr>" +
+
+                "<'row'" +
+                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                ">",
+
+        });
+    });
+    		function printPreview(OrderId){
+			$.ajax({
+				type: "GET",
+                url: "/Admin/Configurations/ManageOrder/Orders?handler=Print",
+				data: { "OrderId": OrderId },
+				contentType: "application/json",
+				dataType: "json",
+				success: function (response) {
+					var targetFile = window.open('http://' + location.host+ "/" + response.ShippingLabel);
+                var repotfile = window.open('http://' + location.host + "/Admin/Configurations/ManageReport/MergeReport?id=" + response.OrderId);
+
+					targetFile.print();
+                                    //repotfile.print();
+
+
+				},
+				failure: function (response) {
+					alert(response);
+				}
+			});
+			
+}
+
+</script>
+

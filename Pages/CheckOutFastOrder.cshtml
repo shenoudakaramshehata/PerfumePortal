@@ -1,0 +1,1054 @@
+﻿@page
+@model CRM.Pages.CheckOutFastOrderModel
+@Html.AntiForgeryToken()
+@inject PerfumeContext _context
+@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+    @using Microsoft.AspNetCore.Localization
+@using Newtonsoft.Json;
+
+    var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+        var currentuser = await UserManager.GetUserAsync(User);
+    //bool isCheckoutSuccessful = HttpContext.Session.GetString("IsCheckoutSuccessful") == "true";
+    //string outOfStockItemNamesJson = HttpContext.Session.GetString("OutOfStockItemNames");
+    //List<string> outOfStockItemNames = string.IsNullOrEmpty(outOfStockItemNamesJson)
+    //    ? new List<string>() // Create an empty list if the JSON string is null or empty
+    //    : JsonConvert.DeserializeObject<List<string>>(outOfStockItemNamesJson);
+}
+
+    
+}
+<link href="~/stepper.css" rel="stylesheet" />
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+
+<div class="page-title-wrap">
+    <div class="page-title-area " style="background-color:#f5f5f5 !important;">
+      
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black">@sharedResource["Check Out"]</h2>
+                    <ul>
+                        <li>
+                            <a class="text-black" href="/index">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black">@sharedResource["Check Out"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div></div>
+@{
+    if (Model.user == null)
+    {
+        <div class="checkout-area pt-100 pb-70">
+
+            <div id="outOfStockContainer" class="container" style="display: none; justify-content: center; align-items: center;">
+                <div class="checkout-item">
+                    <div class="checkout-payment">
+                        <h3 id="outOfStockMessage"></h3>
+                    </div>
+                </div>
+            </div>
+                
+            <div class="container">
+                <div class="row">
+                    <form class="row" asp-page-handler="AddCustomerAddress" asp-route-Serial="@Model.newserial">
+                        <div class="col-lg-8">
+                            <div class="checkout-item">
+                                <div class="checkout-billing">
+                                    <h2>@sharedResource["Billing Address"]</h2>
+                                    @*  @if (Model.hasAddress)
+                            {*@
+
+                                    @*                            <form asp-page-handler="AddCustomerAddress" asp-route-Serial="@Model.newserial">
+                            *@                            <input type="hidden" class="form-control" id="serialCouponId" value="@Model.newserial" value="@Model.newserial">
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="FullName" asp-for="@Model.FastOrderVM.FullName" placeholder="@sharedResource["FullName*"]" required>
+                                        <span class="validation-message text-danger" id="fullname-validation-msg"></span>
+
+                                    </div>
+                                    @{
+                                        if (currentuser == null)
+                                        {
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="EmailInput" asp-for="@Model.FastOrderVM.Email" placeholder="@sharedResource["Email*"]" required>
+                                                <span class="validation-message text-danger" id="email-validation-msg"></span>
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="Address" asp-for="@currentuser.Email" placeholder="@sharedResource["Email*"]" required>
+                                            </div>
+                                        }
+                                    }
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="PhoneNumber" asp-for="@Model.FastOrderVM.PhoneNumber" placeholder="@sharedResource["Phone Number*"]" required>
+                                        <div class="invalid-feedback" id="phone-error-msg">Please enter a valid phone number with the country code. The format should be '+[country code] [phone number]'.</div>
+                                        <span class="validation-message text-danger" id="phone-validation-msg"></span>
+                                       
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="Address" asp-for="@Model.FastOrderVM.Address" placeholder="@sharedResource["Address*"]" required>
+                                        <span class="validation-message text-danger" id="address-validation-msg"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="CityName" asp-for="@Model.FastOrderVM.Cityname" placeholder="@sharedResource["City name*"]" required>
+                                        <span class="validation-message text-danger" id="cityname-validation-msg"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="AreaName" asp-for="@Model.FastOrderVM.Areaname" placeholder="@sharedResource["Area name*"]" required>
+                                        <span class="validation-message text-danger" id="areaname-validation-msg"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="ZipcodeId" asp-for="@Model.FastOrderVM.ZIP"  placeholder="@sharedResource["Zip Code*"]" required>
+                                        <span class="validation-message text-danger" id="zipcodeId-validation-msg"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="BuildingNo" asp-for="@Model.FastOrderVM.BuildingNo" placeholder="@sharedResource["Building No*"]" required>
+                                        <span class="validation-message text-danger" id="buildingno-validation-msg"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="CountryENName" asp-for="@Model.CountryENName" placeholder="@sharedResource["Country"]" disabled>
+                                    </div>
+                                    @{
+                                        if (currentuser == null)
+                                        {
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" onclick="ShowPassword()" asp-for="@Model.FastOrderVM.ISCHecked" id="defaultCheck1">
+                                                <label class="form-check-label" for="defaultCheck1">@sharedResource["Create an account?"]</label>
+                                            </div>
+
+                                            <div class="form-group" id="Password" style="display:none">
+                                                <input type="password" id="passinput" class="form-control" asp-for="@Model.FastOrderVM.Password" placeholder="@sharedResource["Password"]">
+                                            </div>
+                                        }
+                                    }
+                                    <div class="form-group">
+                                        <textarea cols="2" id="noteID" asp-for="@Model.FastOrderVM.Notes" class="form-control" placeholder=@sharedResource["Order notes (optional)"]></textarea>
+                                    </div>
+
+
+
+                                    @*}*@
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="checkout-item">
+
+
+
+                                <div class="checkout-total" style="background-color: darkgray;">
+                                    <h2>@sharedResource["Cart Total"]:</h2>
+                                    <ul>
+                                        @foreach (var item in Model.shippingCartObjectVMs)
+                                        {
+                                            <li>
+                                                @{
+                                                    var total = item.priceCart * item.Qunatity;
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        @item.ItemTitleEn
+                                                        <span>@total  @Model.CurrencyNameEN</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        @item.ItemTitleAr
+                                                        <span>@total  @Model.CurrencyNameAr</span>
+                                                    }
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                    <h3>
+                                        @sharedResource["Subtotal"]:
+
+                                        @if (BrowserCulture == "en-US")
+                                        {
+
+                                            <span>@Model.Subtotal  @Model.CurrencyNameEN</span>
+
+                                        }
+                                        else
+                                        {
+                                            <span>@Model.Subtotal  @Model.CurrencyNameAr</span>
+
+                                        }
+
+                                    </h3>
+                                    <h3>
+                                        @sharedResource["Tax"] &nbsp;(@Model.tax %):
+                                        @{
+                                            if (@Model.tax == 0)
+                                            {
+                                                <span>@Model.OrdernetByTax</span>
+                                            }
+                                            else
+                                            {
+                                                @if (BrowserCulture == "en-US")
+                                                {
+
+                                                    <span>@Model.OrdernetByTax @Model.CurrencyNameEN </span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span>@Model.OrdernetByTax  @Model.CurrencyNameAr</span>
+
+                                                }
+                                            }
+                                        }
+
+                                    </h3>
+                                    @{
+                                        if (Model.DeliveryCost != null)
+                                        {
+                                            <h3 class="mt-3 display-4 fw-bolder">
+                                                @sharedResource["Shipping Cost"]:
+
+                                                @if (BrowserCulture == "en-US")
+                                                {
+
+                                                    <span>@Model.DeliveryCost  @Model.CurrencyNameEN</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@Model.DeliveryCost  @Model.CurrencyNameAr</span>
+                                                }
+
+                                            </h3>
+                                        }
+                                    }
+                                    <h3>
+                                        @sharedResource["Total"]:
+
+                                        @if (BrowserCulture == "en-US")
+                                        {
+
+                                            <span id="TotalID">@Model.TotalAmount  @Model.CurrencyNameEN</span>
+
+                                        }
+                                        else
+                                        {
+                                            <span id="TotalID">@Model.TotalAmount  @Model.CurrencyNameAr</span>
+
+                                        }
+
+                                    </h3>
+
+
+                                    @{
+                                        if (Model.TotalAmount > 0)
+                                        {
+                                            if (Model.coupon != null)
+                                            {
+                                                <h3 class="mt-3 display-4 fw-bolder">
+                                                    @sharedResource["After Discount"]:
+
+                                                    @if (BrowserCulture == "en-US")
+                                                    {
+
+                                                        <span id="TotalAmountAfterDiscountID">@Model.TotalAmountAfterDiscount  @Model.CurrencyNameEN</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span id="TotalAmountAfterDiscountID">@Model.TotalAmountAfterDiscount  @Model.CurrencyNameAr</span>
+                                                    }
+
+                                                </h3>
+                                            }
+                                        }
+                                    }
+
+                                </div>
+                                <div class="text-center my-4">
+                                    <button type="button" onclick="checkout(@Model.newserial)" class="btn btn-close-white btn-light" style="border-radius: 0; width:100%;">@sharedResource["Place Order"]</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    }
+
+    else
+    {
+        <div class="checkout-area pt-100 pb-70">
+            <div id="outOfStockContainer" class="container" style="display: none; justify-content: center; align-items: center;">
+                <div class="checkout-item">
+                    <div class="checkout-payment">
+                        <h3 id="outOfStockMessage"></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <form class="row" asp-page-handler="AddCustomerAddress" asp-route-Serial="@Model.newserial">
+                        <div class="col-lg-8">
+                            <div class="checkout-item">
+                                <div class="checkout-billing">
+                                    <h2>@sharedResource["Billing Address"]</h2>
+                                    @*  @if (Model.hasAddress)
+                            {*@
+
+                                    @*                            <form asp-page-handler="AddCustomerAddress" asp-route-Serial="@Model.newserial">
+                            *@                            <input type="hidden" class="form-control" id="serialCouponId" value="@Model.newserial" value="@Model.newserial">
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="Address" asp-for="@Model.customerAddr.Address" placeholder="@sharedResource["Address*"]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="CityName" asp-for="@Model.customerAddr.CityName" placeholder="@sharedResource["City name*"]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="AreaName" asp-for="@Model.customerAddr.AreaName" placeholder="@sharedResource["Area name*"]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="ZipcodeId" asp-for="@Model.customerAddr.ZIPCode" placeholder="@sharedResource["Zip Code*"]" required>
+                                        <span class="validation-message text-danger" id="zipcodeId-validation-msg"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="BuildingNo" asp-for="@Model.customerAddr.BuildingNo" placeholder="@sharedResource["Building No*"]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="PhoneNumber" asp-for="@Model.customerAddr.Mobile" placeholder="@sharedResource["Mobile*"]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="CountryENName" asp-for="@Model.CountryENName" placeholder="@sharedResource["Country"]" disabled>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <textarea cols="2" asp-for="@Model.FastOrderVM.Notes" class="form-control" placeholder=@sharedResource["Order notes (optional)"]></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="checkout-item">
+
+
+
+                                <div class="checkout-total" style="background-color: darkgray;">
+                                    <h2>@sharedResource["Cart Total"]:</h2>
+                                    <ul>
+                                        @foreach (var item in Model.shoppingCarts)
+                                        {
+                                            <li>
+                                                @{
+                                                    var total = item.ItemPrice * item.ItemQty;
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        @item.Item.ItemTitleEn
+                                                        <span>@total  @Model.CurrencyNameEN</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        @item.Item.ItemTitleAr
+                                                        <span>@total  @Model.CurrencyNameAr</span>
+                                                    }
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                    <h3>
+                                        @sharedResource["Subtotal"]:
+
+                                        @if (BrowserCulture == "en-US")
+                                        {
+
+                                            <span>@Model.Subtotal  @Model.CurrencyNameEN</span>
+
+                                        }
+                                        else
+                                        {
+                                            <span>@Model.Subtotal  @Model.CurrencyNameAr</span>
+
+                                        }
+
+                                    </h3>
+
+
+
+
+
+                                    <h3>
+                                        @sharedResource["Tax"] &nbsp;(@Model.tax %):
+                                        @{
+
+                                            if (@Model.tax == 0)
+                                            {
+                                                <span>@Model.OrdernetByTax</span>
+                                            }
+                                            else
+                                            {
+                                                @if (BrowserCulture == "en-US")
+                                                {
+
+                                                    <span>@Model.OrdernetByTax  @Model.CurrencyNameEN </span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span>@Model.OrdernetByTax  @Model.CurrencyNameAr </span>
+
+                                                }
+                                            }
+                                        }
+
+
+                                    </h3>
+                                    @{
+                                        if (Model.DeliveryCost != null)
+                                        {
+                                            <h3 class="mt-3 display-4 fw-bolder">
+                                                @sharedResource["Shipping Cost"]:
+
+                                                @if (BrowserCulture == "en-US")
+                                                {
+
+                                                    <span>@Model.DeliveryCost  @Model.CurrencyNameEN</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@Model.DeliveryCost  @Model.CurrencyNameAr</span>
+                                                }
+
+                                            </h3>
+                                        }
+                                    }
+                                    <h3>
+                                        @sharedResource["Total"]:
+
+                                        @if (BrowserCulture == "en-US")
+                                        {
+
+                                            <span>@Model.TotalAmount  @Model.CurrencyNameEN</span>
+
+                                        }
+                                        else
+                                        {
+                                            <span>@Model.TotalAmount  @Model.CurrencyNameAr</span>
+
+                                        }
+
+                                    </h3>
+
+
+                                    @{
+                                        if (Model.TotalAmount > 0)
+                                        {
+                                            if (Model.coupon != null)
+                                            {
+                                                <h3 class="mt-3 display-4 fw-bolder">
+                                                    @sharedResource["After Discount"]:
+
+                                                    @if (BrowserCulture == "en-US")
+                                                    {
+
+                                                        <span>@Model.TotalAmountAfterDiscount  @Model.CurrencyNameEN</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@Model.TotalAmountAfterDiscount  @Model.CurrencyNameAr</span>
+                                                    }
+
+                                                </h3>
+                                            }
+                                        }
+                                    }
+
+                                </div>
+
+                                <div class="text-center my-4">
+                                    <button type="button" onclick="checkoutDatabase(@Model.newserial)" class="btn btn-close-white btn-light" style="border-radius: 0; width:100%;">@sharedResource["Place Order"]</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+    }
+}
+<partial name="_TabbyPopup" />
+
+<script>
+
+    // Set the flag when the page is loaded after a successful checkout
+
+
+    //function checkout(Serial){
+    //     $.ajax({
+    //        type: "POST",
+    //            url: "/CheckOutFastOrder?handler=AddCustomerAddress",
+    //        data: { "Serial": Serial},
+    //        beforeSend: function (xhr) {
+    //            xhr.setRequestHeader("XSRF-TOKEN",
+    //                $('input:hidden[name="__RequestVerificationToken"]').val());
+    //        },
+
+    //        headers: {
+    //            RequestVerificationToken:
+    //                $('input:hidden[name="__RequestVerificationToken"]').val()
+    //        },
+
+    //        success: function (response) {
+    //            console.log(response)
+    //            const message = `Items ${response.join(", ")} are out of stock`;
+    //            showOutOfStockMessage(message);
+    //        },
+    //        failure: function (response) {
+    //            alert(response);
+    //        }
+    //    });
+    //}
+
+    function checkout(Serial) {
+        if (!validateFormFields()) {
+            return;
+        }
+
+        const fullName = $("#FullName").val();
+        const email = $("#EmailInput").val();
+        const phoneNumber = $("#PhoneNumber").val();
+        const address = $("#Address").val();
+        const city = $("#CityName").val();
+        const area = $("#AreaName").val();
+        const buildingNo = $("#BuildingNo").val();
+        const notes = $("#noteID").val();
+        const zip = $("#ZipcodeId").val();
+        const isCreateAccountChecked = $("#defaultCheck1").prop("checked");
+        const password = isCreateAccountChecked ? $("#passinput").val() : null;
+
+        if (isCreateAccountChecked && !password) {
+            $("#passinput").addClass("is-invalid");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/CheckOutFastOrder?handler=AddCustomerAddress",
+            data: {
+                "Serial": Serial,
+                "FullName": fullName,
+                "Email": email,
+                "PhoneNumber": phoneNumber,
+                "Address": address,
+                "CityName": city,
+                "AreaName": area,
+                "BuildingNo": buildingNo,
+                "Notes": notes,
+                "ZIP": zip,
+                "IsCreateAccountChecked": isCreateAccountChecked,
+                "Password": password
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {
+                console.log(response);
+                if (response.outofStock == false) {
+                    const message = `Items ${response.outOfStockItemNames.join(", ")} are out of stock`;
+                    showOutOfStockMessage(message);
+
+                }
+                if (response.outofStock == true) {
+                    var orderId = response.order; // Get the order ID
+                    var serialParameter = Serial; // Get the serial parameter
+
+                    // Construct the URL
+                    var redirectUrl = "/CheckOutPayment?orderId=" + orderId + (serialParameter ? "&Serial=" + serialParameter : "");
+
+                    // Perform the redirect
+                    window.location.href = redirectUrl;
+                }
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert(textStatus + ": " + errorThrown);
+            }
+        });
+    }
+
+    $("#defaultCheck1").on("change", function () {
+        $("#passinput").prop("required", this.checked).toggle(this.checked);
+        if (!this.checked) {
+            $("#passinput").removeClass("is-invalid");
+        }
+    });
+
+    function validateFormFields() {
+        // Validate Full Name
+        const fullNameInput = document.getElementById("FullName");
+        if (fullNameInput.value.trim() === "") {
+            const validationMsg = document.getElementById("fullname-validation-msg");
+            validationMsg.textContent = "Full Name is required.";
+            return false;
+        }
+
+        // Validate Email (if applicable)
+        const emailInput = document.getElementById("EmailInput");
+        const currentuserEmail = document.getElementById("Address"); // Change this to the correct element ID
+        if (!currentuserEmail && emailInput.value.trim() === "") {
+            const validationMsg = document.getElementById("email-validation-msg");
+            validationMsg.textContent = "Email is required.";
+            return false;
+        }
+
+        // Validate Phone Number
+        const phoneNumberInput = document.getElementById("PhoneNumber");
+        if (phoneNumberInput.value.trim() === "") {
+            const validationMsg = document.getElementById("phone-validation-msg");
+            validationMsg.textContent = "Phone Number is required.";
+            return false;
+        }
+        // Validate Zip
+        const zipInput = document.getElementById("ZipcodeId");
+        if (zipInput.value.trim() === "") {
+            const validationMsg = document.getElementById("zipcodeId-validation-msg");
+            validationMsg.textContent = "Zip Code is required.";
+            return false;
+        }
+        // Validate Address
+        const addressInput = document.getElementById("Address");
+        if (addressInput.value.trim() === "") {
+            const validationMsg = document.getElementById("address-validation-msg");
+            validationMsg.textContent = "Address is required.";
+            return false;
+        }
+
+        // Validate City Name
+        const cityInput = document.getElementById("CityName");
+        if (cityInput.value.trim() === "") {
+            const validationMsg = document.getElementById("cityname-validation-msg");
+            validationMsg.textContent = "City Name is required.";
+            return false;
+        }
+
+        // Validate Area Name
+        const areaInput = document.getElementById("AreaName");
+        if (areaInput.value.trim() === "") {
+            const validationMsg = document.getElementById("areaname-validation-msg");
+            validationMsg.textContent = "Area Name is required.";
+            return false;
+        }
+
+        // Validate Building Number
+        const buildingNoInput = document.getElementById("BuildingNo");
+        if (buildingNoInput.value.trim() === "") {
+            const validationMsg = document.getElementById("buildingno-validation-msg");
+            validationMsg.textContent = "Building Number is required.";
+            return false;
+        }
+
+        return true;
+    }
+
+    function showOutOfStockMessage(message) {
+        document.getElementById("outOfStockMessage").textContent = message;
+        document.getElementById("outOfStockContainer").style.display = "flex";
+    }
+
+
+    function validateFormFieldsDatabase() {
+
+
+        // Validate Email (if applicable)
+
+
+        // Validate Phone Number
+        const phoneNumberInput = document.getElementById("PhoneNumber");
+        if (phoneNumberInput.value.trim() === "") {
+            const validationMsg = document.getElementById("phone-validation-msg");
+            validationMsg.textContent = "Phone Number is required.";
+            return false;
+        }
+
+        // Validate Address
+        const addressInput = document.getElementById("Address");
+        if (addressInput.value.trim() === "") {
+            const validationMsg = document.getElementById("address-validation-msg");
+            validationMsg.textContent = "Address is required.";
+            return false;
+        }
+        // Validate Zip
+        const zipInput = document.getElementById("ZipcodeId");
+        if (zipInput.value.trim() === "") {
+            const validationMsg = document.getElementById("zipcodeId-validation-msg");
+            validationMsg.textContent = "Zip Code is required.";
+            return false;
+        }
+        // Validate City Name
+        const cityInput = document.getElementById("CityName");
+        if (cityInput.value.trim() === "") {
+            const validationMsg = document.getElementById("cityname-validation-msg");
+            validationMsg.textContent = "City Name is required.";
+            return false;
+        }
+
+        // Validate Area Name
+        const areaInput = document.getElementById("AreaName");
+        if (areaInput.value.trim() === "") {
+            const validationMsg = document.getElementById("areaname-validation-msg");
+            validationMsg.textContent = "Area Name is required.";
+            return false;
+        }
+
+        // Validate Building Number
+        const buildingNoInput = document.getElementById("BuildingNo");
+        if (buildingNoInput.value.trim() === "") {
+            const validationMsg = document.getElementById("buildingno-validation-msg");
+            validationMsg.textContent = "Building Number is required.";
+            return false;
+        }
+
+        return true;
+    }
+
+    function checkoutDatabase(Serial) {
+        if (!validateFormFieldsDatabase()) {
+            return;
+        }
+
+
+        const phoneNumber = $("#PhoneNumber").val();
+        const address = $("#Address").val();
+        const city = $("#CityName").val();
+        const area = $("#AreaName").val();
+        const buildingNo = $("#BuildingNo").val();
+        const notes = $("#noteID").val();
+        const zip = $("#ZipcodeId").val();
+
+
+
+        $.ajax({
+            type: "POST",
+            url: "/CheckOutFastOrder?handler=AddCustomerAddressDatabase",
+            data: {
+                "Serial": Serial,
+
+                "PhoneNumber": phoneNumber,
+                "Address": address,
+                "CityName": city,
+                "AreaName": area,
+                "BuildingNo": buildingNo,
+                "Notes": notes,
+                "ZIP": zip
+
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {
+                console.log(response);
+                if (response.outofStock == false) {
+                    const message = `Items ${response.outOfStockItemNames.join(", ")} are out of stock`;
+                    showOutOfStockMessage(message);
+
+                }
+                if (response.outofStock == true) {
+                    var orderId = response.order; // Get the order ID
+                    var serialParameter = Serial; // Get the serial parameter
+
+                    // Construct the URL
+                    var redirectUrl = "/CheckOutPayment?orderId=" + orderId + (serialParameter ? "&Serial=" + serialParameter : "");
+
+                    // Perform the redirect
+                    window.location.href = redirectUrl;
+                }
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert(textStatus + ": " + errorThrown);
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    window.onload = StorageinSession()
+    function StorageinSession() {
+        var cartItemsData = JSON.parse(localStorage.getItem("cartItems"));
+
+        var country = localStorage.getItem('Country')
+        var parsecartItems = JSON.stringify(cartItemsData)
+        console.log(typeof (parsecartItems))
+        console.log(typeof (country))
+        //var countryPic = localStorage.getItem('countryPic');
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=Storedata",
+            data: { "parsecartItems": parsecartItems, "country": country },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+                //console.log(response.CountryTlen);
+                //console.log(response.CountryTlar);
+                //if(localStorage.getItem("lang")=="en"){
+                //    document.getElementById("CurentCountry").innerHTML=response.CountryTlen;
+                //}
+                //else{
+                //    document.getElementById("CurentCountry").innerHTML=response.CountryTlar;
+
+                //}
+                var countryPic = response.Pic;
+                document.getElementById("CurentCountryPic").src = "/" + countryPic
+
+
+                //document.getElementById("CurentCountry").innerHTML=response;
+                //document.getElementById("shippingicon").innerHTML = response
+                //localStorage.setItem("countryPic", response);
+                //var countryPic = localStorage.getItem('countryPic');
+                //var CountryImg = document.getElementById("CountryImg").src = "/"+response
+                //localStorage.setItem("CountryTitle",response);
+                //document.getElementById("CurentCountry").innerHTML=response;
+
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+
+        //sessionStorage.setItem('cartItemsData', JSON.stringify(cartItemsData));
+    }
+    function ShowPassword() {
+        let chk = document.getElementById("defaultCheck1");
+        let Password = document.getElementById("Password");
+        if (chk.checked == true) {
+            // 👇 this SHOWS the requiredInputs
+            Password.style.display = 'flex';
+        }
+        else {
+            Password.style.display = 'none';
+        }
+    }
+    //function CheckOut() {
+    //    var Country = localStorage.getItem("Country");
+    //    var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+    //    var selectedPayment = document.querySelector('input[name="paymentId"]:checked').value;
+    //    console.log(selectedPayment)
+    //    console.log(typeof(selectedPayment))
+
+    //    //var parsecartItems = JSON.parse(cartItems)
+    //    var parsecartItems = JSON.stringify(cartItems)
+    //    console.log(typeof (parsecartItems))
+    //    var Serial = document.getElementById("serialCouponId").value;
+    //    console.log(Serial)
+    //    let Address = document.getElementById("Address").value;
+    //    let CityName = document.getElementById("CityName").value;
+    //    let AreaName = document.getElementById("AreaName").value;
+    //    let BuildingNo = document.getElementById("BuildingNo").value;
+    //    let Mobile = document.getElementById("Mobile").value;
+    //    let CountryENName = document.getElementById("CountryENName").value;
+    //    console.log(CountryENName)
+
+    //    let Adressobj = {
+    //        "Address": Address,
+    //        "CityName": CityName,
+    //        "AreaName": AreaName,
+    //        "BuildingNo": BuildingNo,
+    //        "Mobile": Mobile,
+    //        "CountryENName": CountryENName
+    //    };
+    //    console.log(Adressobj)
+    //    let ParseAddress = JSON.stringify(Adressobj)
+    //    console.log(ParseAddress)
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/CheckOut?handler=AddCustomerAddress",
+    //        data: { "Serial": Serial, "Country": Country, "Adressobj": Adressobj, "selectedPayment": selectedPayment },
+    //        beforeSend: function (xhr) {
+    //            xhr.setRequestHeader("XSRF-TOKEN",
+    //                $('input:hidden[name="__RequestVerificationToken"]').val());
+    //        },
+
+    //        headers: {
+    //            RequestVerificationToken:
+    //                $('input:hidden[name="__RequestVerificationToken"]').val()
+    //        },
+
+    //        success: function (response) {
+    //            console.log(response)
+    //            //document.getElementById("shippingicon").innerHTML = response
+    //            //localStorage.removeItem('cartItems');
+
+    //        },
+    //        failure: function (response) {
+    //            alert(response);
+    //        }
+    //    });
+
+    //}
+
+    function validateInput(inputId, validationMsgId, validationMessage) {
+        var input = document.getElementById(inputId);
+        var validationMsg = document.getElementById(validationMsgId);
+
+        // Clear previous validation message
+        validationMsg.textContent = "";
+
+        if (input.value.trim() === "") {
+            validationMsg.textContent = validationMessage;
+            return false;
+        }
+
+        return true;
+    }
+
+    function handleTabbyValidation() {
+        var isEmailValid = validateInput("EmailInput", "email-validation-msg", "Email is required.");
+        var isAddressValid = validateInput("Address", "address-validation-msg", "Address is required.");
+        var isCityNameValid = validateInput("CityName", "cityname-validation-msg", "City name is required.");
+        var isAreaNameValid = validateInput("AreaName", "areaname-validation-msg", "Area name is required.");
+        var isBuildingNoValid = validateInput("BuildingNo", "buildingno-validation-msg", "Building No is required.");
+        var isPhoneValid = validateInput("PhoneNumber", "phone-validation-msg", "Please enter a valid phone number.");
+        var isFullNameValid = validateInput("FullName", "fullname-validation-msg", "Full name is required.");
+
+        if (isEmailValid && isAddressValid && isCityNameValid && isAreaNameValid && isBuildingNoValid && isPhoneValid && isFullNameValid) {
+            handleTabby(); // Proceed with sending the AJAX request
+        }
+        else {
+            // If validation fails, reset the radio button selection
+            document.getElementById("defaultCheckTabby2").checked = false;
+        }
+    }
+
+
+    function handleTabby() {
+        console.log("Tabby")
+        var email = document.getElementById("EmailInput").value;
+        console.log(typeof (email))
+        var address = document.getElementById("Address").value;
+        console.log(typeof (address))
+        var cityName = document.getElementById("CityName").value;
+        console.log(typeof (cityName))
+        var areaName = document.getElementById("AreaName").value;
+        console.log(typeof (areaName))
+        var buildingNo = document.getElementById("BuildingNo").value;
+        console.log(typeof (buildingNo))
+        var phoneNumber = document.getElementById("PhoneNumber").value;
+        console.log(typeof (phoneNumber))
+        var fullName = document.getElementById("FullName").value;
+        console.log(typeof (fullName))
+        var data = {
+            "email": email,
+            "address": address,
+            "cityName": cityName,
+            "areaName": areaName,
+            "buildingNo": buildingNo,
+            "phoneNumber": phoneNumber,
+            "FullName": fullName
+        };
+        var totalElement = document.getElementById("TotalID");
+        var totalAfterDiscountElement = document.getElementById("TotalAmountAfterDiscountID");
+
+        // If the elements exist, add their values to the data object
+        if (totalElement != null) {
+            console.log(typeof (totalElement))
+            data.totalAmount = totalElement.innerText;
+        }
+
+        if (totalAfterDiscountElement != null) {
+            data.totalAmountAfterDiscount = totalAfterDiscountElement.innerText;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/CheckOutFastOrder?handler=TabbyCheckOut",
+            data: data,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+
+
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+        $('#AddModal').modal('show');
+    }
+</script>

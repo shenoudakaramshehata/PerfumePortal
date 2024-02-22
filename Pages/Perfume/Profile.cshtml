@@ -1,0 +1,95 @@
+﻿@page
+@model CRM.Pages.Perfume.ProfileModel
+@{
+    Layout = "_Layout2";
+}
+
+<!-- personal deatail section start -->
+<section class="contact-page register-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>@sharedResource["PERSONAL DETAIL"]</h3>
+                <form class="theme-form">
+                    <div class="form-row row">
+                        <div class="col-md-6">
+                            <label for="name">@sharedResource["First Name"]</label>
+                            <input type="text" class="form-control" id="name" placeholder="@sharedResource["Enter Your name"]"
+                                   required="">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email">@sharedResource["Last Name"]</label>
+                            <input type="text" class="form-control" id="last-name" placeholder="@sharedResource["Last Name"]" required="">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="review">@sharedResource["Phone number"]</label>
+                            <input type="text" class="form-control" id="review" placeholder="@sharedResource["Enter your number"]"
+                                   required="">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email">@sharedResource["Email"]</label>
+                            <input type="text" class="form-control" id="email" placeholder="@sharedResource["Email"]" required="">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="review">@sharedResource["Write Your Message"]</label>
+                            <textarea class="form-control mb-0" placeholder="@sharedResource["Write Your Message"]" 
+                                      id="exampleFormControlTextarea1" rows="6"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Section ends -->
+<!-- address section start -->
+@*@*<section class="contact-page register-page section-b-space">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>@sharedResource["SHIPPING ADDRESS"]</h3>
+                <form class="theme-form">
+                    <div class="form-row row">
+                        <div class="col-md-6">
+                            <label for="name">@sharedResource["flat/plot"]</label>
+                            <input type="text" class="form-control" id="home-ploat" placeholder="@sharedResource["flat/plot"]"
+                                   required="">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="name">@sharedResource["Address"]</label>
+                            <input type="text" class="form-control" id="address-two" placeholder="@sharedResource["Address"]"
+                                   required="">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email">@sharedResource["Zip Code"]</label>
+                            <input type="text" class="form-control" id="zip-code" placeholder="@sharedResource["Zip Code"]"
+                                   required="">
+                        </div>
+                        <div class="col-md-6 select_input">
+                            <label for="review">@sharedResource["Country"] </label>
+                            <select class="form-control" size="1">
+                                <option value="India">India</option>
+                                <option value="UAE">UAE</option>
+                                <option value="U.K">U.K</option>
+                                <option value="US">US</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="review">@sharedResource["City"] </label>
+                            <input type="text" class="form-control" id="city" placeholder="@sharedResource["City"]" required="">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="review">@sharedResource["Region/State"]</label>
+                            <input type="text" class="form-control" id="region-state" placeholder="@sharedResource["Region/State"]"
+                                   required="">
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-sm btn-solid" type="submit">@sharedResource["Save setting"]</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>*@
+<!-- Section ends -->

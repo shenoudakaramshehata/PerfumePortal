@@ -1,0 +1,1386 @@
+﻿@page
+@Html.AntiForgeryToken()
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@model CRM.Pages.ViewCartModel
+@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@inject SignInManager<CRM.Data.ApplicationUser> SignInManager
+@inject UserManager<CRM.Data.ApplicationUser> UserManager
+@inject PerfumeContext _context
+
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+    var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+}
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+
+<style>
+     .cart-area .table-cart ul li .left form .form-control {
+    
+    border-radius: 0!important;
+     }
+    .styles__tabby-promo-snippet--2ddd6.styles__tabby-promo-snippet_font_inherit--345bc {
+        font-family: cairo,sans-serif;
+    }
+
+    .styles__snippetWrapper--b97bf {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: 16px;
+        max-width: 720px;
+        border: 1px solid #d6d6d3;
+        font-family: inherit;
+        font-size: 14px;
+        /* line-height: 21px; */
+    }
+
+    .styles__tabby-promo-snippet--2ddd6 {
+        
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-align-items: flex-start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 18px 10px;
+        width: fit-content;
+        /*max-width: 335px;*/
+        box-sizing: border-box;
+        border: 1px solid rgb(41 41 41 / 15%);
+        border-radius: 7px;
+        font-size: 12px;
+        line-height: 18px;
+        font-family: Inter, sans-serif;
+        transition: all 0.5s;
+        cursor: pointer;
+    }
+
+    .styles__tabby-promo-snippet__content--51d69 {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-flow: row wrap;
+        -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-align-self: center;
+        -ms-flex-item-align: center;
+        align-self: center;
+        margin: 0 16px 0 0;
+    }
+
+    .styles__tabby-promo-snippet__text--93920 {
+        color: inherit;
+        color: var(--snippetTextColor, inherit);
+    }
+
+    .styles__tabby-promo-snippet--2ddd6.styles__tabby-promo-snippet_font_inherit--345bc {
+        font-family: inherit;
+    }
+
+    .styles__snippetLink--e917e {
+        margin: 0;
+    }
+
+    .styles__tabby-promo-snippet__link--60af3 {
+        display: inline-block;
+        color: inherit;
+        color: var(--snippetLinkTextColor, inherit);
+        transition: opacity 0.2s;
+        text-decoration: underline;
+        margin: 5px 0;
+    }
+
+    .styles__logo--8e422 {
+        width: 70px;
+        height: 28px;
+        -webkit-align-self: flex-start;
+        -ms-flex-item-align: start;
+        align-self: flex-start;
+    }
+
+    .list-wrap {
+        padding: 12px;
+        /* background-color: #d8b9c3; */
+        border-radius: 5px;
+        /* width: 400px;*/
+        padding-top: 1.5rem;
+    }
+
+    div.list {
+        counter-reset: list-number;
+    }
+
+        div.list div:before {
+            counter-increment: list-number;
+            content: counter(list-number);
+            margin-right: 10px;
+            margin-bottom: 10px;
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            background-color: #e6e5e9;
+            border-radius: 50%;
+            color: black;
+            font-weight: 700;
+        }
+
+    @@media (max-width: 768px) {
+        /* Adjust styles for mobile devices */
+        .list-wrap {
+            max-width: 100%;
+            padding: 8px;
+        }
+    }
+</style>
+<link href="~/stepper.css" rel="stylesheet" />
+
+<div class="page-title-wrap">
+    <div class="page-title-area" style="background-color:#f5f5f5 !important;">
+       
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black">@sharedResource["Cart"]</h2>
+                    <ul>
+                        <li>
+                            <a class="text-black" href="/index">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black">@sharedResource["Cart"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+     if (Model.shippingCartObjectVMs != null){
+    if (Model.shippingCartObjectVMs.Count > 0)
+    {
+        <div class="cart-area ptb-100">
+            <div class="container">
+
+
+                <div class="cart-area ptb-100">
+                    <div class="container">
+                        <div class="row">
+                          <div class="viewTable col-lg-7 col-sm-5">
+                            <div class="table-item">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">@sharedResource["Image"]</th>
+                                            <th scope="col">@sharedResource["Product Name"]</th>
+                                            <th scope="col">@sharedResource["Price"]</th>
+                                            <th scope="col">@sharedResource["Quantity"]</th>
+                                            <th scope="col">@sharedResource["Total"]</th>
+                                            <th scope="col">@sharedResource["Remove"]</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.shippingCartObjectVMs)
+                                        {
+                                            <input class="ItemIdCl" type="text" value="@item.ItemId" asp-for="@item.ItemId" hidden>
+
+                                            <tr>
+                                                <th scope="row">
+                                                    <img id="imageId" src="~/@item.ItemImage" alt="Product">
+                                                </th>
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <td>@item.ItemTitleEn</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@item.ItemTitleAr</td>
+                                                    }
+
+                                                }
+
+                                                        <td>@item.priceCart
+
+                                                            @{
+                                                                if (BrowserCulture == "en-US")
+                                                                {
+                                                                     <span>@Model.CurrencyEN</span>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@Model.CurrencyNameAr</span>
+                                                                    
+                                                                }
+                                                            }
+
+                                                            </td>
+                                                       
+                                                <td>
+                                                    <ul class="number">
+                                                        <li>
+
+                                                            <span onclick="DeacreaseViewCartQuantity(@item.ItemId)" class="minus border-dark text-black">-</span>
+                                                            <input class="ItemQuaCl bg-black" type="text" asp-for="@item.Qunatity" value="@item.Qunatity">
+                                                            <span onclick="IncreaseViewCartQuantity(@item.ItemId)" class="plus border-dark text-black">+</span>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                @{
+                                                    var total = (item.priceCart * item.Qunatity);
+                                                }
+
+                                                        <td class="totalprice">@total
+
+                                                            @{
+                                                                if (BrowserCulture == "en-US")
+                                                                {
+                                                                    <span>@Model.CurrencyEN</span>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@Model.CurrencyNameAr</span>
+
+                                                                }
+                                                            }
+                                                       
+                                                <td>
+                                                        <button class="btn btn-close-white btn-light" style="border-radius: 0;" onclick="removeFromViewCart(@item.ItemId)" type="button"><i class="bx bx-x"></i></button>
+
+
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                             <div id="TabbyPromo"></div>
+                              @* <div class="table-cart">
+                                    <ul class="align-items-center">
+                                        <li>
+                                            <div class="left">
+
+                                                    <div class="styles__tabby-promo-snippet--2ddd6 styles__tabby-promo-snippet_font_inherit--345bc styles__snippetWrapper--b97bf">
+                                                        <div class="styles__tabby-promo-snippet__content--51d69">
+                                                            <span class="styles__tabby-promo-snippet__text--93920">
+                                                                <span class="">
+
+                                                                    <strong style="color: #000000;font-size: 20px!important;"> @sharedResource["Pay in 4. No interest, no fees."]</strong>
+                                                                </span>
+                                                                <span class="styles__tabby-promo-snippet__link--60af3 styles__snippetLink--e917e">
+                                                                    <span class="" style="font-size: 17px;" onclick="handleTabby('@Model.tabbyorderNet')" data-test="widget-learn-more">@sharedResource["Learn more"]</span>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        <img src="/Jeel/images/tabbyLogo.png" style="height: 29px;width: 98px;" />
+                                                    </div>
+                                                    <div><p id="rejectionresonID"></p></div>
+
+                                                </div>
+                                        </li>
+
+                                    </ul>
+                                </div>*@
+
+
+                                <div class="table-cart">
+                                    <ul class="align-items-center">
+                                        <li>
+                                            <div class="left">
+
+                                                <form method="post" asp-page-handler="ValidateCopoun">
+
+                                                    <input type="text" class="form-control" asp-for="@Model.CouponSerial" placeholder="@sharedResource["Enter coupon code"]">
+
+                                                        <button type="submit" class="btn btn-close-white btn-light" style="border-radius: 0;top: 0.7rem;">@sharedResource["Apply Coupon"]</button>
+
+                                                </form>
+
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                        </div>
+                           <div class="cart-total mb-5 col-lg-5 col-sm-7" style="background-color: darkgray;">
+                                    <h2>@sharedResource["Cart Total"]</h2>
+                                    <div class="inner">
+                                        <h3>
+                                            @sharedResource["Discount"]:
+                                            @{
+                                                if (@Model.Discount == 0)
+                                                {
+                                                    <span>@Model.Discount</span>
+                                                }
+                                                else
+                                                {
+                                                    
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <span> @Model.Discount&nbsp; @Model.CurrencyEN</span>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <span> @Model.Discount&nbsp; @Model.CurrencyNameAr</span>
+                                                         
+                                                    }
+                                                
+
+
+                                                     
+                                                }
+                                            }
+                                           
+                                        </h3>
+                                    </div>
+                                    <div class="inner">
+                                        <h3>
+                                            @sharedResource["Tax"] &nbsp; (@Model.tax %):
+                                            @{
+                                                if (@Model.tax == 0)
+                                                {
+                                                    <span>@Model.OrdernetByTax</span>
+                                                }
+                                                else
+                                                {
+
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <span>@Model.OrdernetByTax &nbsp; @Model.CurrencyEN </span>
+                                                        
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@Model.OrdernetByTax &nbsp; @Model.CurrencyNameAr</span>
+                                                      
+                                                    }
+
+
+                                                }
+                                            }
+
+                                        </h3>
+                                    </div>
+                                    <div class="inner">
+                                        <h4>
+                                            @sharedResource["Subtotal"]:
+                                            @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                         <span id="Subtotalamount">@Model.totalitems &nbsp;  @Model.CurrencyEN</span>
+
+                                                    }
+                                                    else
+                                                    {
+                                                    <span id="Subtotalamount">@Model.totalitems &nbsp;  @Model.CurrencyNameAr</span>
+                                                        
+                                                    }
+                                                }
+
+
+                                           
+                                        </h4>
+                                    </div>
+                                    <div class="inner">
+                                        <h4>
+                                            @sharedResource["Shipping Cost"]:
+                                            @{
+                                                if (BrowserCulture == "en-US")
+                                                {
+                                                   <span id="totalamountid">@Model.DeliveryCost &nbsp; @Model.CurrencyEN</span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span id="totalamountid">@Model.DeliveryCost &nbsp; @Model.CurrencyNameAr</span>
+
+                                                }
+                                            }
+
+                                            
+                                        </h4>
+                                    </div>
+
+                                    <div class="inner">
+                                        <h4>
+                                            @sharedResource["Total"]:
+                                            @{
+                                                if (BrowserCulture == "en-US")
+                                                {
+                                                    <span id="totalamount">@Model.TotalAmount &nbsp; @Model.CurrencyEN</span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span id="totalamount">@Model.TotalAmount &nbsp; @Model.CurrencyNameAr</span>
+
+                                                }
+                                            }
+                                            
+                                        </h4>
+                                    </div>
+                                    @{
+                                        if (Model.TotalAmount > 0)
+                                        {
+                                            if (Model.IsDiscounted)
+                                            {
+                                                <div class="inner">
+                                                    <h4>
+                                                        @sharedResource["After Discount"]:
+                                                        @{
+                                                if (BrowserCulture == "en-US")
+                                                {
+                                                   <span>@Model.TotalAmountAfterDiscount &nbsp; @Model.CurrencyEN</span>
+
+                                                }
+                                                else
+                                                {
+                                                                <span>@Model.TotalAmountAfterDiscount &nbsp; @Model.CurrencyNameAr</span>
+                                                }
+                                            }
+                                                        
+                                                    </h4>
+                                                </div>
+                                            }
+                                        }
+                                    }
+
+                                    <div class="text-center">
+                                        <a class="btn btn-close-white btn-light text-black" style="border-radius: 0; width:100%;" asp-page="/CheckOutFastOrder" asp-route-Serial="@Model.newCouponSerial"> @sharedResource["Proceed To Checkout"]  </a>
+
+                                    </div>
+
+                                </div>
+                        </div>
+                         
+                          
+                           
+                        
+                    </div>
+                </div>
+
+                
+                
+            
+
+               
+    </div>
+        </div>
+    }
+    }
+      
+    
+   
+    if (Model.shoppingCarts != null)
+                {
+                if (Model.shoppingCarts.Count > 0)
+                {
+                    <div class="cart-area ptb-100">
+                       <div class="container">
+                          <div class="row">
+                            <div class="viewTable col-lg-7 col-sm-5">
+                              <div class="table-item">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">@sharedResource["Image"]</th>
+                                            <th scope="col">@sharedResource["Product Name"]</th>
+                                            <th scope="col">@sharedResource["Price"]</th>
+                                            <th scope="col">@sharedResource["Quantity"]</th>
+                                            <th scope="col">@sharedResource["Total"]</th>
+                                            <th scope="col">@sharedResource["Remove"]</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.shoppingCarts)
+                                        {
+                                            <input class="ItemIdCl" type="text" value="@item.ItemId" asp-for="@item.ItemId" hidden>
+
+                                            <tr>
+                                                <th scope="row">
+                                                    <img id="imageId" src="~/@item.Item.ItemImage" alt="Product">
+                                                </th>
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <td>@item.Item.ItemTitleEn</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@item.Item.ItemTitleAr</td>
+                                                    }
+
+                                                }
+
+                                                <td>@item.ItemPrice
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                         <span>@Model.CurrencyEN</span>
+                                                    }
+                                                    else
+                                                    {
+                                                            <span>@Model.CurrencyNameAr</span>
+                                                    }
+                                                }
+                                                </td>
+                                               
+                                                <td>
+                                                    <ul class="number">
+                                                        <li>
+
+                                                            <span class="minus border-dark text-black">-</span>
+                                                                            <input class="ItemQuaCl bg-black" type="text" asp-for="@item.ItemQty" value="@item.ItemQty">
+                                                            <span class="plus border-dark text-black">+</span>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                @{
+                                                    //var total = @item.ItemTotal;
+                                                }
+
+                                                <td id="totalprice">@item.ItemTotal
+                                                 @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                         <span>@Model.CurrencyEN</span>
+                                                    }
+                                                    else
+                                                    {
+                                                            <span>@Model.CurrencyNameAr</span>
+                                                    }
+                                                }
+                                                
+                                                
+
+                                                <td>
+                                                    <form method="post" asp-page-handler="DeleteItemFromShoppingCart" asp-route-id="@item.ItemId">
+                                                    <button class="btn btn-close-white btn-light" style="border-radius: 0;" type="submit"><i class="bx bx-x"></i></button>
+                                                    </form>
+
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="TabbyPromo"></div>
+                            <br/>
+                            <br/>
+                            @* <div class="table-cart">
+                                    <ul class="align-items-center">
+                                        <li>
+                                            <div class="left">
+
+                                                    <div class="styles__tabby-promo-snippet--2ddd6 styles__tabby-promo-snippet_font_inherit--345bc styles__snippetWrapper--b97bf">
+                                                        <div class="styles__tabby-promo-snippet__content--51d69">
+                                                            <span class="styles__tabby-promo-snippet__text--93920">
+                                                                <span class="">
+
+                                                                    <strong style="color: #000000;font-size: 20px!important;"> @sharedResource["Pay in 4. No interest, no fees."]</strong>
+                                                                </span>
+                                                                <span class="styles__tabby-promo-snippet__link--60af3 styles__snippetLink--e917e">
+                                                                    <span class="" style="font-size: 17px;" onclick="handleTabby('@Model.tabbyorderNet')" data-test="widget-learn-more">@sharedResource["Learn more"]</span>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        <img src="/Jeel/images/tabbyLogo.png" style="height: 29px;width: 98px;" />
+                                                    </div>
+                                                    <div><p id="rejectionresonID"></p></div>
+
+                                                </div>
+                                        </li>
+
+                                    </ul>
+                </div>*@
+                              <div class="table-cart">
+                                <ul class="align-items-center">
+                                    <li>
+                                        <div class="left">
+
+                                            <form method="post" asp-page-handler="ValidateCopoun">
+
+                                                <input type="text" class="form-control" asp-for="@Model.CouponSerial" placeholder="@sharedResource["Enter coupon code"]">
+
+                                                <button type="submit" class="btn btn-close-white btn-light" style="border-radius: 0;top: 0.7rem;">@sharedResource["Apply Coupon"]</button>
+
+                                            </form>
+
+                                        </div>
+                                    </li>
+                                    <li>
+                                        @* <form method="post" asp-page-handler="UpdateCart">*@
+                                        <div class="right">
+                                            <button class="btn btn-close-white btn-light" style="border-radius: 0;" type="button" onclick="UpdateQuantity()">@sharedResource["Update Cart"]</button>
+                                        </div>
+                                        @* </form>*@
+
+                                    </li>
+                                </ul>
+                              </div>
+                            </div>
+
+                        <div class="cart-total mb-5 col-lg-5 col-sm-7" style="background-color: darkgray;">
+                                <h2>@sharedResource["Cart Total"]</h2>
+                                <div class="inner">
+                                    <h3>
+                                        @sharedResource["Discount"]:
+                                        @{
+                                            if(@Model.Discount==0){
+                                            <span>@Model.Discount</span>
+                                        }
+                                        else
+                                        {
+                                             
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                <span>@Model.Discount &nbsp; @Model.CurrencyEN</span>
+                                                    }
+                                                    else
+                                                    {
+                                                <span>@Model.Discount &nbsp; @Model.CurrencyNameAr</span>
+                                                    }
+                                                
+                                             
+                                        }
+                                    }
+                                       
+                                    </h3>
+                                </div>
+
+
+
+
+
+
+
+                            <div class="inner">
+                                <h3>
+                                    @sharedResource["Tax"] &nbsp;(@Model.tax %) :
+                                    @{
+                                        if (@Model.tax == 0)
+                                        {
+                                            <span>@Model.OrdernetByTax</span>
+                                        }
+                                        else
+                                        {
+
+                                            if (BrowserCulture == "en-US")
+                                            {
+                                                <span>@Model.OrdernetByTax &nbsp; @Model.CurrencyEN </span>
+                                               
+                                            }
+                                            else
+                                            {
+                                                <span>@Model.OrdernetByTax &nbsp; @Model.CurrencyNameAr</span>
+                                                
+                                            }
+
+
+                                        }
+                                    }
+
+                                </h3>
+                            </div>
+
+
+
+                                <div class="inner">
+                                    <h4>
+                                        @sharedResource["Subtotal"]:
+                                    <span class="Subtotalamount">@Model.SubTotal &nbsp;@Model.CurrencyEN</span>
+                                    </h4>
+                                </div>
+                                <div class="inner">
+                                    <h3>
+                                        @sharedResource["Shipping Cost"]:
+                                   @{ if (BrowserCulture == "en-US")
+                                    {
+                                     <span>@Model.DeliveryCost &nbsp;@Model.CurrencyEN</span>
+                                    }
+                                    else
+                                    {
+                                            <span>@Model.DeliveryCost &nbsp;@Model.CurrencyNameAr</span>
+                                   
+                                    }}
+                                       
+                                    </h3>
+                                </div>
+
+
+                                <div class="inner">
+                                    <h4>
+                                        @sharedResource["Total"]:
+                                        @{ if (BrowserCulture == "en-US")
+                                    {
+                                            <span class="totalamount">@Model.TotalAmount &nbsp;@Model.CurrencyEN</span>
+
+                                    }
+                                    else
+                                    {
+                                            <span class="totalamount">@Model.TotalAmount &nbsp;@Model.CurrencyNameAr</span>
+                                    }}
+                                    </h4>
+                                </div>
+                                @{
+                                    if (Model.TotalAmount > 0)
+                                    {
+                                        if (Model.IsDiscounted)
+                                        {
+                                            <div class="inner">
+                                                <h4>
+                                                    @sharedResource["After Discount"]:
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <span>@Model.TotalAmountAfterDiscount &nbsp;@Model.CurrencyEN</span>
+
+                                                    }
+                                                    else
+                                                    {
+                                                         <span>@Model.TotalAmountAfterDiscount &nbsp;@Model.CurrencyNameAr</span>
+                                                    }
+                                                }
+                                                   
+                                                </h4>
+                                            </div>
+                                        }
+                                    }
+                                }
+                                <div class="text-center">
+                                 <a class="btn btn-close-white btn-light text-black" style="border-radius: 0; width:100%;" asp-page="/CheckOutFastOrder" asp-route-Serial="@Model.newCouponSerial"> @sharedResource["Proceed To Checkout"]  </a>
+
+                                </div>
+
+                            </div>
+                            
+                          </div>
+                       </div>
+            </div>
+        }
+
+
+    }
+
+    if (Model.shippingCartObjectVMs == null)
+    {
+
+        <div class="cart-area ptb-100" style="text-align: center;
+                    font-size: x-large;
+                    font-weight: bolder;">
+            <span>@sharedResource["There are no items in the Shopping Cart"]</span>
+        </div>
+
+    }
+    if ((Model.shippingCartObjectVMs.Count < 0 || Model.shippingCartObjectVMs.Count == 0 || Model.shippingCartObjectVMs == null) && (Model.shoppingCarts.Count < 0 || Model.shoppingCarts.Count == 0 || Model.shoppingCarts == null))
+    {
+
+        <div class="cart-area ptb-100" style="text-align: center;
+                font-size: x-large;
+                font-weight: bolder;">
+            <span>@sharedResource["There are no items in the Shopping Cart"]</span>
+        </div>
+
+
+    }
+    //if (Model.shoppingCarts.Count < 0 || Model.shoppingCarts.Count == 0 || Model.shoppingCarts == null)
+    //{
+
+    //    <div class="cart-area ptb-100" style="text-align: center;
+    //                font-size: x-large;
+    //                font-weight: bolder;">
+    //        <span>@sharedResource["There are no items in the Shopping Cart"]</span>
+    //    </div>
+
+
+    //}
+
+        }
+
+        <partial name="_TabbyPopup" />
+        <script src="https://checkout.tabby.ai/tabby-promo.js"></script>
+
+    <script>
+
+
+    window.onload = handleTabbyPromo
+        ; StorageinSession()
+    function StorageinSession() {
+        var cartItemsData = JSON.parse(localStorage.getItem("cartItems"));
+
+        var country = localStorage.getItem('Country')
+        var parsecartItems = JSON.stringify(cartItemsData)
+        console.log(typeof (parsecartItems))
+        console.log(typeof (country))
+        //var countryPic = localStorage.getItem('countryPic');
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=Storedata",
+            data: { "parsecartItems": parsecartItems, "country": country },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+                //console.log(response.CountryTlen);
+                //console.log(response.CountryTlar);
+                //if(localStorage.getItem("lang")=="en"){
+                //    document.getElementById("CurentCountry").innerHTML=response.CountryTlen;
+                //}
+                //else{
+                //    document.getElementById("CurentCountry").innerHTML=response.CountryTlar;
+
+                //}
+                var countryPic = response.Pic;
+                document.getElementById("CurentCountryPic").src = "/" + countryPic
+
+
+                //document.getElementById("CurentCountry").innerHTML=response;
+                //document.getElementById("shippingicon").innerHTML = response
+                //localStorage.setItem("countryPic", response);
+                //var countryPic = localStorage.getItem('countryPic');
+                //var CountryImg = document.getElementById("CountryImg").src = "/"+response
+                //localStorage.setItem("CountryTitle",response);
+                //document.getElementById("CurentCountry").innerHTML=response;
+
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+
+        //sessionStorage.setItem('cartItemsData', JSON.stringify(cartItemsData));
+    }
+
+       function DeacreaseViewCartQuantity(ItemId) {
+       console.log(ItemId);
+       let totalSum=0;
+        let SubtotalSum = 0;
+        var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+                    for (var i = 0; i < cartItems.length; i++) {            
+                        if (cartItems[i].ItemId == ItemId) {
+                             console.log("Id");
+                             console.log(cartItems[i].ItemId);
+                            if (cartItems[i].Qunatity > 1) {
+                                console.log("asde")
+                                cartItems[i].Qunatity--;
+                               console.log("Quantity")
+                                console.log(cartItems[i].Qunatity)
+                                
+                                      
+                                
+                                  var ClassElement=document.getElementsByClassName("totalprice")[i]
+
+                                      ClassElement.innerHTML = cartItems[i].priceCart * cartItems[i].Qunatity
+                                    console.log(i);
+
+                               
+                                      //document.querySelectorAll("#totalprice")[i].innerHTMl = cartItems[i].priceCart * cartItems[i].Qunatity
+                                     
+                            }
+
+
+                        }
+                        SubtotalSum += cartItems[i].Qunatity * cartItems[i].priceCart
+                        let DeliveryCost = cartItems[i].DeliveryCost
+                       totalSum += (cartItems[i].Qunatity * cartItems[i].priceCart) 
+                       var amountclass = document.getElementById("totalamount")
+                       console.log(totalSum);
+            var subtotal = document.getElementById("Subtotalamount")
+                      amountclass.innerHTML = totalSum + DeliveryCost
+            subtotal.innerHTML = SubtotalSum
+                    }
+
+                    var updatedCartItemsJson = JSON.stringify(cartItems);
+                    localStorage.setItem("cartItems", updatedCartItemsJson);
+                    StorageinSession()
+                     ShoppingCartIcon()
+                    //DisplayCartItems();
+                }
+
+
+    function IncreaseViewCartQuantity(ItemId) {
+        console.log(ItemId);
+        let IncreasetotalSum = 0;
+        let IncreaseSubtotalSum = 0;
+
+        var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+        for (var i = 0; i < cartItems.length; i++) {
+            if (cartItems[i].ItemId == ItemId) {
+               console.log("Id");
+                console.log(cartItems[i].ItemId);
+                    console.log("asde")
+                    cartItems[i].ItemId
+                    cartItems[i].Qunatity++;
+                console.log("Quantity")
+                    console.log(cartItems[i].Qunatity)
+                
+                var ClassElement = document.getElementsByClassName("totalprice")[i]
+
+                ClassElement.innerHTML = cartItems[i].priceCart * cartItems[i].Qunatity
+                    //document.getElementById("totalprice").innerHTML = cartItems[i].priceCart * cartItems[i].Qunatity
+                     //document.getElementsByClassName("totalamountid")[i].innerHTML = IncreasetotalSum
+               
+                console.log(i);
+
+            }
+           let DeliveryCost = cartItems[i].DeliveryCost
+
+            IncreasetotalSum += (cartItems[i].Qunatity * cartItems[i].priceCart) 
+            console.log(IncreasetotalSum)
+             IncreaseSubtotalSum += cartItems[i].Qunatity * cartItems[i].priceCart
+ 
+            var amountclass = document.getElementById("totalamount")
+            amountclass.innerHTML = IncreasetotalSum +DeliveryCost
+            var subtotal = document.getElementById("Subtotalamount")
+            subtotal.innerHTML = IncreaseSubtotalSum
+        }
+        var updatedCartItemsJson = JSON.stringify(cartItems);
+        localStorage.setItem("cartItems", updatedCartItemsJson);
+         ShoppingCartIcon()
+        StorageinSession()
+
+        //DisplayCartItems();
+    }
+
+    //function removeFromViewCart(ItemId) {
+    //    var cartData = JSON.parse(localStorage.getItem("cartItems"));
+    //    var productIndex = -1;
+    //    for (var i = 0; i < cartData.length; i++) {
+    //        if (cartData[i].ItemId == ItemId) {
+    //            productIndex = i;
+    //            break;
+    //        }
+    //    }
+    //    if (productIndex !== -1) {
+    //        cartData.splice(productIndex, 1);
+    //    }
+    //    localStorage.setItem("cartItems", JSON.stringify(cartData));
+
+    //    StorageinSession()
+    //    location.href = "/ViewCart"
+    //}
+
+
+    //function removeFromViewCart(ItemId) {
+    //            var cartData = JSON.parse(localStorage.getItem("cartItems"));
+    //            var productIndex = -1;
+    //            for (var i = 0; i < cartData.length; i++) {
+    //                if (cartData[i].ItemId == ItemId) {
+    //                    productIndex = i;
+    //            console.log(productIndex)
+    //                    break;
+    //                }
+    //            }
+    //            if (productIndex !== -1) {
+    //                console.log("splice")
+    //                cartData.splice(productIndex, 0);
+    //            }
+    //            localStorage.setItem("cartItems", JSON.stringify(cartData));
+    //           location.reload();
+    //            StorageinSession()
+    //        ShoppingCartIcon()
+                
+    //        }
+
+    
+        function removeFromViewCart(ItemId) {
+            // Get the shopping cart items from local storage
+            var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+        var itemIndex = cartItems.findIndex(function (item) {
+            return item.ItemId === ItemId;
+        });
+
+        // Remove the item from the array
+        if (itemIndex >= 0) {
+            cartItems.splice(itemIndex, 1);
+
+            // Save the updated cart items back to local storage
+            localStorage.setItem("cartItems", JSON.stringify(cartItems));
+        $.ajax({
+            type: "POST",
+            url: "/ViewCart?handler=RemoveFromsession",
+            data: { "ItemId": ItemId },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+                    ShoppingCartIcon()
+
+
+                    // Reload the page
+                    window.location.reload();
+             //StorageinSession()
+            
+       
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+            // Find the item with the matching ID
+          
+        }
+        }
+
+
+        function UpdateQuantity() {
+            var ItemQuantityVmList = [];
+            //console.log("Item");
+            var ItemIds = document.getElementsByClassName("ItemIdCl");
+            var ItemQus = document.getElementsByClassName("ItemQuaCl");
+            //console.log(ItemIds);
+            //console.log(ItemQus);
+            for (var i = 0; i < ItemIds.length; i++) {
+                ItemQuantityVm = {};
+                ItemQuantityVm.ItemId = parseInt(ItemIds[i].value);
+                ItemQuantityVm.ItemQty = parseInt(ItemQus[i].value);
+                //console.log(ItemQuantityVm)
+                //console.log(window.location.href);
+                var urlToSplit = window.location.href;
+                var UrlArray = urlToSplit.split('?');
+                var UrlToUse = UrlArray[0];
+                //console.log(UrlToUse);
+                ItemQuantityVmList.push(ItemQuantityVm)
+            }
+            //console.log(ItemQuantityVmList);
+            ItemQuantityVmList = JSON.stringify(ItemQuantityVmList);
+            if (ItemQuantityVmList.length > 0) {
+                $.ajax({
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    type: 'post',
+                    //url:window.location.href+"?handler=EditItemQuantity",
+
+                    url: UrlToUse + "?handler=EditItemQuantity",
+                    data: ItemQuantityVmList,
+                    success: function () {
+                        //console.log("suceess");
+
+                        window.location.href = '/ViewCart'
+                        //window.location.href = '/ViewCart'
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    }
+
+                    ,
+                    failure: function (response) {
+                        window.location.href = '/ViewCart'
+
+                    }
+                });
+            }
+            else {
+                //console.log("Nobody has been selected")
+            }
+
+
+        }
+
+
+        function handleTabby(tabbyorderNet){
+        console.log(tabbyorderNet)
+        
+        
+        const viewPagesName = document.getElementById("pages");
+        var lang = localStorage.getItem("lang")
+        var Country = localStorage.getItem('Country');
+        //var email = document.getElementById("EmailInput").value;
+        // console.log(typeof(email))
+        //var address = document.getElementById("Address").value;
+        // console.log(typeof(address))
+        //var cityName = document.getElementById("CityName").value;
+        // console.log(typeof(cityName))
+        //var areaName = document.getElementById("AreaName").value;
+        // console.log(typeof(areaName))
+        //var buildingNo = document.getElementById("BuildingNo").value;
+        // console.log(typeof(buildingNo))
+        //var phoneNumber = document.getElementById("PhoneNumber").value;
+        // console.log(typeof(phoneNumber))
+        //var fullName = document.getElementById("FullName").value;
+        // console.log(typeof(fullName))
+    //    var data = {
+    //        "email": email,
+    //        "address": address,
+    //        "cityName": cityName,
+    //        "areaName": areaName,
+    //        "buildingNo": buildingNo,
+    //        "phoneNumber": phoneNumber,
+    //        "FullName": fullName
+    //    };
+    //    var totalElement = document.getElementById("TotalID");
+    //var totalAfterDiscountElement = document.getElementById("TotalAmountAfterDiscountID");
+
+    //// If the elements exist, add their values to the data object
+    //if (totalElement !=null) {
+    //        console.log(typeof (totalElement))
+    //    data.totalAmount = totalElement.innerText;
+    //}
+
+    //    if (totalAfterDiscountElement != null) {
+    //    data.totalAmountAfterDiscount = totalAfterDiscountElement.innerText;
+    //}
+        $.ajax({
+            type: "POST",
+            url: "/ViewCart?handler=TabbyCheckOut",
+            data: { "tabbyorderNet": tabbyorderNet, "Country": Country },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+                 viewPagesName.innerHTML = "";
+               if(response.IsInstallment==true){
+
+                    viewPagesName.innerHTML = ` <div class="" style="margin-top: 24px;">
+                            <h3 style="font-size: 24px;font-style: normal;font-weight: bold;font-family: Inter, sans-serif;">@sharedResource["Split in 4 interest-free payments"]  ${lang == "en" ? response.currencyEN : response.currencyAR} ${response.downpayment_total}.
+                          </h3></div>
+                    <div class="mt-5" >
+                        <div class="relative grid gap-8 row-gap-5 md:row-gap-8 lg:grid-cols-4">
+                            <div class="absolute inset-0 flex items-center justify-center sm:hidden lg:flex" >
+                                <div class="w-px h-full bg-gray-300 lg:w-full lg:h-px" ></div>
+                            </div>
+
+                            <div class="relative px-5 h-16 bg-white border rounded-2xl border-gray-300 flex flex-row items-center">
+                                <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+                                    <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+                                        <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+
+                                        <img alt="25" src="/images/graph-25.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-25.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+                                    </span>
+                                </span>
+                                <div class="flex flex-col ps-3">
+                                    <span class="text-xl">
+                                        ${response.Installment}
+                                        ${lang == "en" ? response.currencyEN : response.currencyAR}
+
+                                    </span>
+                                    <span class="text-xs text-text-light">@sharedResource["Today"]</span>
+                                </div>
+                            </div>
+
+                            <div class="relative px-5 h-16 bg-white border rounded-2xl border-gray-300 flex flex-row items-center">
+                                <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+                                    <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+                                        <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+                                    </span>
+                                    <img alt="50" src="/images/graph-50.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-50.svg 1x, /images/graph-50.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+                                </span>
+                                <div class="flex flex-col ps-3">
+                                    <span class="text-xl">
+                                        ${response.InstallmentList[0].amount}
+                                        ${lang == "en" ? response.currencyEN : response.currencyAR}
+                                    </span>
+                                    <span class="text-xs text-text-light">${response.InstallmentList[0].due_date}</span>
+                                </div>
+                            </div>
+
+                            <div class="relative px-5 h-16 bg-white border rounded-2xl border-gray-300 flex flex-row items-center">
+                                <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+                                    <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+                                        <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+                                    </span>
+                                    <img alt="75" src="/images/graph-75.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-75.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+                                </span>
+                                <div class="flex flex-col ps-3">
+                                    <span class="text-xl">
+                                        ${response.InstallmentList[1].amount}
+                                        ${lang == "en" ? response.currencyEN : response.currencyAR}
+                                    </span>
+                                    <span class="text-xs text-text-light">${response.InstallmentList[1].due_date}</span>
+                                </div>
+                            </div>
+
+                            <div class="relative px-5 h-16 bg-white border-2 rounded-2xl border-gray-300 flex flex-row items-center">
+                                <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+                                    <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+                                        <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+                                    </span>
+                                    <img alt="100" src="/images/graph-100.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-100.svg 1x, /images/graph-100.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+                                </span>
+                                <div class="flex flex-col ps-3">
+                                    <span class="text-xl">
+                                        ${response.InstallmentList[2].amount}
+                                        ${lang == "en" ? response.currencyEN : response.currencyAR}
+                                    </span>
+                                    <span class="text-xs text-text-light">${response.InstallmentList[2].due_date}</span>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                        <div style="color: rgb(41, 41, 41);margin-top: 2rem;padding-left: 1rem;font-size: 24px;font-style: normal;font-weight: bold;">@sharedResource["How it works:"]</div>
+    <div class="list-wrap">
+
+      <div class="list">
+            <div  class="row" style="padding-left: 13px;padding-right: 13px;font-size: 19px;font-weight: 600;">@sharedResource["Choose"] <img src="/Jeel/images/tabbyLogo.png" style="height: 29px;width: 98px;"/> @sharedResource["at checkout."]</div>
+            <div style="font-size: 19px;font-weight: 600;" >@sharedResource["Enter your information and add your debit or credit card."]</div>
+        <div style="font-size: 19px;font-weight: 600;">@sharedResource["Split your purchase in 4 monthly payments."]</div>
+            <div style="font-size: 19px;font-weight: 600;">@sharedResource["We’ll send reminders when your next payment is due."]</div>
+      </div>
+
+    </div>
+
+                            `
+                    $('#AddModal').modal('show');
+               }
+               else if(response.IsInstallment==false){
+                   
+                 document.getElementById("rejectionresonID").innerHTML= response.rejectionReason;
+                    document.getElementById("rejectionresonID").style.color = "red";
+                }
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+         
+    }
+
+         function handleTabbyPromo(){
+         var total = '@Model.tabbyorderNet';
+          var ordertotaltabby = parseFloat('@Model.tabbyorderNet');
+        console.log(total + "tabby total");
+           var country = localStorage.getItem('Country')
+        var lang = localStorage.getItem("lang")
+        if (country == "2") {
+            if (lang == "en") {
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: 'SAR', // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    price: ordertotaltabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'en', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MKSA' // required
+                });
+            }
+            else {
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: "SAR", // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    price: ordertotaltabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'ar', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MKSA' // required
+                });
+            }
+
+        }
+
+        if (country == "1") {
+            if (lang == "en") {
+
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: "KWD", // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    price: ordertotaltabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'en', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MKSA' // required
+                });
+            }
+            else {
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: 'KWD', // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                price: ordertotaltabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'ar', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MKWT' // required
+                });
+            }
+        }
+
+        if (country == "4") {
+            if (lang == "en") {
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: 'AED', // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    price: ordertotaltabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'en', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MUAE' // required
+                });
+            }
+            else {
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: 'AED', // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    price: ordertotaltabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'ar', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MUAE' // required
+                });
+            }
+        }
+        }
+
+    </script>
+
+
+                    

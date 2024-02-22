@@ -1,0 +1,38 @@
+﻿@page
+@model CRM.Pages.Perfume.WishlistModel
+@{
+    Layout = "_Layout2";
+}
+
+
+<!--section start-->
+<section class="wishlist-section section-b-space">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 table-responsive">
+                <div class="loader position-absolute w-100 h-100" style="display:none">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </div>
+                <table class="table cart-table">
+                    <thead>
+                        <tr class="table-head">
+                            <th scope="col">@sharedResource["Image"]</th>
+                            <th scope="col">@sharedResource["ProductName"]</th>
+                            <th scope="col">@sharedResource["Price"]</th>
+                            <th scope="col">@sharedResource["ACTION"]</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table_wishlist">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row wishlist-buttons">
+            <div class="col-12">
+                <a asp-page="../Index" class="btn btn-solid">@sharedResource["ContinueShopping"]</a>
+                <a asp-page="/Perfume/Checkout" class="btn btn-solid">@sharedResource["Checkout"]</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!--section end-->

@@ -1,0 +1,120 @@
+﻿@page
+@model CRM.Pages.Perfume.ContactModel
+@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext _db
+@inject PerfumeContext _context
+@using Microsoft.AspNetCore.Localization;
+
+@{
+    string adminRoleId = _db.Roles.Where(e => e.Name == "Admin").FirstOrDefault().Id;
+    var UserAdminId = _db.UserRoles.Where(e => e.RoleId == adminRoleId).FirstOrDefault().UserId;
+    var user = UserManager.Users.Where(e => e.Id == UserAdminId).FirstOrDefault();
+    var currentuser = await UserManager.GetUserAsync(User);
+        var Fax = _context.SocialMediaLinks.FirstOrDefault().Fax;
+    var Address = _context.SocialMediaLinks.FirstOrDefault().Address;
+}
+@{
+    Layout = "_Layout2";
+}
+<!--section start-->
+<section class="contact-page section-b-space">
+    <div class="container">
+        <div class="row section-b-space">
+            <div class="col-lg-7 map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7485777.785836187!2d36.923033812499995!3d23.634263629427693!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f051c34cdc92f%3A0xeec9b9df4e2e9ad8!2sMashaer.store!5e0!3m2!1sen!2seg!4v1672177076945!5m2!1sen!2seg"></iframe>
+            </div>
+            <div class="col-lg-5">
+                <div class="contact-right">
+                    <ul>
+                      @{
+                            if(user!=null){
+                            
+                        <li>
+                            <div class="contact-icon">
+                                <img src="~/assets/Perfume_assets/images/icon/phone.png"
+                                     alt="Generic placeholder image">
+
+                                <h6>@sharedResource["Contact Us"]</h6>
+                            </div>
+                            <div class="media-body">
+                                <p>@user.PhoneNumber</p>
+                               
+                            </div>
+                        </li>
+                        <li>
+                            <div class="contact-icon">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                <h6>@sharedResource["Address"]</h6>
+                            </div>
+                            <div class="media-body">
+                                <p>@Address</p>
+                               
+                            </div>
+                        </li>
+                        <li>
+                            <div class="contact-icon">
+                                <img src="~/assets/Perfume_assets/images/icon/email.png"
+                                     alt="Generic placeholder image">
+                                <h6>@sharedResource["Email"]</h6>
+                            </div>
+                            <div class="media-body">
+                                <p>@user.Email</p>
+                            
+                            </div>
+                        </li>
+                        <li>
+                            <div class="contact-icon">
+                                <i class="fa fa-fax" aria-hidden="true"></i>
+                                <h6>@sharedResource["Fax"]</h6>
+                            </div>
+                            <div class="media-body">
+                                <p>@Fax</p>
+                                
+                            </div>
+                        </li>
+                        }
+                            }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="theme-form" method="post">
+                    <div class="form-row row">
+                        <div class="col-md-6">
+                            <label asp-for="contact.FirstName" for="name">@sharedResource["First Name"]</label>
+                            <input asp-for="contact.FirstName" type="text" class="form-control" id="name" placeholder="@sharedResource["Enter First Name"]"
+                                   required="">
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="contact.LastName" for="last-name">@sharedResource["Last Name"]</label>
+                            <input asp-for="contact.LastName" type="text" class="form-control" id="last-name" placeholder="@sharedResource["Enter Last Name"]" required="">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="review"  asp-for="contact.Mobile">@sharedResource["Phone number"]</label>
+                            <input type="text" asp-for="contact.Mobile" class="form-control" id="review" placeholder="@sharedResource["Enter your number"]"
+                                   required="">
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="contact.Email" for="email">@sharedResource["Email"]</label>
+                            <input asp-for="contact.Email" type="text" class="form-control" id="email" placeholder="@sharedResource["Enter Email"]" required="">
+                        </div>
+                        <div class="col-md-12">
+                            <label asp-for="contact.Msg" for="review">@sharedResource["Message"]</label>
+                            <textarea asp-for="contact.Msg" class="form-control" placeholder="@sharedResource["Write Your Message"]"
+                                      id="exampleFormControlTextarea1" rows="6" required=""></textarea>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-solid" type="submit">@sharedResource["Send Your Message"]</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!--Section ends-->

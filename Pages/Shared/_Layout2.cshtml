@@ -1,0 +1,168 @@
+﻿@inject IStringLocalizer<SharedResource> sharedResource
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from themes.pixelstrap.com/multikart/front-end/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 07 Dec 2022 08:28:12 GMT -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="multikart">
+    <meta name="keywords" content="multikart">
+    <meta name="author" content="multikart">
+    <link rel="icon" href="~/assets/Perfume_assets/images/icon/newlogo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="~/assets/Perfume_assets/images/icon/newlogo.png" type="image/x-icon">
+    <title>MASHAER</title>
+
+    @Html.Partial("../Perfume/scripts/_Styles")
+
+
+
+</head>
+
+<body class="theme-color-1">
+
+    @*@Html.Partial("../Perfume/layouts/_Loader")*@
+
+    <!-- Header Start -->
+    @Html.Partial("../Perfume/layouts/_Header")
+    <!-- Header End -->
+
+    @RenderBody()
+
+    <!-- footer -->
+    @Html.Partial("../Perfume/layouts/_Footer")
+    <!-- footer end -->
+    @Html.Partial("../Perfume/layouts/_Cookie")
+
+
+    <!-- Quick-view modal popup start-->
+    @Html.Partial("../Perfume/layouts/_Product_View")
+    <!-- Quick-view modal popup end-->
+
+    @Html.Partial("../Perfume/layouts/_Settings_theme")
+
+
+   
+
+
+    <!-- tap to top -->
+    <div class="tap-top top-cls">
+        <div>
+            <i class="fa fa-angle-double-up"></i>
+        </div>
+    </div>
+    <!-- tap to top end -->
+    @Html.Partial("../Perfume/scripts/_Scripts")
+    @await RenderSectionAsync("Scripts", required: false)
+    @await Component.InvokeAsync("NToastNotify")
+</body>
+
+
+<!-- Mirrored from themes.pixelstrap.com/multikart/front-end/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 07 Dec 2022 08:28:46 GMT -->
+</html>
+
+
+
+
+
+
+
+@*    <!--modal popup start-->
+    <div class="modal fade bd-example-modal-lg theme-modal" id="exampleModal" tabindex="-1" role="dialog"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body modal1">
+                    <div class="container-fluid p-0">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="modal-bg">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <div class="offer-content"> <img src="~/assets/Perfume_assets/images/Offer-banner.png"
+                                            class="img-fluid blur-up lazyload" alt="">
+                                        <h2>newsletter</h2>
+                                        <form
+                                            action="https://pixelstrap.us19.list-manage.com/subscribe/post?u=5a128856334b598b395f1fc9b&amp;id=082f74cbda"
+                                            class="auth-form needs-validation" method="post"
+                                            id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form"
+                                            target="_blank">
+                                            <div class="form-group mx-sm-3">
+                                                <input type="email" class="form-control" name="EMAIL" id="mce-EMAIL"
+                                                    placeholder="Enter your email" required="required">
+                                                <button type="submit" class="btn btn-solid"
+                                                    id="mc-submit">subscribe</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--modal popup end-->*@
+
+
+
+
+<!-- exit modal popup start-->
+@*<div class="modal fade bd-example-modal-lg theme-modal exit-modal" id="exit_popup" tabindex="-1" role="dialog"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body modal1">
+                    <div class="container-fluid p-0">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="modal-bg">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <div class="media">
+                                        <img src="~/assets/Perfume_assets/images/stop.png"
+                                            class="stop img-fluid blur-up lazyload me-3" alt="">
+                                        <div class="media-body text-start align-self-center">
+                                            <div>
+                                                <h2>wait!</h2>
+                                                <h4>We want to give you
+                                                    <b>10% discount</b>
+                                                    <span>for your first order</span>
+                                                </h4>
+                                                <h5>Use discount code at checkout</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+<!-- Add to cart modal popup end-->
+<!-- facebook chat section start -->
+<!-- <div id="fb-root"></div>
+<script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src =
+            'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js#xfbml=1&version=v2.12&autoLogAppEvents=1';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script> -->
+<!-- Your customer chat code -->
+<!-- <div class="fb-customerchat" attribution=setup_tool page_id="2123438804574660" theme_color="#0084ff"
+    logged_in_greeting="Hi! Welcome to PixelStrap Themes  How can we help you?"
+    logged_out_greeting="Hi! Welcome to PixelStrap Themes  How can we help you?">
+</div> -->
+<!-- facebook chat section end -->

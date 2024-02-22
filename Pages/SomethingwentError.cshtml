@@ -1,0 +1,39 @@
+﻿
+@page
+@model CRM.Pages.SomethingwentErrorModel
+@{
+    ViewData["Title"] = "Pay";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mashar</title>
+
+
+    <link rel="stylesheet" href="StyleSheet.css">
+
+</head>
+<body>
+    <div class="errorModule">
+        <div class="errorIcon">
+            <i class="fa fa-unlink"></i>
+        </div>
+        @{
+            if (Model.ErrorMessage != null)
+            {
+                <div class="errorMsg">
+                    @Model.ErrorMessage
+                </div>
+            }
+            else
+            {
+                <div class="errorMsg">أُووبس! هناك خطأ ما. الرجاء محاولة ثانية</div>
+            }
+        }
+
+    </div>
+
+</body>
+</html>

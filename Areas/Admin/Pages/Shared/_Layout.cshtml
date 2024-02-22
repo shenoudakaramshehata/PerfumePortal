@@ -1,0 +1,142 @@
+﻿@using Microsoft.AspNetCore.Localization;
+
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> sharedResource
+
+
+<!doctype html>
+
+<html lang="en" dir="ltr" id="masterPageId" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg">
+
+<head>
+
+    @Html.Partial("_title_meta.cshtml")
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    @* add devextreme*@
+    @*<link href="~/Css/devextreme/bootstrap.css" rel="stylesheet" />*@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+    <link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
+    <link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
+    @*<script type='text/javascript' src='https://knockoutjs.com/downloads/knockout-3.5.0.debug.js'></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js'></script>
+    <script src="~/js/devextreme/jquery.js"></script>
+    <script src="~/js/devextreme/bootstrap.js"></script>
+    <script src="~/js/devextreme/dx.all.js"></script>
+    <script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
+    <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>*@
+    <script type='text/javascript' src='https://knockoutjs.com/downloads/knockout-3.5.0.debug.js'></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js'></script>
+
+    @*<script src="~/Admin/lib/popper/js/popper.js"></script>*@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/devextreme/dx.all.js"></script>
+    <script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
+    <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
+    @* end devextreme*@
+
+
+    @RenderSection("styles", required: false)
+    @{
+        if (!(User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Operator") || User.IsInRole("Store"))))
+        {
+
+            Context.Response.Redirect(Url.Content("~/login?returnUrl=" + Context.Request.Path));
+        }
+
+
+    }
+    @{
+        var locale = Context.Request.HttpContext.Features.Get<IRequestCultureFeature>();
+        var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+        //English
+        if (BrowserCulture == "en-US")
+        {
+
+                <style>
+                    html {
+                        direction: ltr !important;
+                    }
+   
+                </style>
+            <link href="@Url.Content("~/assets/css/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+            <link href="@Url.Content("~/assets/css/icons.min.css")" rel="stylesheet" type="text/css" />
+            <link href="@Url.Content("~/assets/css/app.min.css")" rel="stylesheet" type="text/css" />
+            <link href="~/assets/css/custom.min.css" rel="stylesheet" type="text/css" />
+
+
+        }
+        //Arabic
+        else
+        {
+                <style>
+                    html {
+                        direction: rtl !important;
+                    }
+                    th { 
+                        text-align: start !important;
+
+                    
+                    }
+                    td { 
+                       padding-right: 2rem !important;
+                    }
+                    input[type=number] {
+                        text-align: right !important;
+                      }
+                    
+                </style>
+           <link href="~/assets/css/bootstrap-rtl.min.css" rel="stylesheet" type="text/css" />
+            <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+            <link href="~/assets/css/app-rtl.min.css" rel="stylesheet" type="text/css" />
+            <link href="~/assets/css/custom-rtl.min.css" rel="stylesheet" type="text/css" />
+
+        }
+
+    }
+   
+
+
+    
+    }
+</head>
+<body id="masterbodyid">
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+        @Html.Partial("_menu.cshtml")
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+                    @Html.Partial("_page_title.cshtml")
+
+                    @RenderBody()
+                </div>
+            </div>
+            @Html.Partial("_footer.cshtml")
+        </div>
+
+    </div>
+    <!-- END layout-wrapper -->
+ @*   @Html.Partial("_customizer.cshtml")*@
+
+    @Html.Partial("_vendor_scripts.cshtml")
+     <partial name="_ValidationScriptsPartial" />
+
+    @RenderSection("scripts", required: false)
+  
+   
+
+    @await Component.InvokeAsync("NToastNotify")
+
+</body>
+</html>

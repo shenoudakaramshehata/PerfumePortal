@@ -1,0 +1,342 @@
+﻿@using Microsoft.AspNetCore.Identity
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model CRM.Pages.IndexModel
+@Html.AntiForgeryToken()
+@inject PerfumeContext _context
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+
+@{
+    var IsFavorate = false;
+
+    var locale = Context.Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+    var currUser = await UserManager.GetUserAsync(User);
+    if (currUser != null)
+    {
+        IsFavorate = _context.FavouriteItems.Any(c => c.UserId == currUser.Id);
+    };
+}
+<style>
+    #toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+    .toast {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+    .toast.show {
+        opacity: 1;
+    }
+</style>
+@*<style>
+    .common-btn:before {
+          border-radius: 0 !important;
+     
+    }
+
+    .common-btn {
+     
+        border-radius: 0 !important;       
+    }
+
+    </style>*@
+<section id="productid" class="shop-area ptb-100">
+    <div class="container" id="CatIdForAboutus">
+        <div class="section-title">
+            <h2>
+                @sharedResource["OUR PRODUCTS"]
+            </h2>
+        </div>
+        <div id="ProductsSection" class="row">
+           
+        </div>
+
+    </div>
+</section>
+
+<!-- HTML code for toast container -->
+
+<!-- CSS code for toast container -->
+<style>
+    #toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+
+    .toast {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+        .toast.show {
+            opacity: 1;
+        }
+</style>
+
+
+<script>
+    //window.onload = function () {
+
+    //    var country = localStorage.getItem("countryId");
+
+    //    //getcategory();
+
+    //    getItems(Model.FirstCatId, country);
+    //}
+    //var lang = localStorage.getItem("lang");
+
+    //var categIdglobal = 0;
+    //function getcategory() {
+    //    $.ajax
+    //        ({
+    //            type: "GET",
+    //            beforeSend: function (xhr) {
+    //                xhr.setRequestHeader("XSRF-TOKEN",
+    //                    $('input:hidden[name="__RequestVerificationToken"]').val());
+    //            }
+    //            ,
+    //            url: "/Default?handler=SingleCategory",
+
+    //            contentType: "application/json",
+    //            dataType: "json",
+    //            success: function (response) {
+    //                //console.log(response);
+    //                let categoryName = "";
+    //                $.each(response, function (i, category) {
+    //                    console.log(category);
+    //                    categoryName += `
+
+    //                    <a class="ms-3" style="color:#000;cursor:pointer"
+
+    //                            onclick="getItems(${category.CategoryId,Model.FirstCounId})">
+
+    //                           ${lang == "en" ? category.CategoryTlen : category.CategoryTlar}
+
+    //                    </a>
+    //                            `;
+
+    //                });
+    //                $("#catName").html(categoryName);
+
+    //            },
+
+    //            failure: function (response) {
+    //                alert(response);
+    //            }
+    //        });
+    //}
+
+    //function getItems(CategoryId, CountryId) {
+    //    categIdglobal = CategoryId;
+    //    $.ajax
+    //        ({
+    //            type: "GET",
+    //            beforeSend: function (xhr) {
+    //                xhr.setRequestHeader("XSRF-TOKEN",
+    //                    $('input:hidden[name="__RequestVerificationToken"]').val());
+    //            }
+    //            ,
+    //            url: "/Index?handler=SingleCategoryItems",
+
+    //            data: { CategoryId: CategoryId, CountryId: CountryId },
+    //            //data: { "CountryId": CountryId },
+    //            contentType: "application/json",
+    //            dataType: "json",
+    //            success: function (response) {
+    //                //console.log(response);
+    //                let Items = "";
+    //                $.each(response, function (i, item) {
+    //                    //console.log(item.ItemId);
+    //                    Items += `
+
+    //                                                         <div class="col-sm-6 col-lg-4 " id="shop-item">
+    //                                                <div class="shop-item">
+    //                                                    <div class="top">
+    //                                                            <img src="/${item.ItemImage}" alt="Shop" id="ItemImage">
+    //                                                        <ul>
+    //                                                            <li>
+    //                                                                            <a  onclick="AddToCart(${item.ItemId})">
+    //                                                                    <i class="bx bx-cart"></i>
+    //                                                                </a>
+    //                                                            </li>
+    //                                                            <li>
+    //                                                                             <a onclick="addFavorite(${item.ItemId})">
+
+    //                                                                            ${item.IsFavorate ? `<i class= 'bx bxs-heart text-danger'> </i>` : `<i class= 'bx bxs-heart'> </i >`}
+
+    //                                                                        </a>
+    //                                                            </li>
+    //                                                        </ul>
+    //                                                    </div>
+    //                                                    <div class="bottom">
+    //                                                        <h3>
+    //                                                                    <a style="color:#000;" href="/PerfumeDetails?id=${item.ItemId}">
+
+    //                                                                    ${lang == "en" ? item.ItemTitleEn : item.ItemTitleAr}
+    //                                                            </a>
+    //                                                        </h3>
+
+    //                                                    </div>
+    //                                                </div>
+    //                                            </div>
+    //                                                        `;
+
+    //                });
+    //                $("#catitems").html(Items);
+
+    //            },
+
+    //            failure: function (response) {
+    //                alert(response);
+    //            }
+    //        });
+    //}
+
+    // JavaScript code for toast message
+
+    
+    function addFavorite(ItemId) {
+
+        //console.log(ItemId);
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=AddToFavorate",
+            data: { ItemId: ItemId },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            }
+            ,
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+        })
+            .done(function (result) {
+                //console.log(result);
+                if (result.Islogin) {
+
+                    if (result.IsExists == false) {
+                        document.getElementById(result.ItemId).classList.remove("bx-heart")
+                        document.getElementById(result.ItemId).classList.add("bxs-heart")
+                        document.getElementById(result.ItemId).style.color = '#000';
+                    }
+                    else {
+                        //var element = document.getElementById("myDIV");
+                        //element.classList.remove("mystyle");
+                        document.getElementById(result.ItemId).classList.remove("bxs-heart")
+                        document.getElementById(result.ItemId).classList.add("bx-heart")
+
+                        //document.getElementById(result.ItemId).style.color = '#000';
+                    }
+
+                }
+                else {
+                    window.location.href = '/Login'
+                }
+            });
+    }
+
+
+    function AddCart(ItemId, priceCart) {
+        //console.log(ItemId);
+        var Country = localStorage.getItem('Country');
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=AddToCart",
+            data: { ItemId: ItemId, priceCart: priceCart,Country:Country },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+        })
+            .done(function (result) {
+                console.log(result);
+                if (result.IsRegister==false){
+                    var itemObject = {
+
+                        "ItemTitleEn": result.items.ItemTitleEn,
+                        "ItemTitleAr": result.items.ItemTitleAr,
+                        "ItemImage": result.items.ItemImage,
+                        "ItemId": result.items.ItemId,
+                        "priceCart": priceCart,
+                        "Qunatity": 1,
+                        "DeliveryCost": result.CountryShoppingCost
+                    };
+                    console.log(itemObject)
+
+                    var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+                    console.log(cartItems)
+                    var Found = false;
+                    if (!cartItems) {
+                        cartItems = [];
+                        cartItems.push(itemObject);
+                        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                        console.log(cartItems)
+                    }
+                    else {
+                        console.log(cartItems)
+                        if (result.items.OutOfStock == false) {
+                            console.log(cartItems)
+                            for (var i = 0; i < cartItems.length; i++) {
+                                if (cartItems[i].ItemId == ItemId) {
+                                    cartItems[i].Qunatity++;
+                                    Found = true;
+                                }
+                            }
+                            if (Found == false) {
+                                cartItems.push(itemObject);
+
+                            }
+                            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+                            console.log(JSON.parse(localStorage.getItem('cartItems')))
+                        }
+
+
+                    }
+                    ShoppingCartIcon();
+                    StorageinSession()
+                }
+                if (result == "true"){
+                    ShoppingCartIcon();
+
+                }
+              
+                //if (result) {
+
+                //    //var country = localStorage.getItem("countryId");
+                //    // getItems(categIdglobal, country);
+                //    //window.location.href = '/default'
+                //}
+                //else {
+                //    window.location.href = '/Login'
+                //}
+            });
+    }
+
+</script>

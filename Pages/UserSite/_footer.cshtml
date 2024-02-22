@@ -1,0 +1,178 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext _db
+@inject PerfumeContext _context
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@Html.AntiForgeryToken()
+@using Microsoft.AspNetCore.Localization;
+@{
+
+    //string adminRoleId = _db.Roles.Where(e => e.Name == "Admin").FirstOrDefault().Id;
+    //var UserAdminId = _db.UserRoles.Where(e => e.RoleId == adminRoleId).FirstOrDefault().UserId;
+    //var user = UserManager.Users.Where(e => e.Id == UserAdminId).FirstOrDefault();
+    //var currentuser = await UserManager.GetUserAsync(User);
+
+    var SocialMedia = _context.SocialMediaLinks.FirstOrDefault();
+
+   
+}
+
+
+
+
+
+<footer class="footer-area two pt-50" id="contactIdForScrolling">
+  
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3 offset-lg-0 col-lg-4">
+                <div class="footer-item">
+
+                    <h3>@sharedResource["News Letters"]</h3>
+                    <form class="form-inline " method="post">
+                        <div class="form-group">
+
+                            <input name="EMAIL" type="text" class="form-control"
+                                   placeholder="@sharedResource["Your_Email"]">
+                        </div>
+
+                        <div style="padding-top: 1rem">
+                            <button type="submit" class="btn btn-close-white btn-light" style="border-radius: 0;">
+                                @sharedResource["Subscribe"]
+                            </button>
+                        </div>
+
+                    </form>
+
+
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="footer-item">
+               
+                        @if (SocialMedia != null)
+                        {
+                            <div class="footer-contact">
+                                <h3>@sharedResource["Contact Info:"]</h3>
+                                <ul class="info">
+                                    <li>
+                                        <span>@sharedResource["Address:"]</span>
+                                        <a>@SocialMedia.Address</a>
+                                    </li>
+                                    <li>
+@*                                        <span>@sharedResource["Phone:"]</span>
+*@                                        <a style=" color:#6b6b6b;" href="tel:@SocialMedia.ContactPhone1">@SocialMedia.ContactPhone1</a>
+                                    </li>
+
+                                    <li>
+@*                                        <span>@sharedResource["Email:"]</span>
+*@                                        <a href="mailto:@SocialMedia.ContactMail"><span class="__cf_email__" data-cfemail="2b434e4747446b414e4e4705484446">@SocialMedia.ContactMail</span></a>
+                                    </li>
+                                    @* <li>
+                                <span>Email:</span>
+                                <a href="https://templates.hibootstrap.com/cdn-cgi/l/email-protection#e980878f86a9838c8c85c78a8684"><span class="__cf_email__" data-cfemail="cfa6a1a9a08fa5aaaaa3e1aca0a2">[email&#160;protected]</span></a>
+                                </li>*@
+                                    @*<li>
+                                        <span>@sharedResource["Fax:"]</span>
+                                        <a style="color:#6b6b6b;">@SocialMedia.Fax</a>
+                                    </li>*@
+                                </ul>
+                                <ul class="social">
+ <li>
+                                    <a href="https://wa.me/@SocialMedia.WhatSapp" target="_blank">
+                                        <i class='bx bxl-whatsapp'></i>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="@SocialMedia.Facebook" target="_blank">
+                                            <i class='bx bxl-facebook'></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@SocialMedia.Twitter" target="_blank">
+                                            <i class='bx bxl-twitter'></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@SocialMedia.Youtube" target="_blank">
+                                            <i class='bx bxl-youtube'></i>
+                                        </a>
+                                    </li>
+                                    @* <li>
+                                <a href="@LinkedInsocialLink" target="_blank">
+                                <i class='bx bxl-linkedin'></i>
+                                </a>
+                                </li>*@
+                                    <li>
+                                        <a href="@SocialMedia.Instgram" target="_blank">
+                                            <i class='bx bxl-instagram'></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                   
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 section-title">
+                <img src="~/Jeel/images/PayementIcons.png" alt="Payment Icons" />
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="footer-item">
+                    <div class="footer-img">
+                        <a href="index">
+                            <img src="~/Jeel/images/logoFooter.png" alt="Footer" style="width:120px">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<div class="copyright-area two">
+    <div class="container">
+        <div class="copyright-item">
+            <p>
+                @*@sharedResource["Copyright"]*@
+                <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+                @sharedResource["CopyRight2"]
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div class="go-top">
+    <i class='bx bxs-up-arrow-alt'></i>
+    <i class='bx bxs-up-arrow-alt'></i>
+</div>
+
+
+<script>
+
+
+    //function Subscribe(EMAIL) {
+
+    //    //console.log(EMAIL);
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/Index?handler=OnSubscribe",
+    //        data: { EMAIL: EMAIL },
+    //        beforeSend: function (xhr) {
+    //            xhr.setRequestHeader("XSRF-TOKEN",
+    //                $('input:hidden[name="__RequestVerificationToken"]').val());
+    //        }
+    //        ,
+    //        headers: {
+    //            RequestVerificationToken:
+    //                $('input:hidden[name="__RequestVerificationToken"]').val()
+    //        },
+    //    })
+    //}
+</script>

@@ -1,0 +1,212 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.ManageOrder.OrderDetailsModel
+@Html.AntiForgeryToken()
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    Layout = "_Layout";
+}
+<!--datatable css-->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css" />
+<!--datatable responsive css-->
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+
+
+
+<div class="row justify-content-center">
+    <div class="col-xxl-9">
+        <div class="card" id="demo">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card-header border-bottom-dashed p-4">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h3>@sharedResource["Customer Details"]</h3>
+                                <div class="mt-sm-5 mt-4">
+
+                                   @{
+                                        string Address = Model.customerAddress.CityName + " , " + Model.customerAddress.AreaName;
+                                        string Street = Model.customerAddress.BuildingNo + " , " + Model.customerAddress.Address;
+
+                                   }
+                                     
+                                        <h5 class="text-muted text-uppercase fw-semibold mb-3">@sharedResource["Cutsmoer Name"] : @Model.Customer.CustomerName </h5>
+                                        <h6 class="text-muted text-uppercase fw-semibold">@sharedResource["Address"]</h6>
+                                        <p class="text-muted mb-1">@Address  </p>
+                                        <p class="text-muted mb-0">@Street   </p>
+                                    
+                                </div>
+                            </div>
+
+                            <div class="flex-shrink-0 mt-sm-0 ">
+                               
+                                    @*<h6><span class="text-muted fw-normal">Legal Registration No:</span><span id="legal-register-no">987654</span></h6>
+                                <h6><span class="text-muted fw-normal">Email:</span><span id="email">velzon@themesbrand.com</span></h6>
+                                <h6><span class="text-muted fw-normal">Website:</span> <a href="https://themesbrand.com/" class="link-primary" target="_blank" id="website">www.themesbrand.com</a></h6>*@
+                                    <h6 class="mt-5"><span class="text-muted fw-normal mt-5">@sharedResource["Contact No"]: </span><span id="contact-no"> @Model.customerAddress.Mobile </span></h6>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--end card-header-->
+                </div><!--end col-->
+
+                <div class="col-lg-12">
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+
+                            <div class="col-lg-3 col-6">
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">@sharedResource["Invoice No"]</p>
+                                <h5 class="fs-14 mb-0">@Model.OrderReceipt.UniqeId</h5>
+                            </div>
+                            <!--end col-->
+                            <div class="col-lg-3 col-6">
+
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">@sharedResource["Date"]</p>
+                                <h5 class="fs-14 mb-0"><span id="invoice-date">@Model.OrderReceipt.OrderDate</span></h5>
+                            </div>
+                            <!--end col-->
+                            <div class="col-lg-3 col-6">
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">@sharedResource["Order Status"]</p>
+                                <span class="badge badge-soft-warning fs-11" id="payment-status">@Model.OrderReceipt.OrderStatus.Status</span>
+                            </div>
+                            <!--end col-->
+                            <div class="col-lg-3 col-6">
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">@sharedResource["Total Amount"]</p>
+                                <h5 class="fs-14 mb-0"><span id="total-amount">@Model.OrderReceipt.OrderNet</span></h5>
+                            </div>   
+
+                            <!--end col-->
+                        </div>
+                        <!--end row-->
+                    </div>
+                    <!--end card-body-->
+                </div><!--end col-->
+
+
+                <div class="col-lg-12">
+                    <div class="card-body p-4">
+                        <div class="table-responsive">
+                            <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+                                <thead>
+                                    <tr class="table-active">
+                                       
+                                        <th class="text-center" data-ordering="false">@sharedResource["Item Name"]</th>
+                                        <th class="text-center" data-ordering="false">@sharedResource["Image"]</th>
+                                        <th class="text-center" data-ordering="false">@sharedResource["Item Quantity"]</th>
+                                        <th class="text-center" data-ordering="false">@sharedResource["One Piece Price"]</th>
+                                        <th class="text-center" data-ordering="false">@sharedResource["Total Amount"]</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OrderList)
+                                    {
+                                        var PhotoPath = "~/images/Item/" + @item.Item.ItemImage;
+                                        double TotalAmount = item.ItemQuantity * item.ItemPrice;
+                                        <tr>
+                                            <td>@item.Item.ItemTitleEn</td>
+                                            <td class="w-25"><img class="img-thumbnail rounded w-50" src="@PhotoPath" asp-append-version="true" /> </td>
+                                            <td>@item.ItemQuantity</td>
+                                            <td>@item.ItemPrice</td>
+                                            <td>@TotalAmount</td>
+
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table><!--end table-->
+                        </div>
+                        <div class="border-top border-top-dashed mt-2">
+                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
+                                <tbody>
+
+                                    <tr>
+                                        <td>@sharedResource["Total Amount Before Discount"]</td>
+                                        <td class="text-end">@Model.OrderReceipt.OrderTotal</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>@sharedResource["Discount"]</td>
+                                        <td class="text-end"> @Model.OrderReceipt.OrderDiscount</td>
+                                    </tr>
+                                   
+                                </tbody>
+                            </table>
+
+                            <!--end table-->
+                        </div>
+                        <a asp-page="./index" class="btn btn-primary">@sharedResource["Back"] </a>
+             
+                    </div>
+                    <!--end card-body-->
+                </div><!--end col-->
+            </div><!--end row-->
+        </div>
+        <!--end card-->
+    </div>
+    <!--end col-->
+</div>
+<!--------------------------------------------------------Order Details------------------------------------>
+@*<div class="row">
+    <div class="col-lg-12">
+        <div class="card" id="List">
+            <div class="card-header border-0">
+
+                <div class="row g-4 align-items-center">
+                    <div class="col-sm-3">
+                        <div class="search-box">
+                            <input type="text" class="form-control search" id="txtSearch"
+                                   placeholder="@sharedResource["Search for..."]">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-auto ms-auto">
+                        <div class="hstack gap-2">
+
+                            <button type="button" class="btn btn-success add-btn"
+                                    data-bs-toggle="modal" id="create-btn"
+                                    data-bs-target="#AddModal">
+                                <i class="ri-add-line align-bottom me-1"></i> @sharedResource["Add Order"]
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <div class="table-responsive table-card">
+                        <table id="myTable" class="table  dt-responsive nowrap  align-middle" style="width:100%">
+                            <thead class="table-light">
+                                <tr>
+                                    <th data-ordering="false">@sharedResource["English Title"]</th>
+                                    <th data-ordering="false">@sharedResource["Image"]</th>
+                                    <th data-ordering="false">@sharedResource["Item Quantity"]</th>
+                                    <th data-ordering="false">@sharedResource["Item Price"]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderList)
+                                {
+                                    <tr>
+                                        <td>@item.Item.ItemTitleEn</td>
+                                        <td><img class="img-thumbnail rounded w-50" src="@item.Item.ItemImage" asp-append-version="true" /> </td>
+                                        <td>@item.ItemQuantity</td>
+                                        <td>@item.ItemPrice</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!--end modal-->
+        </div>
+    </div>
+    <!--end col-->
+</div>*@

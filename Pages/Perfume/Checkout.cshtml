@@ -1,0 +1,44 @@
+﻿@page
+@model CRM.Pages.CheckoutModel
+@{
+    Layout = "_Layout2";
+}
+<!-- section start -->
+<section class="section-b-space">
+    <div class="container">
+        <div class="checkout-page">
+            <form class="checkout-form" onsubmit="checkout(event)">
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12 col-xs-12">
+                        <h3>@sharedResource["Address"]</h3>
+                        <div class="customer-address"></div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12">
+                        <div class="checkout-details">
+                            <div class="order-box">
+                                <div class="title-box">
+                                    <div>@sharedResource["Products"] <span>@sharedResource["Total"]</span></div>
+                                </div>
+                                <ul class="qty">
+                                </ul>
+                                <ul class="sub-total">
+                                </ul>
+                                <ul class="total">
+                                </ul>
+                            </div>
+                            <div class="payment-box">
+                                <div class="upper-box">
+                                    <div class="payment-options">
+                                        <ul></ul>
+                                    </div>
+                                </div>
+                                <div class="text-end"><button type="submit" class="btn-solid btn">Place Order</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- section end -->

@@ -1,0 +1,45 @@
+﻿@{
+}
+
+@*@model CRM.Areas.Admin.Pages.Configurations.ManageCategory.IndexModel*@
+
+<style>
+    .px-5 {
+        padding-left: 1.25rem!important;
+        padding-right: 1.25rem!important;
+    }
+    .modal-header {
+        border-bottom: unset !important;
+        border-top-left-radius: unset !important;
+        border-top-right-radius: unset !important;
+    }
+
+    .bg-light {
+        --bs-bg-opacity: 1;
+        background-color: unset!important;
+    }
+</style>
+<div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="AddModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:fit-content!important">
+        <div class="modal-content">
+
+            <div class="modal-header" style="padding-top: 2rem;">
+                <img src="~/Jeel/images/tabbyLogo.png" style="width:80px;height:32px">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <div class="modal-body" id="pages">
+                  
+                <!--end row-->
+                
+                </div>
+            <div class="modal-footer" style="margin-top: 2rem;">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">@sharedResource["Close"]</button>
+                    </div>
+                </div>
+           
+
+        </div>
+    </div>
+</div>

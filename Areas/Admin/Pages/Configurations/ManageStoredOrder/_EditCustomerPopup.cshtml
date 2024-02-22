@@ -1,0 +1,90 @@
+﻿@using CRM.Data
+@using Microsoft.AspNetCore.Localization;
+@inject PerfumeContext _context
+@{
+    var locale = Context.Features.Get<IRequestCultureFeature>();
+
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+    var Countries = _context.Country.Select(e => new { e.CountryId, e.CountryTlen,e.CountryTlar });
+}
+@model CRM.ViewModels.CustomerVM
+
+<div class="modal fade" id="showCustomerEditModal" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@(sharedResource["Edit Customer"])</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-area="Admin" asp-page="/Configurations/ManageStoredOrder/EditOrder" asp-page-handler="EditCustomer" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" id="id-field" />
+                    <div class="row g-3">
+                        <!--end col-->
+                        <div class="col-lg-12 hidden">
+                            <div>
+                                <input id="CustomerID"  asp-for="@Model.CustomerId" hidden/>
+@*                                <input id="CustomerAddressID"  asp-for="@Model.CustomerAddressId" hidden/>
+*@                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12 hidden">
+                            <div>
+                                <input id="OrderCustomerID" asp-for="@Model.OrderId" hidden />
+                                @*                                <input id="CustomerAddressID"  asp-for="@Model.CustomerAddressId" hidden/>
+                                *@
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.CustomerName" class="form-label">@(sharedResource["CustomerName"])</label>
+                                <input data-val-required="@sharedResource["Enter CustomerName"]" id="CustomerNameId" type="text" asp-for="@Model.CustomerName" class="form-control" placeholder="@sharedResource["Enter CustomerName"]" required />
+                                <span asp-validation-for="@Model.CustomerName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.Email" class="form-label">@sharedResource["Email"]</label>
+                                <input type="email" data-val-required="@sharedResource["Enter Email"]" id="EmailId" asp-for="@Model.Email" class="form-control" placeholder="@sharedResource["Enter Email"]" required />
+                                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.Mobile" class="form-label">@sharedResource["Mobile"]</label>
+                                <input type="text" data-val-required="@sharedResource["Enter Mobile"]" id="MobileId" asp-for="@Model.Mobile" class="form-control" placeholder="@sharedResource["Enter Mobile"]" required />
+                                <span asp-validation-for="@Model.Mobile" class="text-danger"></span>
+                            </div>
+                        </div>
+                       
+                        
+                        
+                        
+                        <!--end col-->
+                        <!--end col-->
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light"
+                                data-bs-dismiss="modal">
+                            @sharedResource["Close"]
+                        </button>
+                        <button type="submit" class="btn btn-success"
+                                id="add-btn">
+                            @sharedResource["Save"]
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,307 @@
+﻿@page
+@model CRM.Pages.ContactUsModel
+@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@Html.AntiForgeryToken()
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@inject PerfumeContext _context
+
+@{
+    var SocialLinks = _context.SocialMediaLinks.FirstOrDefault();
+    //var Address = _context.SocialMediaLinks.FirstOrDefault().Address;
+    //var ContactEmail = _context.SocialMediaLinks.FirstOrDefault().ContactMail;
+    //var ContactTele = _context.SocialMediaLinks.FirstOrDefault().ContactPhone1;
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+}
+
+<style>
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+
+@@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+</style>
+
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+<style>
+    .row > * {
+    flex: auto;
+    }
+</style>
+<div class="page-title-wrap">
+    <div class="page-title-area" style="background-color:#f5f5f5 !important;">
+      
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black" >@sharedResource["Contact Us"]</h2>
+                    <ul>
+                        <li>
+                            <a asp-page="index" class="text-black">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black">@sharedResource["Contact Us"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="contact-info-area pt-100 pb-70">
+    <div class="container">
+        <div class="row">
+
+            @if (SocialLinks != null)
+            {
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="contact-info-item">
+                        <h3>@sharedResource["Address:"]</h3>
+                        <ul>
+                            @* <li>
+                        <a href="#">3 Edgar Buildings, George Street, BA1 2FJ</a>
+                        </li>*@
+                            <li>
+                                <a>@SocialLinks.Address</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="contact-info-item active">
+                        <h3>@sharedResource["Phone No:"]</h3>
+                        <ul>
+                            <li>
+                                <a href="tel:@SocialLinks.ContactPhone1">@SocialLinks.ContactPhone1</a>
+                            </li>
+                            @* <li>
+                        <a href="tel:+9905325969">+990 532 5969</a>
+                        </li>
+                        <li>
+                        <a href="tel:+9905325965">+990 532 5965</a>
+                        </li>
+                        <li>
+                        <a href="tel:+9905325966">+990 532 5966</a>
+                        </li>*@
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 offset-sm-3 offset-lg-0 col-lg-4">
+                    <div class="contact-info-item">
+                        <h3>@sharedResource["Email:"]</h3>
+                        <ul>
+                            <li>
+                                <a href="mailto:@SocialLinks.ContactMail">@SocialLinks.ContactMail</a>
+                            </li>
+                            @* <li>
+                        <a href="mailto:info@jeel.com">info@jeel.com</a>
+                        </li>
+                        <li>
+                        <a href="mailto:x@jeel.com">x@jeel.com</a>
+                        </li>
+                        <li>
+                        <a href="mailto:y@jeel.com">y@jeel.com</a>
+                        </li>*@
+                        </ul>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="contact-form-area pb-100">
+    <div class="container">
+        <div class="form-item" style="background-color:#f5f5f5 !important;">
+            <div class="contact-shape">
+                <img src="/Jeel/images/contact-shape1.png" alt="Shape">
+                <img src="/Jeel/images/contact-shape2.png" alt="Shape">
+            </div>
+            <form id="contactForm" method="post">
+                <div class="section-title two">
+                    <h2 style="color:black!important">@sharedResource["Contact Us"] </h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <input type="text" asp-for="@Model.contact.FirstName" id="FirstName" class="form-control" placeholder=@sharedResource["Enter First Name"] required data-error=@sharedResource["Please enter your name"]>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                     <div class="col-lg-6">
+                        <div class="form-group">
+                            <input type="text" asp-for="@Model.contact.LastName" id="LastName" class="form-control" placeholder=@sharedResource["Enter Last Name"] required data-error=@sharedResource["Please enter your last name"]>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <input type="email" asp-for="@Model.contact.Email" id="Email" class="form-control" placeholder=@sharedResource["Enter Email"] required data-error=@sharedResource["Please enter your email"]>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <input type="text" asp-for="@Model.contact.Mobile" id="Mobile" placeholder="@sharedResource["Enter your number"]" required data-error=@sharedResource["Please enter your number"] class="form-control">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                   
+                    <div class="col-lg-12">
+                        <div class="form-group">
+<textarea asp-for="@Model.contact.Msg" class="form-control" id="Msg" cols="30" rows="8" placeholder=@sharedResource["Write Your Message"] required data-error=@sharedResource["Please enter your message"]></textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <button type="button" onclick="sendMessage()" class="btn btn-close-white btn-light" style="border-radius: 0;">@sharedResource["Send Your Message"]</button>
+@*                            <div id="msgSubmit" class="h3 text-center hidden"></div>
+*@                            @*<div class="clearfix"></div>*@
+                        </div>
+                        <div id="snackbar">@sharedResource["Your message was delivered successfully"]</div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@*<div class="map-area pb-100">
+    <div class="container">
+
+        <iframe id="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7485777.785836187!2d36.923033812499995!3d23.634263629427693!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f051c34cdc92f%3A0xeec9b9df4e2e9ad8!2sMashaer.store!5e0!3m2!1sen!2seg!4v1672177076945!5m2!1sen!2seg" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    </div>
+</div>*@
+
+
+<script>
+
+    function myFunction() {
+  var x = document.getElementById("snackbar");
+  x.className = "show";
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+    function sendMessage(){
+        console.log("asa")
+        ////first Name
+        let firstName = document.getElementById("FirstName").value
+        console.log(firstName)
+        if (firstName == null && firstName==""){
+            firstName.setAttribute("required", "");
+
+        }
+        ///Last Name
+        let lastName = document.getElementById("LastName").value
+        if (lastName == null && lastName == "") {
+            lastName.setAttribute("required", "");
+
+        }
+        ///Email
+        let Email = document.getElementById("Email").value
+        if (Email == null && Email == "") {
+            Email.setAttribute("required", "");
+
+        }
+        ///Mobile
+        let Mobile = document.getElementById("Mobile").value
+        if (Mobile == null && Mobile == "") {
+            Mobile.setAttribute("required", "");
+
+        }
+
+        ///TestArea
+        let Message = document.getElementById("Msg").value
+        if (Message == null && Message == "") {
+            Message.setAttribute("required", "");
+        }
+        //// validation for send Ajax Request
+        if (firstName != null && firstName != "" && lastName != null && lastName != "" && Email != null && Email != "" && Mobile != null && Mobile != "" && Message != null && Message != ""){
+            let Messageobj = {
+                "FirstName": firstName,
+                "LastName": lastName,
+                "Email": Email,
+                "Mobile": Mobile,
+
+                "Msg": Message
+
+            };
+            console.log(Messageobj)
+            ////Ajax Request
+            $.ajax({
+                type: "POST",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                }
+                ,
+                url: "/ContactUs?handler=SendMessage",
+                async: false,
+                data: JSON.stringify(Messageobj),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+
+                success: function (response) {
+                    //console.log("get selected rows successfully" + response)
+                   myFunction();
+                   window.location.href= "/Contactus";
+
+                },
+
+                failure: function (response) {
+                    alert(response);
+                }
+
+            });
+
+
+        }
+    }
+</script>

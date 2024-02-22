@@ -1,0 +1,100 @@
+﻿@{
+}
+
+@*@model CRM.Areas.Admin.Pages.Configurations.ManageCategory.IndexModel*@
+@model CRM.Models.Category
+
+<div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="AddModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@(sharedResource["Add New Category"])</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-area="Admin" asp-page="/ManageCategory/Index" asp-page-handler="AddCategory" enctype="multipart/form-data" onsubmit="return validateMyForm();">
+                <div class="modal-body">
+                    <input type="hidden" id="id-field" />
+                    <div class="row g-3">
+                        <div class="col-lg-12">
+                            <div class="text-center col-lg-12">
+                                <div class="position-relative d-inline-block">
+                                    <div class="position-absolute bottom-0 end-0">
+                                        <label for="file" class="mb-0" data-bs-toggle="tooltip" data-bs-placement="right" title=@(sharedResource["Select Image"])>
+                                            <div class="avatar-xs cursor-pointer">
+                                                <div class="avatar-title bg-light border rounded-circle text-muted">
+                                                    <i class="ri-image-fill"></i>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <input class="form-control d-none hidefromHere" name="file" id="file" type="file"
+                                               accept="image/*" required>
+                                    </div>
+                                    <div class="avatar-lg p-1">
+                                        <div class="avatar-title bg-light rounded-circle">
+                                            <img src="~/assets/images/users/user-dummy-img.jpg" id="lead-img" class="avatar-md rounded-circle object-cover removeFromHere" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 class="fs-13 mt-3">@sharedResource["Image"] </h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div>
+                                <label asp-for="@Model.CategoryTlar" class="form-label">@(sharedResource["Arabic Title"])</label>
+
+                                <input type="text" asp-for="@Model.CategoryTlar" class="form-control" placeholder="@sharedResource["Enter Arabic Title"]" required />
+
+                                <span asp-validation-for="@Model.CategoryTlar" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.CategoryTlen" class="form-label">@sharedResource["English Title"]</label>
+                                <input type="text" asp-for="@Model.CategoryTlen" class="form-control" placeholder="@sharedResource["Enter English Title"]" required />
+                                <span asp-validation-for="@Model.CategoryTlen" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.DescriptionTlar" class="form-label">@(sharedResource["Arabic Description"])</label>
+                                <textarea asp-for="@Model.DescriptionTlar" class="form-control" cols="2" placeholder="@sharedResource["Enter Arabic Description"]"></textarea>
+                                <span asp-validation-for="@Model.DescriptionTlar" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.DescriptionTlen" class="form-label">@(sharedResource["English Description"])</label>
+                                <textarea asp-for="@Model.DescriptionTlen" class="form-control" cols="2" placeholder="@sharedResource["Enter English Description"]"></textarea>
+                                <span asp-validation-for="@Model.DescriptionTlen" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.SortOrder" class="form-label">@sharedResource["Sort Index"]</label>
+                                <input type="number" min="1" asp-for="@Model.SortOrder" id="company_name-field" class="form-control" placeholder="@sharedResource["Enter Category Sort Index"]" required />
+                                <span asp-validation-for="@Model.SortOrder" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-check">
+                                <input asp-for="@Model.IsActive" class="form-check-input" type="checkbox" id="default">
+                                <label for="@Model.IsActive" class="form-check-label" >@sharedResource["Active"]</label>
+                                <span asp-validation-for="@Model.IsActive" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">@sharedResource["Close"]</button>
+                        <button type="submit" asp-page="Index" asp-page-handler="AddCategory" class="btn btn-success" id="add-btn">@sharedResource["Add"]</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

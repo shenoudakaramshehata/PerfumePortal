@@ -1,0 +1,18 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.ManageReport.MergeReportModel
+@{
+}
+<input value=@Model.OrderInvoiceParam id="Param1" hidden />
+@*<input id="Param2" value=@Model.ShippinngInvoiceParam hidden />
+*@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var originValue = window.origin;
+        var checkIn = document.getElementById("Param1").value;
+         console.log(checkIn)
+        //var checkOut = document.getElementById("Param2").value;
+        //console.log(checkOut)
+        window.location.replace(originValue + '/Admin/Configurations/ManageReport/OrderInvoice?id=' + checkIn);
+        window.open(originValue + '/Admin/Configurations/ManageReport/ShippingInvoice?id=' + checkIn, '_blank');
+    });
+</script>

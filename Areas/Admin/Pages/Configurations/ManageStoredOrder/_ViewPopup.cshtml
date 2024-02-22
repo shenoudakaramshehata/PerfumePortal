@@ -1,0 +1,33 @@
+﻿@{
+}
+
+
+@model CRM.Models.Order
+
+<div class="modal fade" id="QuickViewPoup" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@(sharedResource["Shipping Label"])</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close" id="close-modal"></button>
+            </div>
+            <div class="modal-body">
+                <embed src="" class="w-100" id="DCategoryPicId" />
+							</div>
+            <div class="modal-footer">
+                <div class="hstack gap-2 justify-content-end d-print-none mt-4" ">
+                    <button type="button" class="btn btn-light"
+                            data-bs-dismiss="modal">
+                        @sharedResource["Close"]
+                    </button>
+                    <a href="javascript:window.print()" class="btn btn-success"><i class="ri-printer-line align-bottom me-1"></i>@sharedResource["Print"]  </a>
+
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

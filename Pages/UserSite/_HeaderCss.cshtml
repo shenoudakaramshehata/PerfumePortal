@@ -1,0 +1,86 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+
+
+
+@using Microsoft.AspNetCore.Localization
+
+@{
+    var locale = Context.Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+
+    //English
+    if (BrowserCulture == "en-US")
+    {
+        <script>
+            document.getElementById("masterPageId").dir = "ltr";
+        </script>
+
+        <link rel="stylesheet" href="~/Jeel/css/bootstrap.min.css">
+        <link rel="stylesheet" href="~/Jeel/css/boxicons.min.css">
+        <link rel="stylesheet" href="~/Jeel/css/meanmenu.css">
+        <link rel="stylesheet" href="~/Jeel/css/animate.min.css">
+        <link rel="stylesheet" href="~/Jeel/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="~/Jeel/css/owl.theme.default.min.css">
+        <link rel="stylesheet" href="~/Jeel/css/modal-video.min.css">
+        <link rel="stylesheet" href="~/Jeel/css/odometer.min.css">
+        <link rel="stylesheet" type="text/css" href="~/Jeel/css/settings.css">
+        <link rel="stylesheet" type="text/css" href="~/Jeel/css/layers.css">
+        <link rel="stylesheet" type="text/css" href="~/Jeel/css/navigation.css">
+        <link rel="stylesheet" href="~/Jeel/css/nice-select.min.css">
+        <link rel="stylesheet" href="~/Jeel/css/style.css">
+        <link rel="stylesheet" href="~/Jeel/css/responsive.css">
+        <link rel="stylesheet" href="~/Jeel/css/theme-dark.css">
+        <link rel="stylesheet" href="~/Jeel/css/Custom.css">
+
+    }
+    //Arabic
+    else
+    {
+        <script>
+            document.getElementById("masterPageId").dir = "rtl";
+        </script>
+
+
+        <link rel="stylesheet" href="~/Jeel/css/bootstrap.rtl.min.css">
+
+        <link rel="stylesheet" href="~/Jeel/css/boxicons.min.css">
+
+        <link rel="stylesheet" href="~/Jeel/css/meanmenu.css">
+
+        <link rel="stylesheet" href="~/Jeel/css/animate.min.css">
+
+        <link rel="stylesheet" href="~/Jeel/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="~/Jeel/css/owl.theme.default.min.css">
+
+        <link rel="stylesheet" href="~/Jeel/css/modal-video.min.css">
+
+        <link rel="stylesheet" href="~/Jeel/css/odometer.min.css">
+
+        <link rel="stylesheet" type="text/css" href="~/Jeel/css/settings.css">
+        <link rel="stylesheet" type="text/css" href="~/Jeel/css/layers.css">
+        <link rel="stylesheet" type="text/css" href="~/Jeel/css/navigation.css">
+
+        <link rel="stylesheet" href="~/Jeel/css/nice-select.min.css">
+
+        <link rel="stylesheet" href="~/Jeel/css/style.css">
+
+        <link rel="stylesheet" href="~/Jeel/css/responsive.css">
+
+        <link rel="stylesheet" href="~/Jeel/css/theme-dark.css">
+
+        <link rel="stylesheet" href="~/Jeel/css/rtl.css">
+        <link rel="stylesheet" href="~/Jeel/css/Custom.css">
+        <style>
+            .productDiv {
+                flex: unset!important;
+            }
+        </style>
+    }
+
+}

@@ -1,0 +1,103 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.ManageReport.ItemReportModel
+@{
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/assets/css/slim.css" rel="stylesheet" />
+    <title></title>
+</head>
+<body>
+    <div class="slim-mainpanel">
+        <div class="container">
+            <div class="slim-pageheader">
+            </div><!-- slim-pageheader -->
+
+
+
+
+            <div class="row">
+                <div class=" col-lg-4 card pd-20 ">
+                    
+                    <div class="post-group">
+
+                        <label class="slim-card-title">@sharedResource["Filter"]</label>
+                        <div class="post-group">
+
+                            @using (Html.BeginForm(FormMethod.Post))
+
+
+                                @(Html.DevExtreme().Form<CRM.ViewModels.FinancialFilterVm>()
+                                    .FormData(Model.financialFilterVm)
+                                    .LabelMode(FormLabelMode.Outside)
+                                    .LabelLocation(FormLabelLocation.Top)
+                                    .Items(items =>
+                                    {
+                                        items.AddSimpleFor(m => m.From).IsRequired(false).Label(l => l.Text(sharedResource["From Date"]));
+                                        items.AddSimpleFor(m => m.To).IsRequired(false).Label(l => l.Text(sharedResource["To Date"]));
+                                        items.AddSimpleFor(m => m.CountryId).IsRequired(false).Label(l => l.Text(sharedResource["Country"]))
+                                        .Editor(e => e
+                                        .Lookup()
+                                        .DataSource(ds => ds.WebApi().Controller("Lookup").LoadAction("CountriesLookup").Key("Value"))
+                                        .ValueExpr("Value")
+                                        .DisplayExpr("Text").Placeholder(sharedResource["Select"])
+                                        .ShowClearButton(true)
+                                        .ClearButtonText(sharedResource["Clear"])
+                                        .CancelButtonText(sharedResource["Cancel"])
+                                        .SearchPlaceholder(sharedResource["searching"])
+                                        );
+                                        items.AddSimpleFor(m => m.ItemId).IsRequired(false).Label(l => l.Text(sharedResource["Item"]))
+                                        .Editor(e => e
+                                        .Lookup()
+                                        .DataSource(ds => ds.WebApi().Controller("Lookup").LoadAction("ItemsLookup").Key("Value"))
+                                        .ValueExpr("Value")
+                                        .DisplayExpr("Text").Placeholder(sharedResource["Select"])
+                                        .ShowClearButton(true)
+                                        .ClearButtonText(sharedResource["Clear"])
+                                        .CancelButtonText(sharedResource["Cancel"])
+                                        .SearchPlaceholder(sharedResource["searching"])
+                                        );
+
+                                        items.AddButton()
+                                        .HorizontalAlignment(HorizontalAlignment.Left)
+                                        .ButtonOptions(b => b.Text(sharedResource["Send"])
+                                        .Type(ButtonType.Success)
+                                        .UseSubmitBehavior(true)
+                                        );
+                                    })
+                                    )
+
+
+
+
+
+
+
+
+                        </div><!-- post-group -->
+                    </div><!-- card -->
+                </div>
+                <div class="col-lg-8">
+
+                    <div class="card">
+                        <div class="timeline-group">
+                            @using CRM.Reports
+
+                            <link rel="stylesheet" href="~/css/viewer.part.bundle.css" />
+
+                            <script src="~/js/viewer.part.bundle.js"></script>
+
+                            @Html.DevExpress().WebDocumentViewer("DocumentViewer").Height("500px").Bind(Model.Report)
+                        </div><!-- timeline-group -->
+                    </div><!-- card -->
+
+                </div><!-- col-9 -->
+                <!-- col-3 -->
+            </div><!-- row -->
+            <!-- container -->
+        </div>
+    </div>
+
+</body>
+</html>

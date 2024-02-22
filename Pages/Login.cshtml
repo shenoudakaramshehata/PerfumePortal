@@ -1,0 +1,77 @@
+﻿@page
+@model CRM.Pages.LoginModel
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+}
+<style>
+    .user-area .user-item {
+        background-color: #F5F5F5 !important;
+    }
+
+</style>
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+<style>
+    .theme-dark h4 a {
+        color: #000 !important;
+    }
+</style>
+
+<div class="page-title-wrap">
+    <div class="page-title-area" style="background-color:#f5f5f5 !important;">
+       
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black">@sharedResource["Login"]</h2>
+                    <ul>
+                        <li>
+                            <a href="/index" class="text-black">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black">@sharedResource["Login"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="user-area ptb-100">
+    <div class="container">
+        <div class="user-item">
+
+            <div class="user-shape">
+                <img src="~/Jeel/images/contact-shape1.png" alt="Shape">
+                <img src="~/Jeel/images/contact-shape2.png" alt="Shape">
+            </div>
+
+            <h2 class="text-dark">@sharedResource["Sign In"]</h2>
+
+             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <form method="post">
+                <div class="form-group">
+                    <input data-val="true" data-val-required="@sharedResource["Enter your Email"]" type="email" asp-for="Input.Email" class="form-control" placeholder="@sharedResource["Enter Email"]" required>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                 
+
+                <div class="form-group">
+                    <input data-val="true" data-val-required="@sharedResource["Enter The Password"]" type="Password" asp-for="Input.Password" class="form-control" placeholder="@sharedResource["Enter password"]" required>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                
+                <button type="submit" class="btn btn-close-white btn-light mb-2 " style="border-radius: 0;width:100%;">@sharedResource["Sign In"]</button>
+              
+                <h4 class="text-dark">@sharedResource["Didn't have any account?"] <a asp-page="Register" class="text-dark">@sharedResource["Sign Up"]</a></h4>
+            </form>
+        </div>
+    </div>
+</div>
+ <partial name="_ValidationScriptsPartial" />

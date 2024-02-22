@@ -1,0 +1,37 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<style>
+	.up {
+		transform: rotate(-135deg);
+		-webkit-transform: rotate(-135deg);
+	}
+</style>
+
+<div class="btn-group">
+    <button type="button" class="btn btn-tertiary btn-lg btn-block dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @sharedResource["Choose Language"]
+    </button>
+    <ul id="myList" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <li data-required>
+            <a class="dropdown-item" asp-controller="Setting" asp-action="ChangeLanguage" asp-route-culture="en-US" asp-route-url="@Context.Request.Path@Context.Request.QueryString.ToString()" onclick="ChangeLang('en')">English</a></li>
+        <li data-required>
+            <a class="dropdown-item" asp-controller="Setting" asp-action="ChangeLanguage" asp-route-culture="ar-EG" asp-route-url="@Context.Request.Path@Context.Request.QueryString.ToString()" onclick="ChangeLang('ar')">اللغة العربية</a>
+        </li>
+   
+  </ul>
+</div>
+
+
+@*<input required type="button" value="Choose Language" style="background-color: #000; border-color:#000" val class="btn mb-2 mb-md-0 btn-primary btn-block dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="arrow up"></i>
+
+<div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
+	<a class="dropdown-item" asp-controller="Setting" asp-action="ChangeLanguage" asp-route-culture="en-US" asp-route-url="@Context.Request.Path@Context.Request.QueryString.ToString()" onclick="ChangeLang('en')">English</a>
+	<a class="dropdown-item" asp-controller="Setting" asp-action="ChangeLanguage" asp-route-culture="ar-EG" asp-route-url="@Context.Request.Path@Context.Request.QueryString.ToString()" onclick="ChangeLang('ar')">اللغة العربية</a>
+</div>
+*@
+
+
+

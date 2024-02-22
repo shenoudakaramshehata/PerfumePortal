@@ -1,0 +1,874 @@
+﻿@page
+@model CRM.Pages.PerfumeDetailsModel
+@inject PerfumeContext _context
+@Html.AntiForgeryToken()
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+    var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+}
+
+
+<link href="~/stepper.css" rel="stylesheet" />
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+<style>
+    .styles__tabby-promo-snippet--2ddd6.styles__tabby-promo-snippet_font_inherit--345bc {
+        font-family: cairo,sans-serif;
+    }
+
+    .styles__snippetWrapper--b97bf {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: 16px;
+        max-width: 720px;
+        border: 1px solid #d6d6d3;
+        font-family: inherit;
+        font-size: 14px;
+        /* line-height: 21px; */
+    }
+
+    .styles__tabby-promo-snippet--2ddd6 {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-align-items: flex-start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 18px 10px;
+        width: fit-content;
+        /*max-width: 335px;*/
+        box-sizing: border-box;
+        border: 1px solid rgb(41 41 41 / 15%);
+        border-radius: 7px;
+        font-size: 12px;
+        line-height: 18px;
+        font-family: Inter, sans-serif;
+        transition: all 0.5s;
+        cursor: pointer;
+    }
+
+    .styles__tabby-promo-snippet__content--51d69 {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-flow: row wrap;
+        -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-align-self: center;
+        -ms-flex-item-align: center;
+        align-self: center;
+        margin: 0 16px 0 0;
+    }
+
+    .styles__tabby-promo-snippet__text--93920 {
+        color: inherit;
+        color: var(--snippetTextColor, inherit);
+    }
+
+    .styles__tabby-promo-snippet--2ddd6.styles__tabby-promo-snippet_font_inherit--345bc {
+        font-family: inherit;
+    }
+
+    .styles__snippetLink--e917e {
+        margin: 0;
+    }
+
+    .styles__tabby-promo-snippet__link--60af3 {
+        display: inline-block;
+        color: inherit;
+        color: var(--snippetLinkTextColor, inherit);
+        transition: opacity 0.2s;
+        text-decoration: underline;
+        margin: 5px 0;
+    }
+
+    .styles__logo--8e422 {
+        width: 70px;
+        height: 28px;
+        -webkit-align-self: flex-start;
+        -ms-flex-item-align: start;
+        align-self: flex-start;
+    }
+
+    .list-wrap {
+        padding: 12px;
+        /* background-color: #d8b9c3; */
+        border-radius: 5px;
+        /* width: 400px;*/
+        padding-top: 1.5rem;
+    }
+
+    div.list {
+        counter-reset: list-number;
+    }
+
+        div.list div:before {
+            counter-increment: list-number;
+            content: counter(list-number);
+            margin-right: 10px;
+            margin-bottom: 10px;
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            background-color: #e6e5e9;
+            border-radius: 50%;
+            color: black;
+            font-weight: 700;
+        }
+
+    @@media (max-width: 768px) {
+        /* Adjust styles for mobile devices */
+        .list-wrap {
+            max-width: 100%;
+            padding: 8px;
+        }
+    }
+</style>
+
+<div class="page-title-wrap">
+    <div class="page-title-area " style="background-color:#f5f5f5 !important;">
+       
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black">
+                        @if (BrowserCulture == "en-US")
+                        {
+                            @Model.item.ItemTitleEn
+
+
+                        }
+                        else
+                        {
+                            @Model.item.ItemTitleAr
+                        }
+
+
+                    </h2>
+                    <ul>
+                        <li>
+                            <a class="text-black" href="/index">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black">@sharedResource["Perfumes"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="product-details-area ptb-100">
+    <div class="container">
+        <div class="row align-items-center justify-content-around">
+            <div class="col-sm-6 col-lg-4" >
+                <div class="shop-item">
+                    <div class="top">
+
+                        @{
+                            @if (Model.item.OutOfStock == true||Model.item.Stock==0)
+                            {
+                                <img src="~/images/out-of-stock.png" asp-append-version="true" style="position:absolute; right:0px; bottom:0px; width:100px;height:100px;" />
+                            }
+                        }
+                        <img src="~/@Model.item.ItemImage" alt="Shop">
+
+                        <ul>
+                            <li>
+                                <form method="post">
+                                    @if (@Model.item.OutOfStock == true||Model.item.Stock==0)
+                                    {
+                                        <a class="bg-gradiant">
+                                            <i class="bx bx-cart" style="opacity:0.5;"></i>
+                                        </a>
+
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="common-btn p-2" asp-page-handler="AddToFavorite" asp-route-id="@Model.item.ItemId" style="  display: block;width: 60px;
+	                                        height: 55px;
+	                                        text-align: center;
+	                                        background-color: #fff;
+	                                     
+	                                        font-size: 30px;
+	                                        position: relative;
+                                            border: 1px solid #c4a261;
+                                             padding:2px;
+                                           ">
+                                            <i class="bx bx-cart" style="color: #c4a261;"></i>
+
+                                        </button>
+                                    }
+                                </form>
+                            </li>
+                            <li>
+                                <form method="post">
+
+                                    @if (@Model.IsFavorite)
+                                    {
+                                        <button type="submit" class="common-btn p-2" asp-page-handler="AddToFavorite" asp-route-id="@Model.item.ItemId" style="  display: block;width: 60px;
+	                                            height: 55px;
+	                                            text-align: center;
+	                                            background-color: #fff;
+	                                           
+	                                            font-size: 30px;
+	                                            position: relative;
+                                                 border: 1px solid #c4a261;
+                                               
+                                               ">
+                                            <i class="bx bxs-heart" style="color: #c4a261;"></i>
+
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="common-btn p-2" type="submit" asp-page-handler="AddToFavorite" asp-route-id="@Model.item.ItemId" style=" display: block;width: 60px;
+	                                        height: 55px;
+	                                        text-align: center;
+	                                        background-color: #fff;
+	                                        font-size: 30px;
+	                                        position: relative;
+                                            border: 1px solid #c4a261;
+                                           ">
+                                            <i class="bx bx-heart" style=" color: #c4a261;"></i>
+
+                                        </button>
+                                    }
+
+
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="shop-details">
+                    @if (BrowserCulture == "en-US")
+                    {
+                        <h2>  @Model.item.ItemTitleEn</h2>
+                    }
+                    else
+                    {
+                        <h2>  @Model.item.ItemTitleAr</h2>
+                    }
+
+                    <ul class="reviews">
+                        <li id="itemprice">
+                            @*                               <p  value="@Model.itemPriceN">  <span id="CurrencyNameID"></span></p>
+                            *@                                                @*Html.FormatValue(_context.itemPriceNs.Where(c => c.ItemId == @Model.item.ItemId && c.CountryId == Model.dbcountryId).FirstOrDefault().Price.ToString(), "{0} KD")*@
+
+
+
+                        </li>
+                    </ul>
+                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            @*<a class="nav-link active common-btn two" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">@sharedResource["Description"]</a>*@
+                            <h4 class="active two">@sharedResource["Description"]</h4>
+                        </li>
+                    </ul>
+                    <ul>
+                        @if (BrowserCulture == "en-US")
+                        {
+                            <li>@Model.item.ItemDescriptionEn</li>
+                        }
+                        else
+                        {
+                            <li>@Model.item.ItemDescriptionAr</li>
+                        }
+
+                        <li>
+                            @sharedResource["Product Weight"]:
+                            @Model.item.Weight
+                        </li>
+
+                    </ul>
+                    <ul class="tag">
+                        @if (BrowserCulture == "en-US")
+                        {
+                            <li>@sharedResource["Category"] <span>@Model.item.Category.CategoryTlen</span></li>
+                        }
+                        else
+                        {
+                            <li>@sharedResource["Category"]  <span>@Model.item.Category.CategoryTlar</span></li>
+                        }
+                    </ul>
+                     <div id="TabbyPromo"></div>
+                   @* <ul class="tag">
+                        <li id="tabbyID">
+                            <div class="styles__tabby-promo-snippet--2ddd6 styles__tabby-promo-snippet_font_inherit--345bc styles__snippetWrapper--b97bf">
+                                <div class="styles__tabby-promo-snippet__content--51d69">
+                                    <span class="styles__tabby-promo-snippet__text--93920">
+                                        <span class="">
+                                           
+                                            <strong style="color: #000000;font-size: 20px!important;"> @sharedResource["Pay in 4. No interest, no fees."]</strong>
+                                        </span>
+                                        <span class="styles__tabby-promo-snippet__link--60af3 styles__snippetLink--e917e">
+                                            <span class="" style="font-size: 17px;" onclick="handleTabby(@Model.ItemID)" data-test="widget-learn-more">@sharedResource["Learn more"]</span>
+                                        </span>
+                                    </span>
+                                </div>
+                                <img src="/Jeel/images/tabbyLogo.png" style="height: 29px;width: 98px;" />
+                            </div>
+                            <div><p id="rejectionresonID"></p></div>
+
+                        </li>
+                    </ul>*@
+                    <form method="post">
+                        <ul class="cart">
+
+                            <li>
+                                <ul class="number">
+                                    <li>
+                                       
+                                        <span class="minus">-</span>
+                                        
+                                        <input type="text" id="QuantityID" class="w-25" asp-for="@Model.itemQuantity" value="@Model.itemQuantity" min="1">
+
+                                        <span class="plus">+</span>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                 @if (@Model.item.OutOfStock == true||Model.item.Stock==0)
+                                {
+                                    <button   class="btn btn-light  common-btn  fs-5" style="background-color: #c4a261; color:white; " disabled >@sharedResource["Out of Stock"]</button>
+                                   
+                                }
+                                else
+                                {
+
+                                    <button type="button" onclick="cart(@Model.item.ItemId,'@Model.itemPriceN')" class="btn btn-close-white btn-light  fs-5" style="border-radius: 0;" asp-route-id="@Model.item.ItemId">@sharedResource["Add To Cart"]</button>
+                                }
+                            </li>
+                        </ul>
+                    </form>
+                    @* <a class="wishlist-btn" href="wishlist.html">*@
+                    <form method="post">
+
+                        @if (@Model.IsFavorite)
+                        {
+                            <button type="submit" class="btn btn-light" asp-page-handler="AddToFavorite" asp-route-id="@Model.item.ItemId" style=" color: #c4a261;">
+                                <i class="bx bxs-heart" style="color: #c4a261;"></i>
+                                @sharedResource["Remove from favorite"]
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-light" type="submit" asp-page-handler="AddToFavorite" asp-route-id="@Model.item.ItemId" style=" color: #c4a261;">
+                                <i class="bx bx-heart"></i>
+                                @sharedResource["Add to favorite"]
+                            </button>
+                        }
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_CountryPopUp.cshtml")
+<partial name="_TabbyPopup" />
+
+@*<script src="~/jeel/js/jquery.min.js"></script>
+*@@*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
+
+@*<link href="~/jeel/css/bootstrap.min.css" rel="stylesheet" />
+*@<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://checkout.tabby.ai/tabby-promo.js"></script>
+
+<script>
+    var country = localStorage.getItem('Country')
+    var currency = ""
+
+    function GetProductsDetails() {
+        console.log("ProductDetails")
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+
+        // Use the 'id' parameter to perform actions or fetch data
+        console.log('ID:', id);
+        var country = localStorage.getItem('Country')
+
+        console.log(country)
+        var itemPrice = document.getElementById("itemprice");
+        var lang = localStorage.getItem("lang")
+
+        //var CurrencyName = document.getElementById("CurrencyNameID");
+        // console.log(CurrencyName)
+        $.ajax({
+            type: "GET",
+            url: "/PerfumeDetails?handler=DetailsItem",
+            data: { "country": country, "id": id },
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                localStorage.setItem('itemPriceN', JSON.stringify(response.itemPriceN));
+                if (lang === "en") {
+                    itemPrice.innerHTML = `<p  value="${response.itemPriceN}"><span id="itempriceID"> ${response.itemPriceN}</span >  <span id="CurrencyTabbyID" value="${response.CurrencyNameEN}">${response.CurrencyNameEN}</span></p>`
+
+                } else {
+                    itemPrice.innerHTML = `<p  value="${response.itemPriceN}"><span id="itempriceID"> ${response.itemPriceN}</span > <span id="CurrencyTabbyID" value="${response.CurrencyNameAr}">${response.CurrencyNameAr}</span></p>`
+
+                }
+                var curr = document.getElementById("CurrencyTabbyID").textContent;
+                console.log(curr);
+                currency = curr;
+                console.log(currency);
+                var itemPriceTabby = document.getElementById("itempriceID").textContent;
+                console.log(itemPriceTabby);
+                handleTabbyPromo(curr, itemPriceTabby)
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+
+
+
+    }
+
+
+
+            function chooseCountry() {
+            var country = localStorage.getItem('Country');
+            var Language = localStorage.getItem('lang');
+
+            //var navbar = document.getElementById("navbarid")
+            //var banner = document.getElementById("bannerid")
+            //var Footer = document.getElementById("contactIdForScrolling")
+            //var product = document.getElementById("productid")
+            //var topbar = document.getElementById("topbarid")
+            //var masherSection = document.getElementById("masherSection")
+            
+            if (country == null) {
+                //navbar.style.display = "none"
+                //banner.style.display = "block"
+                //masherSection.style.display = "block"
+                //Footer.style.display = "none"
+                //product.style.display = "none"
+                //topbar.style.display = "none"
+
+            $('#CountryModal').modal('show');
+
+            }
+        }
+
+
+    window.onload = GetProductsDetails;
+    chooseCountry();
+    
+    function cart(ItemId, priceCart) {
+        console.log("Price")
+        var QuantityID = document.getElementById("QuantityID").value;
+        var quatityidparse = parseInt(QuantityID)
+        console.log(QuantityID)
+        
+        var Country = localStorage.getItem('Country');
+        console.log(Country)
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=AddToCart",
+            data: { ItemId: ItemId, priceCart: priceCart, Country: Country },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+        })
+            .done(function (result) {
+                console.log(result);
+                console.log(result.priceCart);
+                var itemObject = {
+
+                    "ItemTitleEn": result.items.ItemTitleEn,
+                    "ItemTitleAr": result.items.ItemTitleAr,
+                    "ItemImage": result.items.ItemImage,
+                    "ItemId": result.items.ItemId,
+                    "priceCart": result.priceCart,
+                    "Qunatity": QuantityID,
+                    "DeliveryCost": result.CountryShoppingCost
+                };
+                console.log(itemObject)
+
+                var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+                console.log(cartItems)
+                var Found = false;
+                if (!cartItems) {
+                    cartItems = [];
+                    cartItems.push(itemObject);
+                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                    console.log(cartItems)
+                }
+                else {
+                    console.log(cartItems)
+                    if (result.items.OutOfStock == false) {
+                        console.log(cartItems)
+                        for (var i = 0; i < cartItems.length; i++) {
+                            if (cartItems[i].ItemId == ItemId) {
+                                var parsequantitylocal = parseInt(cartItems[i].Qunatity)
+                                cartItems[i].Qunatity = parsequantitylocal + quatityidparse;
+                                console.log(cartItems[i].Qunatity)
+                                Found = true;
+                            }
+                        }
+                        if (Found == false) {
+                            cartItems.push(itemObject);
+
+                        }
+                        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+                        console.log(JSON.parse(localStorage.getItem('cartItems')))
+                    }
+
+
+                }
+                ShoppingCartIcon();
+                StorageinSession()
+
+                //if (result) {
+
+                //    //var country = localStorage.getItem("countryId");
+                //    // getItems(categIdglobal, country);
+                //    //window.location.href = '/default'
+                //}
+                //else {
+                //    window.location.href = '/Login'
+                //}
+            });
+    }
+
+
+    function Submit() {
+
+
+        const radioButtons = document.getElementsByName('card');
+        let isSelected = false;
+        console.log(radioButtons)
+        let selectedValue;
+        for (let i = 0; i < radioButtons.length; i++) {
+            if (radioButtons[i].checked) {
+                selectedValue = radioButtons[i].value;
+                localStorage.setItem("Country", selectedValue);
+                isSelected = true;
+                break;
+            }
+        }
+        if (!isSelected) {
+            console.log("ddd")
+            radioButtons[0].setAttribute("required", "");
+        }
+        var selectcountry = localStorage.getItem("Country");
+        console.log(selectcountry)
+        localStorage.setItem("lang", "ar");
+        window.location.reload();
+        removeModalBackdrop();
+        //window.location.href = "/Index"
+
+        //  var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+        //console.log(cartItems)
+
+        //if(cartItems.length>0){
+        //    var shoppingCartlength = cartItems.length
+        //    const viewPagesName = document.querySelector("#shoppingIcon");
+        //    //if (cartItems.length > 0) {
+        //    viewPagesName.innerHTML += `
+        //                     <a  class="cart" role="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
+        //                                    <i class='bx bx-cart' onclick="Displayitems()" style="color:#6b6b6b;"></i>
+        //                                        <span>${shoppingCartlength}</span>
+        //                                </a> `
+        //}
+
+        //}
+    }
+
+   function handleTabby(ItemID){
+        console.log("Tabby")
+        
+        
+        const viewPagesName = document.getElementById("pages");
+        var lang = localStorage.getItem("lang")
+        var Country = localStorage.getItem('Country');
+        //var email = document.getElementById("EmailInput").value;
+        // console.log(typeof(email))
+        //var address = document.getElementById("Address").value;
+        // console.log(typeof(address))
+        //var cityName = document.getElementById("CityName").value;
+        // console.log(typeof(cityName))
+        //var areaName = document.getElementById("AreaName").value;
+        // console.log(typeof(areaName))
+        //var buildingNo = document.getElementById("BuildingNo").value;
+        // console.log(typeof(buildingNo))
+        //var phoneNumber = document.getElementById("PhoneNumber").value;
+        // console.log(typeof(phoneNumber))
+        //var fullName = document.getElementById("FullName").value;
+        // console.log(typeof(fullName))
+    //    var data = {
+    //        "email": email,
+    //        "address": address,
+    //        "cityName": cityName,
+    //        "areaName": areaName,
+    //        "buildingNo": buildingNo,
+    //        "phoneNumber": phoneNumber,
+    //        "FullName": fullName
+    //    };
+    //    var totalElement = document.getElementById("TotalID");
+    //var totalAfterDiscountElement = document.getElementById("TotalAmountAfterDiscountID");
+
+    //// If the elements exist, add their values to the data object
+    //if (totalElement !=null) {
+    //        console.log(typeof (totalElement))
+    //    data.totalAmount = totalElement.innerText;
+    //}
+
+    //    if (totalAfterDiscountElement != null) {
+    //    data.totalAmountAfterDiscount = totalAfterDiscountElement.innerText;
+    //}
+        $.ajax({
+            type: "POST",
+            url: "/PerfumeDetails?handler=TabbyCheckOut",
+            data: { "ItemID": ItemID,"Country":Country },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+                 viewPagesName.innerHTML = "";
+               if(response.IsInstallment==true){
+
+                    viewPagesName.innerHTML = ` <div class="" style="margin-top: 24px;">
+                            <h3 style="font-size: 24px;font-style: normal;font-weight: bold;font-family: Inter, sans-serif;">@sharedResource["Split in 4 interest-free payments"]  ${lang == "en" ? response.currencyEN : response.currencyAR} ${response.downpayment_total}.
+                          </h3></div>
+                    <div class="mt-5" >
+                        <div class="relative grid gap-8 row-gap-5 md:row-gap-8 lg:grid-cols-4">
+                            <div class="absolute inset-0 flex items-center justify-center sm:hidden lg:flex" >
+                                <div class="w-px h-full bg-gray-300 lg:w-full lg:h-px" ></div>
+                            </div>
+
+                            <div class="relative px-5 h-16 bg-white border rounded-2xl border-gray-300 flex flex-row items-center">
+                                <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+                                    <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+                                        <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+
+                                        <img alt="25" src="/images/graph-25.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-25.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+                                    </span>
+                                </span>
+                                <div class="flex flex-col ps-3">
+                                    <span class="text-xl">
+                                        ${response.Installment}
+                                        ${lang == "en" ? response.currencyEN : response.currencyAR}
+
+                                    </span>
+                                    <span class="text-xs text-text-light">@sharedResource["Today"]</span>
+                                </div>
+                            </div>
+
+                            <div class="relative px-5 h-16 bg-white border rounded-2xl border-gray-300 flex flex-row items-center">
+                                <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+                                    <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+                                        <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+                                    </span>
+                                    <img alt="50" src="/images/graph-50.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-50.svg 1x, /images/graph-50.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+                                </span>
+                                <div class="flex flex-col ps-3">
+                                    <span class="text-xl">
+                                        ${response.InstallmentList[0].amount}
+                                        ${lang == "en" ? response.currencyEN : response.currencyAR}
+                                    </span>
+                                    <span class="text-xs text-text-light">${response.InstallmentList[0].due_date}</span>
+                                </div>
+                            </div>
+
+                            <div class="relative px-5 h-16 bg-white border rounded-2xl border-gray-300 flex flex-row items-center">
+                                <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+                                    <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+                                        <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+                                    </span>
+                                    <img alt="75" src="/images/graph-75.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-75.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+                                </span>
+                                <div class="flex flex-col ps-3">
+                                    <span class="text-xl">
+                                        ${response.InstallmentList[1].amount}
+                                        ${lang == "en" ? response.currencyEN : response.currencyAR}
+                                    </span>
+                                    <span class="text-xs text-text-light">${response.InstallmentList[1].due_date}</span>
+                                </div>
+                            </div>
+
+                            <div class="relative px-5 h-16 bg-white border-2 rounded-2xl border-gray-300 flex flex-row items-center">
+                                <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+                                    <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+                                        <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+                                    </span>
+                                    <img alt="100" src="/images/graph-100.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-100.svg 1x, /images/graph-100.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+                                </span>
+                                <div class="flex flex-col ps-3">
+                                    <span class="text-xl">
+                                        ${response.InstallmentList[2].amount}
+                                        ${lang == "en" ? response.currencyEN : response.currencyAR}
+                                    </span>
+                                    <span class="text-xs text-text-light">${response.InstallmentList[2].due_date}</span>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                        <div style="color: rgb(41, 41, 41);margin-top: 2rem;padding-left: 1rem;font-size: 24px;font-style: normal;font-weight: bold;">@sharedResource["How it works:"]</div>
+    <div class="list-wrap">
+
+      <div class="list">
+            <div  class="row" style="padding-left: 13px;padding-right: 13px;font-size: 19px;font-weight: 600;">@sharedResource["Choose"] <img src="/Jeel/images/tabbyLogo.png" style="height: 29px;width: 98px;"/> @sharedResource["at checkout."]</div>
+            <div style="font-size: 19px;font-weight: 600;" >@sharedResource["Enter your information and add your debit or credit card."]</div>
+        <div style="font-size: 19px;font-weight: 600;">@sharedResource["Split your purchase in 4 monthly payments."]</div>
+            <div style="font-size: 19px;font-weight: 600;">@sharedResource["We’ll send reminders when your next payment is due."]</div>
+      </div>
+
+    </div>
+
+                            `
+                    $('#AddModal').modal('show');
+               }
+               else if(response.IsInstallment==false){
+                   
+                 document.getElementById("rejectionresonID").innerHTML= response.rejectionReason;
+                    document.getElementById("rejectionresonID").style.color = "red";
+                }
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+         
+    }
+    function handleTabbyPromo(curr, itemPriceTabby) {
+        console.log(curr)
+        console.log(itemPriceTabby)
+        var lang = localStorage.getItem("lang")
+        if (country == "2") {
+            if (lang == "en") {
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: 'SAR', // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    price: itemPriceTabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'en', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MKSA' // required
+                });
+            }
+            else {
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: "SAR", // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    price: itemPriceTabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'ar', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MKSA' // required
+                });
+            }
+
+        }
+
+        if (country == "1") {
+            if (lang == "en") {
+
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: curr, // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    price: itemPriceTabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'en', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MKSA' // required
+                });
+            }
+            else {
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: 'KWD', // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    price: itemPriceTabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'ar', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MKWT' // required
+                });
+            }
+        }
+
+        if (country == "4") {
+            if (lang == "en") {
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: curr, // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    price: itemPriceTabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'en', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MUAE' // required
+                });
+            }
+            else {
+                new TabbyPromo({
+                    selector: '#TabbyPromo', // required, content of tabby Promo Snippet will be placed in element with that selector.
+                    currency: 'AED', // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    price: itemPriceTabby, // required, price or the product. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    installmentsCount: 4, // Optional, for non-standard plans.
+                    lang: 'ar', // Optional, language of snippet and popups, if the property is not set, then it is based on the attribute 'lang' of your html tag.
+                    source: 'product', // Optional, snippet placement; `product` for product page and `cart` for cart page.
+                    publicKey: 'pk_test_ac7d1bc4-3087-4bab-9109-c28c21874f2e', // required, store Public Key which identifies your account when communicating with tabby.
+                    merchantCode: 'MUAE' // required
+                });
+            }
+        }
+
+    }
+</script>         

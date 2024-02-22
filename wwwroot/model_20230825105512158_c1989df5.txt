@@ -1,0 +1,1 @@
+{"id":"91d37bdc-cd75-48ac-a126-9443cc5c57a9","created_at":"2021-09-14T13:08:54Z","expires_at":"2022-09-14T13:08:54Z","closed_at":"2021-09-14T13:09:45Z","status":"AUTHORIZED","is_test":false,"is_expired":false,"amount":"100","currency":"SAR","order":{"reference_id":"string","updated_at":"0001-01-01T00:00:00Z"},"captures":[],"refunds":[]}

@@ -1,0 +1,744 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.ManageOrder.OrdersModel
+@{
+}
+@{
+    ViewBag.Title = @sharedResource["Orders"];
+    ViewBag.pTitle = @sharedResource["Orders"];
+    ViewBag.pageTitle = @sharedResource["Orders"];
+}
+
+@section styles{
+    <!-- Sweet Alert css-->
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+}
+       <div class="row">
+                <div class="col-xl-4 col-md-6">
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        @sharedResource["Initated"]
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                        <span class="counter-value" data-target="@Model.InitatedCount">0</span>
+                                    </h4>
+
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-soft-success rounded fs-3">
+                                        <i class="bx bx-user-circle text-warning"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-4 col-md-6">
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        @sharedResource["Paid"]
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                        <span class="counter-value" data-target="@Model.PaidCount">0</span>
+                                    </h4>
+
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-soft-info rounded fs-3">
+                                        <i class="bx bx-shopping-bag text-info"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+                <div class="col-xl-4 col-md-6">
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        @sharedResource["Not Paid"]
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                        <span class="counter-value" data-target="@Model.Notpaid">0</span>
+                                    </h4>
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-soft-primary rounded fs-3">
+                                        <i class="bx bx-wallet text-primary"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-md-6">
+
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        @sharedResource["Processing"]
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                        <span class="counter-value" data-target="@Model.Processing">0</span>
+                                    </h4>
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-soft-warning rounded fs-3">
+                                        <i class="bx bx-shopping-bag text-info"></i>
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+                <div class="col-xl-4 col-md-6">
+
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        @sharedResource["Packing"]
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                        <span class="counter-value" data-target="@Model.Packing">0</span>
+                                    </h4>
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-soft-warning rounded fs-3">
+                                        <i class="bx bx-dollar-circle text-success"></i>
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-4 col-md-6">
+
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        @sharedResource["OnDelivery"]
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                                        <span class="counter-value" data-target="@Model.Ondelivery">0</span>
+                                    </h4>
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-soft-warning rounded fs-3">
+                                        <i class="bx bx-dollar-circle text-success"></i>
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+            </div> <!-- end row-->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card" id="orderList">
+                <div class="card-header  border-0">
+                    <div class="d-flex align-items-center">
+                        <h5 class="card-title mb-0 flex-grow-1">@sharedResource["Orders History"]</h5>
+                    </div>
+                </div>
+                <div class="card-body border border-dashed border-end-0 border-start-0">
+
+                    <form method="post">
+                        <div class="row g-3">
+                            <div class="col-xxl-5 col-sm-6">
+                                <div class="search-box">
+                                    <input type="text" class="form-control search"
+                                       placeholder=@sharedResource["Search for..."]>
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-xxl-2 col-sm-6">
+                                <div>
+                                    <input type="text" class="form-control" data-provider="flatpickr"
+                                       data-date-format="d M, Y" data-range-date="true" asp-for="@Model.orderFilter.date"
+                                       id="demo-datepicker" placeholder=@sharedResource["Select date"]>
+                                </div>
+                            </div>
+                            <!--end col-->
+                           <div class="col-xxl-2 col-sm-4">
+                                <div>
+                             <select class="form-control" data-choices data-choices-search-false asp-for="@Model.orderFilter.status" id="idStatus">
+                                        <option value="">@sharedResource["Select Status"]</option>
+                                        @{
+                                        if (@Model.statuses!=null)
+                                        {
+                                             foreach (var item in @Model.statuses)
+
+                                        {
+                                            
+                                                            <option value="@item.OrderStatusId">@item.Status</option>
+                                        }
+                                        }
+
+                                       
+                                }
+                                      
+    
+                                    </select>
+
+                               </div>
+                            </div>
+                            <!--end col-->
+                           <div class="col-xxl-2 col-sm-4">
+                                <div>
+                         <select class="form-control" data-choices data-choices-search-false
+                                         id="idPayment" asp-for="@Model.orderFilter.country">
+                                    <option value="">@sharedResource["Select Country"]</option>
+
+                                    @{
+                                        if (@Model.countries != null)
+                                        {
+                                            foreach (var item in @Model.countries)
+
+                                            {
+
+                                                            <option value="@item.CountryId">@item.CountryTlen</option>
+                                            }
+                                        }
+
+                                       
+                                }
+                            
+                                      
+                                     
+                                    </select>
+
+                                   
+                                </div>
+                            </div>
+                            <!--end col-->
+                            <!--end col-->
+                            <div class="col-xxl-1 col-sm-4">
+                                <div>
+                                    <button type="submit" class="btn btn-primary w-100"
+                                       >
+                                        <i class="ri-equalizer-fill me-1 align-bottom"></i>
+                                        @sharedResource["Filters"]
+                                    </button>
+                                </div>
+                            </div>
+                            <!--end col-->
+                        </div>
+                        <!--end row-->
+                    </form>
+                </div>
+                <div class="card-body pt-0">
+                    <div>
+                        <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active All py-3" data-bs-toggle="tab" id="All"
+                               href="#home1" role="tab" aria-selected="true">
+                                    <i class="ri-store-2-fill me-1 align-bottom"></i>@sharedResource[ "All Orders"]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link py-3 OnDelivery" data-bs-toggle="tab" id="OnDelivery"
+                               href="#ondelivered" role="tab" aria-selected="false">
+                                    <i class="ri-checkbox-circle-line me-1 align-bottom"></i> @sharedResource[ "Delivered"]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link py-3 Processing" data-bs-toggle="tab" id="Processing"
+                               href="#processing" role="tab" aria-selected="false">
+                                    <i class="ri-truck-line me-1 align-bottom"></i> @sharedResource["Processing"]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link py-3 Packing" data-bs-toggle="tab" id="Packing"
+                               href="#packing" role="tab" aria-selected="false">
+                                    <i class="ri-arrow-left-right-fill me-1 align-bottom"></i> @sharedResource["Packing"]
+                                </a>
+                            </li>
+                           
+                        </ul>
+@*                    <button type="button" class="btn btn-info" onclick="exportTableToCsv()" fdprocessedid="sox38"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>
+*@                    <div id="orderpageTable"  class="table-responsive table-card mb-1">
+                        <div id="exportButtonsContainer" class="mb-2"></div>
+
+                        <table   class="table table-nowrap align-middle" id="orderTable">
+                                <thead class="text-muted table-light">
+                                    <tr class="text-uppercase">
+                                       
+                                        <th class="sort" data-sort="id">@sharedResource["Order Id"]</th>
+                                        <th class="sort" data-sort="customer_name">@sharedResource["Customer"]</th>
+                                        <th class="sort" data-sort="product_name">@sharedResource["Address"]</th>
+                                        <th class="sort" data-sort="date">@sharedResource["Order Date"]</th>
+                                        <th class="sort" data-sort="amount">@sharedResource["Total"]</th>
+                                        <th class="sort" data-sort="payment">@sharedResource["Country"]</th>
+                                        <th class="sort" data-sort="status">@sharedResource["Status"]</th>
+                                    <th class="sort" data-tableexport-display="none" data-sort="city">@sharedResource["Actions"]</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list form-check-all">
+                                     @{
+
+                                foreach (var item in @Model.OrderVmList)
+
+                                {
+                                                 <tr>
+                                                                                          
+                                                <td class="id">
+                                                        <a href="/Admin/Configurations/ManageOrder/Details?id=@item.OrderId"
+                                                       class="fw-medium link-primary">@item.OrderId</a>
+                                                    </td>
+                                                    <td class="customer_name">@item.CusName</td>
+                                                    <td class="product_name">@item.CusAddress</td>
+                                                    <td class="date">
+                                                        @item.OrderDate.ToShortDateString() 
+                                                    </td>
+                                                    <td class="amount">@item.NetOrder</td>
+                                                    <td class="payment">@item.Country</td>
+                                                    <td class="status">
+                                                        <span class="badge badge-soft-warning text-uppercase">@item.Status</span>
+                                                    </td>
+                                                    <td>
+                                                        <ul class="list-inline hstack gap-2 mb-0">
+                                                            <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                            data-bs-trigger="hover" data-bs-placement="top"
+                                                            title="View">
+                                                                <a href="/Admin/Configurations/ManageOrder/Details?id=@item.OrderId"
+                                                               class="text-primary d-inline-block">
+                                                                    <i class="ri-eye-fill fs-16"></i>
+                                                                </a>
+                                                            </li>
+
+                                                            <li class="list-inline-item" data-bs-toggle="tooltip"
+                            data-bs-trigger="hover" data-bs-placement="top"
+                            title="Edit">
+                                <a href="/Admin/Configurations/ManageOrder/EditOrder?id=@item.OrderId"
+                               class="text-primary d-inline-block">
+                                    <i class="ri-pencil-fill fs-16"></i>
+                                </a>
+                            </li>
+                                                   
+                                                              @{  if(@item.statusId==5||@item.statusId==6||@item.statusId==7){
+                                                                        <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                                        data-bs-trigger="hover" data-bs-placement="top" title="Print ShippingLabel">
+                                                                            <a class="text-primary d-inline-block">
+
+                                                                                <i onclick="printPreview(@item.OrderId)" class="ri-print fs-16"></i>
+                                                                            </a>
+                                                                        </li>
+
+
+                             }
+                                     }   
+                                     </ul>
+                                                    </td>
+                                                </tr>
+
+                                }
+                                }
+                                </tbody>
+                            </table>
+                            <div class="noresult" style="display: none">
+                                <div class="text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
+                                           trigger="loop" colors="primary:#405189,secondary:#0ab39c"
+                                           style="width:75px;height:75px">
+                                    </lord-icon>
+                                    <h5 class="mt-2">@sharedResource["Sorry! No Result Found"]</h5>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                        <div class="pagination-wrap hstack gap-2">
+                            <a style="display:none" class="page-item pagination-prev disabled" href="#">
+                                Previous
+                            </a>
+                            <ul class="pagination listjs-pagination mb-0"></ul>
+                            <a style="display:none" class="page-item pagination-next" href="#">
+                                Next
+                            </a>
+                        </div>
+
+                        </div>
+                    </div>
+                    <div class="modal fade" id="showModal" tabindex="-1"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-light p-3">
+                                    <h5 class="modal-title" id="exampleModalLabel">&nbsp;</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close" id="close-modal"></button>
+                                </div>
+                               @* <form action="#">
+                                    <div class="modal-body">
+                                        <input type="hidden" id="id-field" />
+
+                                        <div class="mb-3" id="modal-id">
+                                            <label for="orderId" class="form-label">ID</label>
+                                            <input type="text" id="orderId" class="form-control"
+                                               placeholder="ID" readonly />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="customername-field" class="form-label">
+                                                Customer
+                                                Name
+                                            </label>
+                                            <input type="text" id="customername-field"
+                                               class="form-control" placeholder="Enter name"
+                                               required />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="productname-field"
+                                               class="form-label">Product</label>
+                                            <select class="form-control" data-trigger
+                                                name="productname-field" id="productname-field">
+                                                <option value="">Product</option>
+                                                <option value="Puma Tshirt">Puma Tshirt</option>
+                                                <option value="Adidas Sneakers">Adidas Sneakers</option>
+                                                <option value="350 ml Glass Grocery Container">
+                                                    350 ml
+                                                    Glass Grocery Container
+                                                </option>
+                                                <option value="American egale outfitters Shirt">
+                                                    American
+                                                    egale outfitters Shirt
+                                                </option>
+                                                <option value="Galaxy Watch4">Galaxy Watch4</option>
+                                                <option value="Apple iPhone 12">Apple iPhone 12</option>
+                                                <option value="Funky Prints T-shirt">
+                                                    Funky Prints
+                                                    T-shirt
+                                                </option>
+                                                <option value="USB Flash Drive Personalized with 3D Print">
+                                                    USB Flash Drive Personalized with 3D Print
+                                                </option>
+                                                <option value="Oxford Button-Down Shirt">
+                                                    Oxford
+                                                    Button-Down Shirt
+                                                </option>
+                                                <option value="Classic Short Sleeve Shirt">
+                                                    Classic Short
+                                                    Sleeve Shirt
+                                                </option>
+                                                <option value="Half Sleeve T-Shirts (Blue)">
+                                                    Half Sleeve
+                                                    T-Shirts (Blue)
+                                                </option>
+                                                <option value="Noise Evolve Smartwatch">
+                                                    Noise Evolve
+                                                    Smartwatch
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="date-field" class="form-label">
+                                                Order
+                                                Date
+                                            </label>
+                                            <input type="date" id="date-field" class="form-control"
+                                               data-provider="flatpickr" data-date-format="d M, Y"
+                                               data-enable-time required placeholder="Select date" />
+                                        </div>
+
+                                        <div class="row gy-4 mb-3">
+                                            <div class="col-md-6">
+                                                <div>
+                                                    <label for="amount-field"
+                                                       class="form-label">Amount</label>
+                                                    <input type="text" id="amount-field"
+                                                       class="form-control" placeholder="Total amount"
+                                                       required />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div>
+                                                    <label for="payment-field"
+                                                       class="form-label">
+                                                        Payment
+                                                        Method
+                                                    </label>
+                                                    <select class="form-control" data-trigger
+                                                        name="payment-method" id="payment-field">
+                                                        <option value="">Payment Method</option>
+                                                        <option value="Mastercard">Mastercard</option>
+                                                        <option value="Visa">Visa</option>
+                                                        <option value="COD">COD</option>
+                                                        <option value="Paypal">Paypal</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label for="delivered-status" class="form-label">
+                                                Delivery
+                                                Status
+                                            </label>
+                                            <select class="form-control" data-trigger
+                                                name="delivered-status" id="delivered-status">
+                                                <option value="">Delivery Status</option>
+                                                <option value="Pending">Pending</option>
+                                                <option value="Inprogress">Inprogress</option>
+                                                <option value="Cancelled">Cancelled</option>
+                                                <option value="Pickups">Pickups</option>
+                                                <option value="Delivered">Delivered</option>
+                                                <option value="Returns">Returns</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button type="button" class="btn btn-light"
+                                                data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <button type="submit" class="btn btn-success"
+                                                id="add-btn">
+                                                Add Order
+                                            </button>
+                                            <button type="button" class="btn btn-success"
+                                                id="edit-btn">
+                                                Update
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+@*                    <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body p-5 text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json"
+                                           trigger="loop" colors="primary:#405189,secondary:#f06548"
+                                           style="width:90px;height:90px"></lord-icon>
+                                    <div class="mt-4 text-center">
+                                        <h4>You are about to delete a order ?</h4>
+                                        <p class="text-muted fs-15 mb-4">
+                                            Deleting your order will remove
+                                            all of
+                                            your information from our database.
+                                        </p>
+                                        <div class="hstack gap-2 justify-content-center remove">
+                                            <button class="btn btn-link link-success fw-medium text-decoration-none" id="deleteRecord-close"
+                                                data-bs-dismiss="modal">
+                                                <i class="ri-close-line me-1 align-middle"></i>
+                                                Close
+                                            </button>
+                                            <button class="btn btn-danger" id="delete-record">
+                                                Yes,
+                                                Delete It
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+*@                    <!--end modal -->
+                </div>
+            </div>
+
+        </div>
+        <!--end col-->
+    </div>
+    </div>
+    </div>
+    </div>
+    <!--end row-->
+    @section scripts{
+    <!-- list.js min js -->
+    <script src="~/assets/libs/list.js/list.min.js"></script>
+
+    <!--list pagination js-->
+    <script src="~/assets/libs/list.pagination.js/list.pagination.min.js"></script>
+
+    <!-- ecommerce-order init js -->
+    <script src="~/assets/js/pages/ecommerce-order.init.js"></script>
+
+    <!-- Sweet Alerts js -->
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+
+    <!-- App js -->
+    <script src="~/assets/js/app.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tableexport@5.2.0/dist/js/tableexport.min.js"></script>
+}
+
+    <script>
+    		function printPreview(OrderId){
+			$.ajax({
+				type: "GET",
+                url: "/Admin/Configurations/ManageOrder/Orders?handler=Print",
+				data: { "OrderId": OrderId },
+				contentType: "application/json",
+				dataType: "json",
+				success: function (response) {
+					var targetFile = window.open('http://' + location.host+ "/" + response.ShippingLabel);
+                var repotfile = window.open('http://' + location.host + "/Admin/Configurations/ManageReport/MergeReport?id=" + response.OrderId);
+
+					targetFile.print();
+                                    //repotfile.print();
+
+
+				},
+				failure: function (response) {
+					alert(response);
+				}
+			});
+			
+}
+    function downloadCSV(csv, filename) {
+        var csvFile;
+        var downloadLink;
+
+        // Create a CSV Blob
+        var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+        // Create a temporary "a" element to trigger the download
+        var link = document.createElement('a');
+        link.download = filename;
+        link.href = window.URL.createObjectURL(blob);
+        link.style.display = 'none';
+
+        // Append the link to the body and trigger the download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function convertTableToCSV(table) {
+        var csv = [];
+        var rows = table.querySelectorAll('tr');
+
+        // Loop through the table rows
+        for (var i = 0; i < rows.length; i++) {
+            var row = [];
+            var cols = rows[i].querySelectorAll('td, th');
+
+            // Loop through the table columns (skip the last column, which is the "ACTIONS" column)
+            for (var j = 0; j < cols.length - 1; j++) {
+                // For Arabic characters, add a BOM to indicate UTF-8 encoding
+                if (j > 0 && /[\u0600-\u06FF]/.test(cols[j].innerText)) {
+                    row.push('\ufeff' + cols[j].innerText);
+                } else {
+                    // Handle "ADDRESS" column by enclosing in double quotes and removing extra spaces
+                    if (j === 2) {
+                        var addressParts = cols[j].innerText.split(',').map(part => part.trim());
+                        row.push('"' + addressParts.join(', ') + '"');
+                    }
+                    // Handle "ORDER DATE" column by formatting the date
+                    else if (j === 3) {
+                        row.push(formatDateForExcel(cols[j].innerText));
+                    } else {
+                        row.push(cols[j].innerText);
+                    }
+                }
+            }
+
+            csv.push(row.join(','));
+        }
+
+        return csv.join('\n');
+    }
+
+    function formatDateForExcel(dateStr) {
+        var date = new Date(dateStr);
+        var day = String(date.getDate()).padStart(2, '0');
+        var month = String(date.getMonth() + 1).padStart(2, '0');
+        var year = String(date.getFullYear()).substr(-2);
+        return day + '-' + getMonthName(parseInt(month)) + '-' + year;
+    }
+
+    function getMonthName(monthIndex) {
+        var months = [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ];
+        return months[monthIndex - 1];
+    }
+
+    function exportTableToCsv() {
+        // Select the table to be exported
+        var table = document.getElementById('orderTable');
+        if (table) {
+            var csv = convertTableToCSV(table);
+
+            // Modify the CSV to exclude the "ACTIONS" column
+            csv = csv.replace(/ACTIONS,/g, ''); // Remove the ACTIONS column header
+            csv = csv.replace(/,ACTIONS/g, ''); // Remove the ACTIONS column data
+
+            // Merge the address values using "|" as a delimiter
+            csv = csv.replace(/,(KW|Sharjah|Sharjah|AlRamaqia),/g, '|');
+
+            // Provide a filename for the CSV file
+            var filename = 'table_export.csv';
+
+            // Download the CSV file
+            downloadCSV(csv, filename);
+        }
+    }
+        </script>

@@ -1,0 +1,67 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using CRM.Data
+@inject PerfumeContext _context
+@{
+    var header = _context.PublicHeader.Where(e => e.PublicHeaderId == 1).FirstOrDefault();
+}
+<style>
+    .banner-area {
+  height: 170px !important;
+}
+
+        .banner-area.two:before {
+           
+            background: none !important;
+        }
+</style>
+<div id="bannerid" class="banner-area two banner-img-two" style="background-image: url(/@header.pic)!important;">
+    @*  <div class="banner-shape-two">
+    <img src="~/Jeel/images/banner/banner-shape6.png" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape2.png" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape7.png" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape8.png" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape9.png" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape10.png" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape11.png" alt="Shape">
+    </div>*@
+
+    @*  <div class="banner-shape-two">
+    <img class="img-fluid" src="~/Jeel/images/banner/camille-paralisan-LgoehzzFAMA-unsplash.jpg" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape2.png" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape7.png" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape8.png" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape9.png" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape10.png" alt="Shape">
+    <img src="~/Jeel/images/banner/banner-shape11.png" alt="Shape">
+    </div>*@
+
+    <div  class="d-table">
+        <div class="d-table-cell">
+            <div class="container-fluid">
+               @* <div class="banner-content">
+                    <h1 class="wow fadeInUp">@sharedResource["Mashaer Perfume Store"]</h1>
+                    <h4 style="color: #ffffff;" class="wow fadeInUp">@sharedResource["For Niche Perfumes"]</h4>
+                     <div class="banner-btn-area">
+                        <a class="common-btn two" href="#CatIdForAboutus">@sharedResource["SHOP NOW"]</a>
+                        <a class="common-btn two banner-btn" href="/About">@sharedResource["ABOUT US"]</a>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+<div id="masherSection" class="page-title-wrap">
+    <div class="page-title-area" style="background-color:white  !important;">
+
+        <div class="d-table ">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h1 style="color: #484848!important;" class="wow fadeInUp">@sharedResource["Mashaer for Niche Perfumes"]</h1>
+                    @*<h4 style="color: #ffffff;" class="wow fadeInUp">@sharedResource["For Niche Perfumes"]</h4>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,204 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.ManageOrder.InvoiceModel
+@{
+    ViewBag.Title = "Invoice Details";
+    ViewBag.pTitle = "Invoice Details";
+    ViewBag.pageTitle = "Invoices";
+    Layout = "~/Pages/Shared/_Layout3.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-xxl-9">
+        <div class="card" id="demo">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card-header border-bottom-dashed p-4">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <img src="~/assets/Perfume_assets/images/icon/newlogo.png" class="card-logo card-logo-dark" alt="logo dark" height="60">
+                                <img src="~/assets/Perfume_assets/images/icon/newlogo.png" class="card-logo card-logo-light" alt="logo light" height="60">
+                                <div class="mt-sm-5 mt-4">
+                                    <h6 class="text-muted text-uppercase fw-semibold">@sharedResource["Address"]</h6>
+                                    <p class="text-muted mb-1" id="address-details">@Model.Order.Address</p>
+                                    @*<p class="text-muted mb-0" id="zip-code"><span>Zip-code:</span> 90201</p>*@
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                @*<h6><span class="text-muted fw-normal">Legal Registration No:</span><span id="legal-register-no">987654</span></h6>*@
+                                <h6><span class="text-muted fw-normal">@sharedResource["Email:"]</span><span id="email">@Model.Order.SuppEmail</span></h6>
+                                <h6><span class="text-muted fw-normal">@sharedResource["Website:"]</span> <a href="@Model.Order.WebSite" class="link-primary" target="_blank" id="website">@Model.Order.WebSite</a></h6>
+                                <h6 class="mb-0"><span class="text-muted fw-normal">@sharedResource["Contact No:"] </span><span id="contact-no">@Model.Order.ConntactNumber</span></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end card-header-->
+                </div><!--end col-->
+                <div class="col-lg-12">
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-lg-3 col-6">
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">@sharedResource["Invoice No"]</p>
+                                <h5 class="fs-14 mb-0">#MSH<span id="invoice-no">@Model.Order.InvoiceNumber</span></h5>
+                            </div>
+                            <!--end col-->
+                            <div class="col-lg-3 col-6">
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">@sharedResource["Date"]</p>
+                                <h5 class="fs-14 mb-0"><span id="invoice-date">@Model.Order.OrderDate</span></h5>
+                            </div>
+                            <!--end col-->
+                            <div class="col-lg-3 col-6">
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">@sharedResource["Payment Status"]</p>
+                                <span class="badge badge-soft-success fs-11" id="payment-status">@Model.Order.Status</span>
+                            </div>
+                            <!--end col-->
+                            <div class="col-lg-3 col-6">
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">@sharedResource["Total Amount"]</p>
+                                <h5 class="fs-14 mb-0"><span id="total-amount">@Model.Order.NetOrder</span></h5>
+                            </div>
+                            <!--end col-->
+                        </div>
+                        <!--end row-->
+                    </div>
+                    <!--end card-body-->
+                </div><!--end col-->
+                <div class="col-lg-12">
+                    <div class="card-body p-4 border-top border-top-dashed">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <h6 class="text-muted text-uppercase fw-semibold mb-3">@sharedResource["Billing Address"]</h6>
+                                <p class="fw-medium mb-2" id="billing-name">@Model.Order.CusName</p>
+                                <p class="text-muted mb-1" id="billing-address-line-1">@Model.Order.ShippingAddress</p>
+                                <p class="text-muted mb-1"><span>@sharedResource["Phone:"] +</span><span id="billing-phone-no">@Model.Order.ShippingAddressPhone</span></p>
+                                @*<p class="text-muted mb-0"><span>Tax: </span><span id="billing-tax-no">12-3456789</span> </p>*@
+                            </div>
+                            <!--end col-->
+                            <div class="col-6">
+                                <h6 class="text-muted text-uppercase fw-semibold mb-3">@sharedResource["Shipping Address"]</h6>
+                                <p class="fw-medium mb-2" id="shipping-name">@Model.Order.CusName</p>
+                                <p class="text-muted mb-1" id="shipping-address-line-1">@Model.Order.ShippingAddress</p>
+                                <p class="text-muted mb-1"><span>Phone: +</span><span id="shipping-phone-no">@Model.Order.ShippingAddressPhone</span></p>
+                            </div>
+                            <!--end col-->
+                        </div>
+                        <!--end row-->
+                    </div>
+                    <!--end card-body-->
+                </div><!--end col-->
+                <div class="col-lg-12">
+                    <div class="card-body p-4">
+                        <div class="table-responsive">
+                            <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+                                <thead>
+                                    <tr class="table-active">
+                                        <th scope="col" style="width: 50px;">#</th>
+                                         <th scope="col">@sharedResource["Image Item"]</th>
+                                        <th scope="col">@sharedResource["Product Details"]</th>
+                                        <th scope="col">@sharedResource["Rate"]</th>
+                                        <th scope="col">@sharedResource["Quantity"]</th>
+                                        <th scope="col" class="text-end">@sharedResource["Amount"]</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="products-list">
+                                    @{
+                                        if (@Model.Order != null)
+                                        {
+                                            if (@Model.Order.orderItemVms != null)
+                                            {
+                                                int count = 0;
+                                                foreach (var item in @Model.Order.orderItemVms)
+                                                {
+                                                    count = count + 1;
+                                                                    <tr>
+                                                        <th scope="row">@count</th>
+                                                        <td class="text-center">
+                                                            <img style="width: 100%;" src="/@item.ItemImage">
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span class="fw-medium">@item.ItemTitleEn</span>
+                                                            <p class="text-muted mb-0">@item.ItemDis</p>
+                                                        </td>
+                                                        <td class="text-center">@item.ItemPrice</td>
+                                                        <td class="text-center">@item.ItemQuantity</td>
+                                                        <td class="text-end">@item.Total </td>
+                                                    </tr>
+
+                                                }
+
+                                            }
+                                        }
+                                    }
+
+                                 </tbody>
+                            </table><!--end table-->
+                        </div>
+                        <div class="border-top border-top-dashed mt-2">
+                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
+                                <tbody>
+                                    <tr>
+                                        <td>@sharedResource["Sub Total"]</td>
+                                        <td class="text-end">@Model.Order.OrderTotal</td>
+                                    </tr>
+                                    @* <tr>
+                                        <td>Estimated Tax (12.5%)</td>
+                                        <td class="text-end">@Model.Order.</td>
+                                    </tr>*@
+                                    <tr>
+                                        <td >@sharedResource["Discount"] <small class="text-muted">@sharedResource["(MASHAER)"]</small></td>
+                                        <td class="text-end">- @Model.Order.Discount</td>
+                                    </tr>
+                                    <tr>
+                                        <td>@sharedResource["Shipping Charge"]</td>
+                                        <td class="text-end">@Model.Order.ShippingCost</td>
+                                    </tr>
+                                    <tr class="border-top border-top-dashed fs-15">
+                                        <th scope="row">@sharedResource["Total Amount"]</th>
+                                        <th class="text-end">@Model.Order.NetOrder</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!--end table-->
+                        </div>
+                        <div class="mt-3">
+                            <h6 class="text-muted text-uppercase fw-semibold mb-3">@sharedResource["Payment Details:"]</h6>
+                            <p class="text-muted mb-1">@sharedResource["Payment Method:"] <span class="fw-medium" id="payment-method">@Model.Order.PaymentTit</span></p>
+                            @* <p class="text-muted mb-1">Card Holder: <span class="fw-medium" id="card-holder-name">David Nichols</span></p>
+                            <p class="text-muted mb-1">Card Number: <span class="fw-medium" id="card-number">xxx xxxx xxxx 1234</span></p>
+               *@           
+                          <p class="text-muted">@sharedResource["Total Amount:"] <span class="fw-medium" id=""> </span><span id="card-total-amount">@Model.Order.NetOrder</span></p>
+                        </div>
+                        @* <div class="mt-4">
+                            <div class="alert alert-info">
+                                <p class="mb-0">
+                                    <span class="fw-semibold">NOTES:</span>
+                                    <span id="note">
+                                        All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or
+                                        credit card or direct payment online. If account is not paid within 7
+                                        days the credits details supplied as confirmation of work undertaken
+                                        will be charged the agreed quoted fee noted above.
+                                    </span>
+                                </p>
+                            </div>
+                        </div>*@
+                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                            <a href="javascript:window.print()" class="btn btn-success"><i class="ri-printer-line align-bottom me-1"></i>@sharedResource["Print"]  </a>
+                            @*<a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download</a>*@
+                        </div>
+                    </div>
+                    <!--end card-body-->
+                </div><!--end col-->
+            </div><!--end row-->
+        </div>
+        <!--end card-->
+    </div>
+    <!--end col-->
+</div>
+<!--end row-->
+
+@section scripts{
+
+        <script src="~/assets/js/pages/invoicedetails.js"></script>
+
+        <!-- App js -->
+        <script src="~/assets/js/app.js"></script>
+}
+

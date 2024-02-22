@@ -1,0 +1,71 @@
+﻿@page
+@model CRM.Pages.HomeIndexModel
+
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+}
+@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject PerfumeContext _context
+@{
+
+    var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+    var ItemsInCart = 0;
+    var currentuser = await UserManager.GetUserAsync(User);
+    if (currentuser != null)
+    {
+        var CustomerId = _context.CustomerNs.Where(c => c.Email == currentuser.Email).FirstOrDefault().CustomerId;
+        var cartNumbers = _context.ShoppingCart.Where(s => s.CustomerId == CustomerId).Count();
+        ItemsInCart = cartNumbers;
+    };
+
+}
+
+
+<aside class="cart-btn">
+    <span class="nav-cart">
+        <i class="fa fa-luggage-cart">Cart</i>
+    </span>
+    <div class="cart-items">0</div>
+</aside>
+<!-- cart -->
+<div class="cart-overlay">
+    <div class="cart">
+        <span class="close-cart">
+            <i class="far fa-window-close"></i>
+        </span>
+        <h2>your cart</h2>
+        <div class="cart-content">
+            <!--- cart item --->
+            <!---- <div class="cart-item">
+
+             </div> -->
+            <!--- end of cart item --->
+
+        </div>
+        <div class="cart-footer">
+            <h3>
+                your total: EGP <span class="cart-total">0</span>
+            </h3>
+            <button class="clear-cart banner-btn">clear cart</button>
+        </div>
+    </div>
+</div>
+
+<!-- end of cart -->
+
+
+
+
+
+<script>
+    const cartOverlay = document.querySelector(".cart-overlay");
+</script>
+
+
+
+
+

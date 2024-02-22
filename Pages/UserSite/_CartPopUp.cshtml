@@ -1,0 +1,367 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<link href="~/style.css" rel="stylesheet" />
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExample">@sharedResource["Cart"]</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div id="cardbodyid" class="offcanvas-body">
+        <div  class="cart-area">
+           
+                <div id="tableId" class="table-item">
+                    <table  class="table">
+                        <thead id="theadid" >
+                            @*<tr>
+                                <th scope="col">@sharedResource["Image"]</th>
+                                <th scope="col">@sharedResource["Product Name"]</th>
+                                <th scope="col">@sharedResource["Price"]</th>
+                                <th scope="col">@sharedResource["Quantity"]</th>
+                                <th scope="col">@sharedResource["Remove"]</th>
+                            </tr>*@
+                        </thead>
+                        <tbody id="popid">
+                        </tbody>
+
+                    </table>
+                </div>
+            <div id="cartPopupId">      
+                </div>
+            <div id="popupcarttotal" style="background-color: darkgray;" class="cart-total mb-5">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+
+   function ClearElement(){
+     let popupPagesName = document.querySelector("#popid");
+     console.log(popupPagesName);
+     popupPagesName.innerHTML="";
+   }
+
+    function DisplayCartItems() {
+        console.log("Fayed")
+        var parsecartItems = JSON.parse(localStorage.getItem('cartItems'));
+        //	console.log(cartItems)
+        var prodcutcartItems = JSON.stringify(parsecartItems)
+        //var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+        //console.log(cartItems)
+        var lang = localStorage.getItem('lang');
+        var country = localStorage.getItem('Country');
+        const popupPagesName = document.querySelector("#popid");
+        const popupcarttotal = document.querySelector("#popupcarttotal");
+        const popupcart = document.getElementById("cartPopupId")
+        const cardbodyid = document.getElementById("cardbodyid")
+        const theadid = document.getElementById("theadid")
+
+        
+        var TableID = document.getElementById("tableId");
+        var totalSum = 0;
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=DisplayProducts",
+            data: { "prodcutcartItems": prodcutcartItems, "country": country },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+                //console.log(response.prodcutcartItems)
+                //popupPagesName.innerHTML = null;
+
+                if (response.IsRegister == false) {
+                    
+                    console.log(response.CurrencyEN + "CurrencyEN")
+
+                    if (response.prodcutcartItems != '[]' && response.prodcutcartItems != 'null') {
+                    //console.log("1")
+                        var cartItems = JSON.parse(response.prodcutcartItems)
+                        //console.log("7aga")
+
+                       
+                        if (cartItems != null) {
+                            //console.log("2")
+                            //ClearElement();
+                            popupPagesName.innerHTML = "";
+                            popupcart.innerHTML =""
+                            popupcarttotal.style.display = "block";
+
+                            for (var i = 0; i < cartItems.length; i++) {
+
+                                var name = cartItems[i].ItemTitleAr
+                                console.log(name)
+
+                                totalSum += cartItems[i].Qunatity * cartItems[i].priceCart
+
+                                popupPagesName.innerHTML += `
+                                                                                   <input class="ItemIdCl" type="text" value="${cartItems[i].ItemId}" asp-for="${cartItems[i].ItemId}" hidden>
+
+                                                                            
+                                                                            <td><img src="/${cartItems[i].ItemImage}" alt="Product"></td>
+
+
+
+                                                                                                        ${lang == "ar" ? `<td>${cartItems[i].ItemTitleAr} <p>${cartItems[i].priceCart} &nbsp;${response.CurrencyNameAr} </p> </td>` : `<td>${cartItems[i].ItemTitleEn} <p>${cartItems[i].priceCart}&nbsp;${response.CurrencyEN}</p> </td>`}
+
+
+
+                                                                                              
+                                                                                                <td>
+                                                                                                   <ul style="width: max-content;" class="number">
+                                                                                              <li>
+                                                                     <span  onclick="DeacreaseQuantity(${cartItems[i].ItemId})" class="minus border-dark text-black">-</span>
+                                                           <input class="ItemQuaCl bg-black" type="text" asp-for="${cartItems[i].Qunatity}" value="${cartItems[i].Qunatity}">
+                                                            <span onclick="IncreaseQuantity(${cartItems[i].ItemId})" class="plus border-dark text-black">+</span>
+
+                                                                                                                                    </li>
+                                                                                                                                </ul>
+
+                                                                                                                            </td>
+                                                                                                                                    <td>                                                                                                                                                                                                                                                                 <button class="btn btn-close-white btn-light" style="border-radius: 0; width:100%;" onclick="removeFromCart(${cartItems[i].ItemId})" type="button"><i  class="bx bx-x"></i></button>
+</td>
+
+                                                                                            `
+                                popupcarttotal.innerHTML =
+                                    `
+                                                                                           <h2>@sharedResource["Cart Total"]</h2>
+
+                                                                                                            <div class="inner">
+                                                                                                                <h4>
+                                                                                                                                     ${lang == "ar" ? ` <span>${totalSum} &nbsp;${response.CurrencyNameAr}</span>` : `<span>${totalSum} &nbsp;${response.CurrencyEN}</span>`}
+    @sharedResource["Total"]:
+                                                                                                                       
+                                                                                                                       </div>
+                                                                                                                            <div class="text-center">
+
+            <a class="btn btn-close-white btn-light text-black" style="border-radius: 0; width:100%;"  href="/ViewCart"> @sharedResource["View Cart"]  </a>
+                    </div>
+                                                                                            `
+                            }
+                        }
+
+
+                        //$('#QuickViewPoup').modal('show');
+
+
+                    }
+                   
+                    if (response.prodcutcartItems == 'null' || response.prodcutcartItems == '[]') {
+                        console.log("empty")
+
+                   //TableID.innerHTML="";
+                    popupcart.innerHTML =
+                        '<div class="cart-area ptb-100" style="text-align: center;font-size:x-large;font-weight: bolder; "><span>@sharedResource["There are no items in the Shopping Cart"]</span></div>'
+                      //ClearElement();
+                      popupPagesName.innerHTML = "";
+                        theadid.innerHTML = "";
+                        console.log("this cart total=")
+                        popupcarttotal.innerHTML = "";
+                        popupcarttotal.style.display = "none";
+
+                    }
+
+
+                }
+
+                ///////////databaseshoppingcartlist
+                if (response.IsRegister == true) {
+                    //console.log(response.shoppingCarts)
+                    if (response.shoppingCarts != null) {
+                        //var cartItems = JSON.parse(response.shoppingCarts);
+                        var cartItems = response.shoppingCarts
+                        //console.log(cartItems)
+                        popupPagesName.innerHTML = "";
+                        popupcart.innerHTML = ""
+                        popupcarttotal.style.display = "block";
+                        var totalamount = response.TotalAmount
+                        //console.log(totalamount)
+                        for (var i = 0; i < cartItems.length; i++) {
+
+
+                            //totalSum += cartItems[i].Qunatity * cartItems[i].priceCart
+
+                            popupPagesName.innerHTML += `
+                                                                                   <input class="ItemIdCl" type="text" value="${cartItems[i].ItemId}" asp-for="${cartItems[i].ItemId}" hidden>
+
+                                                                             <tr>
+                                                                             <th scope="row">
+                                                                                <img src="/${cartItems[i].Item.ItemImage}" alt="Product">
+                                                                             </th>
+
+
+                                                                                                    ${lang == "ar" ? `<td>${cartItems[i].Item.ItemTitleAr} <p>${cartItems[i].ItemPrice}&nbsp;${response.CurrencyNameAr}</p></td>` : `<td>${cartItems[i].Item.ItemTitleEn} <p>${cartItems[i].ItemPrice}&nbsp;${response.CurrencyEN}</p></td>`}
+
+
+
+                                                                                                <td>
+                                                                                               <ul style="width: max-content;" class="number">
+                                                                                              <li>
+                                                                         <span  onclick="DeacreasedataQuantity(${cartItems[i].ItemId})" class="minus border-dark text-black">-</span>
+                                                                       <input class="ItemQuaCl bg-black" id="QunatityId" type="text" asp-for="${cartItems[i].ItemQty}" value="${cartItems[i].ItemQty}">
+                                                                <span  onclick="IncreasedataQuantity(${cartItems[i].ItemId})" class="plus border-dark text-black">+</span>
+                                                                                                                                    </li>
+                                                                                                                                </ul>
+                                                                                                                            </td>
+
+
+                                                                  <td>
+                                                            <button class="btn btn-close-white btn-light" style="border-radius: 0; width:100%;" onclick="removeProductsFromCart(${cartItems[i].ItemId})" type="button"><i  class="bx bx-x"></i></button>
+
+
+                                                                                                                            </td>
+                                                                                                                        </tr>
+                                                                                            `
+                            popupcarttotal.innerHTML =
+                                `
+                                                                                           <h2>@sharedResource["Cart Total"]</h2>
+
+                                                                                                            <div class="inner">
+                                                                                                                <h4>
+
+            ${lang == "ar" ? ` <span>${totalamount} &nbsp;${response.CurrencyNameAr}</span>` : `<span>${totalamount} &nbsp;${response.CurrencyEN}</span>`}
+    @sharedResource["Total"]:
+                                                                                                                           
+                                                                                                                           </div>
+                                                                                                                                <div class="text-center">
+                <a class="btn btn-close-white btn-light text-black" style="border-radius: 0; width:100%;"  href="/ViewCart"> @sharedResource["View Cart"]  </a>
+
+                </div>
+                                                                                            `
+                        }
+                        
+
+                        //$('#QuickViewPoup').modal('show');
+
+
+                    }
+                    if (response.TotalAmount === 0) {
+                        console.log("empty")
+                        popupcart.innerHTML =
+                            '<div class="cart-area ptb-100" style="text-align: center;font-size:x-large;font-weight: bolder; "><span>@sharedResource["There are no items in the Shopping Cart"]</span></div>'
+                         popupPagesName.innerHTML = "";
+                        theadid.innerHTML = "";
+                        console.log("this cart total=" + popupcarttotal)
+                        popupcarttotal.style.display="none";
+                    }
+                }
+                /////////////////////////////////
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });        //if (cartItems.length == 0) {
+        //    console.log("empty")
+        //    //popupPagesName.innerHTML +=
+        //    //    '<div class="cart-area ptb-100" style="text-align: center;font-size:x-large;font-weight: bolder; "><span>There are no items in the Shopping Cart</span></div>
+        //}
+
+
+
+
+
+    }
+
+
+
+    function DeacreasedataQuantity(ItemId){
+        console.log(ItemId)
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=DecreaseItemQuantity",
+            data: { "ItemId": ItemId },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+                DisplayCartItems()
+                //document.getElementById("shippingicon").innerHTML = response
+                ShoppingCartIcon()
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+    function IncreasedataQuantity(ItemId){
+       
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=IncreaseItemQuantity",
+            data: { "ItemId": ItemId },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+                DisplayCartItems()
+                //document.getElementById("shippingicon").innerHTML = response
+                ShoppingCartIcon()
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+    function removeProductsFromCart(ItemId) {
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=RemoveItem",
+            data: { "ItemId": ItemId },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+                DisplayCartItems()
+                ShoppingCartIcon()
+                //window.location.href="/Index"
+                //document.getElementById("shippingicon").innerHTML = response
+
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+</script>

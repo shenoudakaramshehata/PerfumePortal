@@ -1,0 +1,1416 @@
+﻿@page
+@model CRM.Pages.CheckOutPaymentModel
+@Html.AntiForgeryToken()
+@inject PerfumeContext _context
+@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+    @using Microsoft.AspNetCore.Localization
+
+    var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+        var currentuser = await UserManager.GetUserAsync(User);
+
+    
+}
+<link href="~/stepper.css" rel="stylesheet" />
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+<style>
+    .list-wrap {
+        padding: 12px;
+        /* background-color: #d8b9c3; */
+        border-radius: 5px;
+       /* width: 400px;*/
+        padding-top: 1.5rem;
+    }
+
+    div.list {
+        counter-reset: list-number;
+    }
+
+       div.list div:before {
+    counter-increment: list-number;
+    content: counter(list-number);
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background-color: #e6e5e9;
+    border-radius: 50%;
+    color: black;
+    font-weight: 700;
+}
+
+        @@media (max-width: 768px) {
+    /* Adjust styles for mobile devices */
+    .list-wrap {
+        max-width: 100%;
+        padding: 8px;
+    }
+        }
+</style>
+<div class="page-title-wrap">
+    <div class="page-title-area " style="background-color:#f5f5f5 !important;">
+      
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black">@sharedResource["Payments Methods"]</h2>
+                    <ul>
+                        <li>
+                            <a class="text-black" href="/index">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black">@sharedResource["Check Out"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div></div>
+@{
+    if (Model.user == null)
+    {
+        <div class="checkout-area pt-100 pb-70">
+            <div class="container">
+                <div class="row">
+                    <form class="row" asp-page-handler="AddCustomerAddress" asp-route-orderId="@Model.OrderID" asp-route-Serial="@Model.newserial">
+                        <div class="col-lg-6">
+                            <div class="checkout-item">
+                                <div class="checkout-billing">
+                                    <h2>@sharedResource["Billing Address"]</h2>
+                                    @*  @if (Model.hasAddress)
+                            {*@
+
+                                    @*                            <form asp-page-handler="AddCustomerAddress" asp-route-Serial="@Model.newserial">
+                            *@                            <input type="hidden" class="form-control" id="serialCouponId" value="@Model.newserial" value="@Model.newserial">
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="FullName" asp-for="@Model.customerobj.CustomerName" disabled placeholder="@sharedResource["FullName*"]" required>
+                                        <span class="validation-message text-danger" id="fullname-validation-msg"></span>
+
+                                    </div>
+                                    @{
+                                        if (currentuser == null)
+                                        {
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="EmailInput" asp-for="@Model.customerobj.Email" disabled placeholder="@sharedResource["Email*"]" required>
+                                                <span class="validation-message text-danger" id="email-validation-msg"></span>
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="Address" asp-for="@currentuser.Email" disabled placeholder="@sharedResource["Email*"]" required>
+                                            </div>
+                                        }
+                                    }
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="PhoneNumber" pattern="^\+\d{1,3}\s?\d{1,}-?\d{1,}$"
+                                       title="Please enter a valid phone number with the country code. The format should be '+[country code] [phone number]'." asp-for="@Model.customerobj.Phone" disabled placeholder="@sharedResource["Phone Number*"]" required>
+                                        <div class="invalid-feedback" id="phone-error-msg">Please enter a valid phone number with the country code. The format should be '+[country code] [phone number]'.</div>
+                                        <span class="validation-message text-danger" id="phone-validation-msg"></span>
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="Address" asp-for="@Model.customerAddr.Address" disabled placeholder="@sharedResource["Address*"]" required>
+                                        <span class="validation-message text-danger" id="address-validation-msg"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="CityName" asp-for="@Model.customerAddr.CityName" disabled placeholder="@sharedResource["City name*"]" required>
+                                        <span class="validation-message text-danger" id="cityname-validation-msg"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="AreaName" asp-for="@Model.customerAddr.AreaName" disabled placeholder="@sharedResource["Area name*"]" required>
+                                        <span class="validation-message text-danger" id="areaname-validation-msg"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="BuildingNo" asp-for="@Model.customerAddr.BuildingNo" disabled placeholder="@sharedResource["Building No*"]" required>
+                                        <span class="validation-message text-danger" id="buildingno-validation-msg"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="CountryENName" asp-for="@Model.CountryENName" placeholder="@sharedResource["Country"]" disabled>
+                                    </div>
+
+
+
+
+                                    @*}*@
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="checkout-item">
+
+
+                                <div class="checkout-payment">
+
+                                    @* <form method="post" asp-page-handler="UpdatePayment">*@
+
+                                    <h2>@sharedResource["Payment Method"]</h2>
+                                    @{
+
+
+                                        var MyfattorahEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 1).FirstOrDefault().PaymentMethodEN;
+                                        var MyfattorahAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 1).FirstOrDefault().PaymentMethodAR;
+                                        var CashEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 2).FirstOrDefault().PaymentMethodEN;
+                                        var CashAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 2).FirstOrDefault().PaymentMethodAR;
+
+                                        //var TabbyEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 3).FirstOrDefault().PaymentMethodEN;
+                                        //var TabbyAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 3).FirstOrDefault().PaymentMethodAR;
+
+                                        if (@Model.CountryId == 1)
+                                        {
+
+                                            ////<input type="text" hidden asp-for="@Model.PaymentId" />
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input my-3" onclick="hideErrorMessage()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.FattorahPaymentId" id="FattorahdefaultCheck2" required>
+
+                                                <img src="~/Jeel/images/Knet-logo.png" class="w-25">
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">@MyfattorahEN</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            @MyfattorahAR
+                                                        </label>
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input my-4" onclick="hideErrorMessage()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.CahshPaymentId" id="CashdefaultCheck2" required>
+
+
+                                                @{
+                                                    <img src="~/Jeel/images/cash.jpg" class="w-25">
+
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">@CashEN</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            @CashAR
+                                                        </label>
+                                                    }
+
+                                                }
+
+                                            </div>
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input" onclick="handleTabbyPROMO()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.TabbyPaymentId" id="TabbyCheck2" required>
+
+
+                                                @{
+                                                    <img src="~/Jeel/images/tabbyLogo.png" class="w-25">
+                                                    <label class="form-check-label" for="defaultCheck2">@sharedResource["Pay in 4. No interest, no fees."]</label>
+
+
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+
+                                                    }
+                                                    else
+                                                    {
+
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+                                                    }
+
+                                                }
+
+                                            </div>
+
+                                        }
+                                        else if (@Model.CountryId == 2)
+                                        {
+
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input my-3" onclick="hideErrorMessage()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.FattorahPaymentId" id="FattorahdefaultCheck2" required>
+
+                                                <img src="~/Jeel/images/Knet-logo.png" class="w-25">
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">@MyfattorahEN</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            @MyfattorahAR
+                                                        </label>
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input" onclick="handleTabbyPROMO()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.TabbyPaymentId" id="TabbyCheck2" required>
+
+
+                                                @{
+                                                    <img src="~/Jeel/images/tabbyLogo.png" class="w-25">
+
+                                                    <label class="form-check-label" for="defaultCheck2">@sharedResource["Pay in 4. No interest, no fees."]</label>
+
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+
+                                                    }
+                                                    else
+                                                    {
+
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+                                                    }
+
+                                                }
+
+                                            </div>
+
+                                        }
+                                        else if (@Model.CountryId == 4)
+                                        {
+
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input my-3" onclick="hideErrorMessage()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.FattorahPaymentId" id="FattorahdefaultCheck2" required>
+
+                                                <img src="~/Jeel/images/Knet-logo.png" class="w-25">
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">@MyfattorahEN</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            @MyfattorahAR
+                                                        </label>
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input" onclick="handleTabbyPROMO()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.TabbyPaymentId" id="TabbyCheck2" required>
+
+                                                @{
+                                                    <img src="~/Jeel/images/tabbyLogo.png" class="w-25">
+                                                    <label class="form-check-label" for="defaultCheck2">@sharedResource["Pay in 4. No interest, no fees."]</label>
+
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+
+                                                    }
+                                                    else
+                                                    {
+
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+                                                    }
+
+                                                }
+
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input my-3" onclick="hideErrorMessage()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.FattorahPaymentId" id="FattorahdefaultCheck2" required>
+
+                                                <img src="~/Jeel/images/Knet-logo.png" class="w-25">
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">@MyfattorahEN</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            @MyfattorahAR
+                                                        </label>
+                                                    }
+                                                }
+                                            </div>
+
+                                        }
+
+                                    }
+                                </div>
+                                <div class="checkout-total" style="background-color: darkgray;">
+                                    <h2>@sharedResource["Cart Total"]:</h2>
+                                    <ul>
+                                        @foreach (var item in Model.shippingCartObjectVMs)
+                                        {
+                                            <li>
+                                                @{
+                                                    var total = item.priceCart * item.Qunatity;
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        @item.ItemTitleEn
+                                                        <span>@total  @Model.CurrencyNameEN</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        @item.ItemTitleAr
+                                                        <span>@total  @Model.CurrencyNameAr</span>
+                                                    }
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                    <h3>
+                                        @sharedResource["Subtotal"]:
+
+                                        @if (BrowserCulture == "en-US")
+                                        {
+
+                                            <span>@Model.Subtotal  @Model.CurrencyNameEN</span>
+
+                                        }
+                                        else
+                                        {
+                                            <span>@Model.Subtotal  @Model.CurrencyNameAr</span>
+
+                                        }
+
+                                    </h3>
+                                    <h3>
+                                        @sharedResource["Tax"] &nbsp;(@Model.tax %):
+                                        @{
+                                            if (@Model.tax == 0)
+                                            {
+                                                <span>@Model.OrdernetByTax</span>
+                                            }
+                                            else
+                                            {
+                                                @if (BrowserCulture == "en-US")
+                                                {
+
+                                                    <span>@Model.OrdernetByTax @Model.CurrencyNameEN </span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span>@Model.OrdernetByTax  @Model.CurrencyNameAr</span>
+
+                                                }
+                                            }
+                                        }
+
+                                    </h3>
+                                    @{
+                                        if (Model.DeliveryCost != null)
+                                        {
+                                            <h3 class="mt-3 display-4 fw-bolder">
+                                                @sharedResource["Shipping Cost"]:
+
+                                                @if (BrowserCulture == "en-US")
+                                                {
+
+                                                    <span>@Model.DeliveryCost  @Model.CurrencyNameEN</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@Model.DeliveryCost  @Model.CurrencyNameAr</span>
+                                                }
+
+                                            </h3>
+                                        }
+                                    }
+                                    <h3>
+                                        @sharedResource["Total"]:
+
+                                        @if (BrowserCulture == "en-US")
+                                        {
+
+                                            <span id="TotalID">@Model.TotalAmount  @Model.CurrencyNameEN</span>
+
+                                        }
+                                        else
+                                        {
+                                            <span id="TotalID">@Model.TotalAmount  @Model.CurrencyNameAr</span>
+
+                                        }
+
+                                    </h3>
+
+
+                                    @{
+                                        if (Model.TotalAmount > 0)
+                                        {
+                                            if (Model.coupon != null)
+                                            {
+                                                <h3 class="mt-3 display-4 fw-bolder">
+                                                    @sharedResource["After Discount"]:
+
+                                                    @if (BrowserCulture == "en-US")
+                                                    {
+
+                                                        <span id="TotalAmountAfterDiscountID">@Model.TotalAmountAfterDiscount  @Model.CurrencyNameEN</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span id="TotalAmountAfterDiscountID">@Model.TotalAmountAfterDiscount  @Model.CurrencyNameAr</span>
+                                                    }
+
+                                                </h3>
+                                            }
+                                        }
+                                    }
+
+                                </div>
+                                <div class="text-center my-4">
+                                    <button type="submit" class="btn btn-close-white btn-light" style="border-radius: 0; width:100%;">@sharedResource["Place Order"]</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    }
+
+    else
+    {
+        <div class="checkout-area pt-100 pb-70">
+            <div class="container">
+                <div class="row">
+                    <form class="row" asp-page-handler="AddCustomerAddress" asp-route-orderId="@Model.OrderID" asp-route-Serial="@Model.newserial">
+                         <div class="col-lg-6">
+                            <div class="checkout-item">
+                                <div class="checkout-billing">
+                                    <h2>@sharedResource["Billing Address"]</h2>
+                                    @*  @if (Model.hasAddress)
+                            {*@
+
+                                    @*                            <form asp-page-handler="AddCustomerAddress" asp-route-Serial="@Model.newserial">
+                            *@                            <input type="hidden" class="form-control" id="serialCouponId" value="@Model.newserial" value="@Model.newserial">
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" disabled id="Address" asp-for="@Model.customerAddr.Address" placeholder="@sharedResource["Address*"]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" disabled id="CityName" asp-for="@Model.customerAddr.CityName" placeholder="@sharedResource["City name*"]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" disabled id="AreaName" asp-for="@Model.customerAddr.AreaName" placeholder="@sharedResource["Area name*"]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="BuildingNo" asp-for="@Model.customerAddr.BuildingNo" placeholder="@sharedResource["Building No*"]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" disabled pattern="^\+\d{1,3}\s?\d{1,}-?\d{1,}$"
+                                       title="Please enter a valid phone number with the country code. The format should be '+[country code] [phone number]'." id="Mobile" asp-for="@Model.customerAddr.Mobile" placeholder="@sharedResource["Mobile*"]" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" disabled id="CountryENName" asp-for="@Model.CountryENName" placeholder="@sharedResource["Country"]" disabled>
+                                    </div>
+
+                                   
+                                
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="checkout-item">
+
+                                <div class="checkout-payment">
+
+                                    @* <form method="post" asp-page-handler="UpdatePayment">*@
+
+                                    <h2>@sharedResource["Payment Method"]</h2>
+                                    @{
+
+
+                                        var MyfattorahEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 1).FirstOrDefault().PaymentMethodEN;
+                                        var MyfattorahAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 1).FirstOrDefault().PaymentMethodAR;
+                                        var CashEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 2).FirstOrDefault().PaymentMethodEN;
+                                        var CashAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 2).FirstOrDefault().PaymentMethodAR;
+
+                                        //var TabbyEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 3).FirstOrDefault().PaymentMethodEN;
+                                        //var TabbyAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 3).FirstOrDefault().PaymentMethodAR;
+
+                                        if (@Model.CountryId == 1)
+                                        {
+
+                                            ////<input type="text" hidden asp-for="@Model.PaymentId" />
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input my-3" onclick="hideErrorMessage()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.FattorahPaymentId" id="FattorahdefaultCheck2" required>
+
+                                                <img src="~/Jeel/images/Knet-logo.png" class="w-25">
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">@MyfattorahEN</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            @MyfattorahAR
+                                                        </label>
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input my-4" onclick="hideErrorMessage()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.CahshPaymentId" id="CashdefaultCheck2" required>
+
+
+                                                @{
+                                                    <img src="~/Jeel/images/cash.jpg" class="w-25">
+
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">@CashEN</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            @CashAR
+                                                        </label>
+                                                    }
+
+                                                }
+
+                                            </div>
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input" onclick="handleTabbyPROMO()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.TabbyPaymentId" id="TabbyCheck2" required>
+
+
+                                                @{
+                                                    <img src="~/Jeel/images/tabbyLogo.png" class="w-25">
+                                                    <label class="form-check-label" for="defaultCheck2">@sharedResource["Pay in 4. No interest, no fees."]</label>
+
+
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+
+                                                    }
+                                                    else
+                                                    {
+
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+                                                    }
+
+                                                }
+
+                                            </div>
+
+                                        }
+                                        else if (@Model.CountryId == 2)
+                                        {
+
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input my-3" onclick="hideErrorMessage()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.FattorahPaymentId" id="FattorahdefaultCheck2" required>
+
+                                                <img src="~/Jeel/images/Knet-logo.png" class="w-25">
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">@MyfattorahEN</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            @MyfattorahAR
+                                                        </label>
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input" onclick="handleTabbyPROMO()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.TabbyPaymentId" id="TabbyCheck2" required>
+
+
+                                                @{
+                                                    <img src="~/Jeel/images/tabbyLogo.png" class="w-25">
+
+                                                    <label class="form-check-label" for="defaultCheck2">@sharedResource["Pay in 4. No interest, no fees."]</label>
+
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+
+                                                    }
+                                                    else
+                                                    {
+
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+                                                    }
+
+                                                }
+
+                                            </div>
+
+                                        }
+                                        else if (@Model.CountryId == 4)
+                                        {
+
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input my-3" onclick="hideErrorMessage()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.FattorahPaymentId" id="FattorahdefaultCheck2" required>
+
+                                                <img src="~/Jeel/images/Knet-logo.png" class="w-25">
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">@MyfattorahEN</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            @MyfattorahAR
+                                                        </label>
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input" onclick="handleTabbyPROMO()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.TabbyPaymentId" id="TabbyCheck2" required>
+
+                                                @{
+                                                    <img src="~/Jeel/images/tabbyLogo.png" class="w-25">
+                                                    <label class="form-check-label" for="defaultCheck2">@sharedResource["Pay in 4. No interest, no fees."]</label>
+
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+
+                                                    }
+                                                    else
+                                                    {
+
+
+                                                        <div id="warning-box" class="alert alert-warning" style="font-size: 13px;display:none">
+                                                            @CheckOutPaymentModel.rejectionReason
+                                                        </div>
+                                                        <div id="tabbyCard"></div>
+                                                    }
+
+                                                }
+
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+                                            <div class="checkout-payment">
+                                                <input class="form-check-input my-3" onclick="hideErrorMessage()" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.FattorahPaymentId" id="FattorahdefaultCheck2" required>
+
+                                                <img src="~/Jeel/images/Knet-logo.png" class="w-25">
+                                                @{
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">@MyfattorahEN</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="form-check-label" for="defaultCheck2">
+                                                            @MyfattorahAR
+                                                        </label>
+                                                    }
+                                                }
+                                            </div>
+
+                                        }
+
+                                    }
+                                </div>
+
+                                <div class="checkout-total" style="background-color: darkgray;">
+                                    <h2>@sharedResource["Cart Total"]:</h2>
+                                    <ul>
+                                        @foreach (var item in Model.shoppingCarts)
+                                        {
+                                            <li>
+                                                @{
+                                                    var total = item.ItemPrice * item.ItemQty;
+                                                    if (BrowserCulture == "en-US")
+                                                    {
+                                                        @item.Item.ItemTitleEn
+                                                        <span>@total  @Model.CurrencyNameEN</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        @item.Item.ItemTitleAr
+                                                        <span>@total  @Model.CurrencyNameAr</span>
+                                                    }
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                    <h3>
+                                        @sharedResource["Subtotal"]:
+
+                                        @if (BrowserCulture == "en-US")
+                                        {
+
+                                            <span>@Model.Subtotal  @Model.CurrencyNameEN</span>
+
+                                        }
+                                        else
+                                        {
+                                            <span>@Model.Subtotal  @Model.CurrencyNameAr</span>
+
+                                        }
+
+                                    </h3>
+
+
+
+
+
+                                    <h3>
+                                        @sharedResource["Tax"] &nbsp;(@Model.tax %):
+                                       @{
+                                       
+                                        if (@Model.tax == 0)
+                                        {
+                                                <span>@Model.OrdernetByTax</span>
+                                        }
+                                        else{
+                                        @if (BrowserCulture == "en-US")
+                                        {
+
+                                            <span>@Model.OrdernetByTax  @Model.CurrencyNameEN </span>
+
+                                        }
+                                        else
+                                        {
+                                                    <span>@Model.OrdernetByTax  @Model.CurrencyNameAr </span>
+
+                                        }
+                                        }
+                                       }
+                                      
+
+                                    </h3>
+                                    @{
+                                        if (Model.DeliveryCost != null)
+                                        {
+                                            <h3 class="mt-3 display-4 fw-bolder">
+                                                @sharedResource["Shipping Cost"]:
+
+                                                @if (BrowserCulture == "en-US")
+                                                {
+
+                                                    <span>@Model.DeliveryCost  @Model.CurrencyNameEN</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@Model.DeliveryCost  @Model.CurrencyNameAr</span>
+                                                }
+
+                                            </h3>
+                                        }
+                                    }
+                                    <h3>
+                                        @sharedResource["Total"]:
+
+                                        @if (BrowserCulture == "en-US")
+                                        {
+
+                                            <span>@Model.TotalAmount  @Model.CurrencyNameEN</span>
+
+                                        }
+                                        else
+                                        {
+                                            <span>@Model.TotalAmount  @Model.CurrencyNameAr</span>
+
+                                        }
+
+                                    </h3>
+
+
+                                    @{
+                                        if (Model.TotalAmount > 0)
+                                        {
+                                            if (Model.coupon != null)
+                                            {
+                                                <h3 class="mt-3 display-4 fw-bolder">
+                                                    @sharedResource["After Discount"]:
+
+                                                    @if (BrowserCulture == "en-US")
+                                                    {
+
+                                                        <span>@Model.TotalAmountAfterDiscount  @Model.CurrencyNameEN</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@Model.TotalAmountAfterDiscount  @Model.CurrencyNameAr</span>
+                                                    }
+
+                                                </h3>
+                                            }
+                                        }
+                                    }
+
+                                </div>
+
+                                <div class="text-center my-4">
+                                    <button type="submit" class="btn btn-close-white btn-light" style="border-radius: 0; width:100%;">@sharedResource["Place Order"]</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+    }
+}
+<partial name="_TabbyPopup" />
+
+<script src="https://checkout.tabby.ai/tabby-card.js"></script>
+
+<script>
+
+
+    window.onload = function () {
+        //handleTabbyPromo();
+        showOrHideWarning();
+        StorageinSession();
+    };
+    function StorageinSession() {
+        var cartItemsData = JSON.parse(localStorage.getItem("cartItems"));
+
+        var country = localStorage.getItem('Country')
+        var parsecartItems = JSON.stringify(cartItemsData)
+        console.log(typeof (parsecartItems))
+        console.log(typeof (country))
+        //var countryPic = localStorage.getItem('countryPic');
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=Storedata",
+            data: { "parsecartItems": parsecartItems, "country": country },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+                //console.log(response.CountryTlen);
+                //console.log(response.CountryTlar);
+                //if(localStorage.getItem("lang")=="en"){
+                //    document.getElementById("CurentCountry").innerHTML=response.CountryTlen;
+                //}
+                //else{
+                //    document.getElementById("CurentCountry").innerHTML=response.CountryTlar;
+
+                //}
+                var countryPic = response.Pic;
+                document.getElementById("CurentCountryPic").src = "/" + countryPic
+
+
+                //document.getElementById("CurentCountry").innerHTML=response;
+                //document.getElementById("shippingicon").innerHTML = response
+                //localStorage.setItem("countryPic", response);
+                //var countryPic = localStorage.getItem('countryPic');
+                //var CountryImg = document.getElementById("CountryImg").src = "/"+response
+                //localStorage.setItem("CountryTitle",response);
+                //document.getElementById("CurentCountry").innerHTML=response;
+
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+
+        //sessionStorage.setItem('cartItemsData', JSON.stringify(cartItemsData));
+    }
+    function ShowPassword() {
+        let chk = document.getElementById("defaultCheck1");
+        let Password = document.getElementById("Password");
+        if (chk.checked == true) {
+            // 👇 this SHOWS the requiredInputs
+            Password.style.display = 'flex';
+        }
+        else {
+            Password.style.display = 'none';
+        }
+    }
+    //function CheckOut() {
+    //    var Country = localStorage.getItem("Country");
+    //    var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+    //    var selectedPayment = document.querySelector('input[name="paymentId"]:checked').value;
+    //    console.log(selectedPayment)
+    //    console.log(typeof(selectedPayment))
+
+    //    //var parsecartItems = JSON.parse(cartItems)
+    //    var parsecartItems = JSON.stringify(cartItems)
+    //    console.log(typeof (parsecartItems))
+    //    var Serial = document.getElementById("serialCouponId").value;
+    //    console.log(Serial)
+    //    let Address = document.getElementById("Address").value;
+    //    let CityName = document.getElementById("CityName").value;
+    //    let AreaName = document.getElementById("AreaName").value;
+    //    let BuildingNo = document.getElementById("BuildingNo").value;
+    //    let Mobile = document.getElementById("Mobile").value;
+    //    let CountryENName = document.getElementById("CountryENName").value;
+    //    console.log(CountryENName)
+
+    //    let Adressobj = {
+    //        "Address": Address,
+    //        "CityName": CityName,
+    //        "AreaName": AreaName,
+    //        "BuildingNo": BuildingNo,
+    //        "Mobile": Mobile,
+    //        "CountryENName": CountryENName
+    //    };
+    //    console.log(Adressobj)
+    //    let ParseAddress = JSON.stringify(Adressobj)
+    //    console.log(ParseAddress)
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/CheckOut?handler=AddCustomerAddress",
+    //        data: { "Serial": Serial, "Country": Country, "Adressobj": Adressobj, "selectedPayment": selectedPayment },
+    //        beforeSend: function (xhr) {
+    //            xhr.setRequestHeader("XSRF-TOKEN",
+    //                $('input:hidden[name="__RequestVerificationToken"]').val());
+    //        },
+
+    //        headers: {
+    //            RequestVerificationToken:
+    //                $('input:hidden[name="__RequestVerificationToken"]').val()
+    //        },
+
+    //        success: function (response) {
+    //            console.log(response)
+    //            //document.getElementById("shippingicon").innerHTML = response
+    //            //localStorage.removeItem('cartItems');
+
+    //        },
+    //        failure: function (response) {
+    //            alert(response);
+    //        }
+    //    });
+
+    //}
+
+    // function validateInput(inputId, validationMsgId, validationMessage) {
+    //    var input = document.getElementById(inputId);
+    //    var validationMsg = document.getElementById(validationMsgId);
+
+    //    // Clear previous validation message
+    //    validationMsg.textContent = "";
+
+    //    if (input.value.trim() === "") {
+    //        validationMsg.textContent = validationMessage;
+    //        return false;
+    //    }
+
+    //    return true;
+    //}
+
+    //function handleTabbyValidation() {
+    //    var isEmailValid = validateInput("EmailInput", "email-validation-msg", "Email is required.");
+    //    var isAddressValid = validateInput("Address", "address-validation-msg", "Address is required.");
+    //    var isCityNameValid = validateInput("CityName", "cityname-validation-msg", "City name is required.");
+    //    var isAreaNameValid = validateInput("AreaName", "areaname-validation-msg", "Area name is required.");
+    //    var isBuildingNoValid = validateInput("BuildingNo", "buildingno-validation-msg", "Building No is required.");
+    //    var isPhoneValid = validateInput("PhoneNumber", "phone-validation-msg", "Please enter a valid phone number.");
+    //    var isFullNameValid = validateInput("FullName", "fullname-validation-msg", "Full name is required.");
+
+    //    if (isEmailValid && isAddressValid && isCityNameValid && isAreaNameValid && isBuildingNoValid && isPhoneValid && isFullNameValid) {
+    //        handleTabby(); // Proceed with sending the AJAX request
+    //    }
+    //    else {
+    //    // If validation fails, reset the radio button selection
+    //        document.getElementById("defaultCheckTabby2").checked = false;
+    //}
+    //}
+
+    function handleTabbyPROMO() {
+        var ordertotal = '@Model.tabbyorderNet';
+        var ordertotaltabby = parseFloat('@Model.tabbyorderNet');
+
+        var currency = '@Model.CurrencyNameEN';
+        console.log(ordertotaltabby);
+        console.log(typeof (ordertotaltabby));
+        console.log(currency);
+        var country = localStorage.getItem('Country');
+        var lang = localStorage.getItem("lang");
+
+        if (country == "1") {
+            if (lang == "en") {
+                new TabbyCard({
+                    selector: '#tabbyCard', // empty div for TabbyCard.
+                    currency: currency, // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    lang: 'en', // Optional, language of snippet and popups.
+                    price: ordertotaltabby, // required, total price or the cart. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    size: 'narrow', // required, can be also 'wide', depending on the width.
+                    theme: 'black', // required, can be also 'default'.
+                    header: false // if a Payment method name present already.
+                });
+                var errorMessage = "@CheckOutPaymentModel.rejectionReason";
+                console.log(errorMessage);
+
+                if (errorMessage) {
+                    document.getElementById("warning-box").style.display = "block";
+                    document.getElementById("warning-box").style.color = "red";
+                }
+            } else {
+                new TabbyCard({
+                    selector: '#tabbyCard', // empty div for TabbyCard.
+                    currency: currency, // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    lang: 'ar', // Optional, language of snippet and popups.
+                    price: ordertotaltabby, // required, total price or the cart. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    size: 'narrow', // required, can be also 'wide', depending on the width.
+                    theme: 'black', // required, can be also 'default'.
+                    header: false // if a Payment method name present already.
+                });
+                var errorMessage = "@CheckOutPaymentModel.rejectionReason";
+                console.log(errorMessage);
+
+                if (errorMessage) {
+                    document.getElementById("warning-box").style.display = "block";
+                    document.getElementById("warning-box").style.color = "red";
+                }
+            }
+        }
+
+        if (country == "2") {
+            if (lang == "en") {
+                new TabbyCard({
+                    selector: '#tabbyCard', // empty div for TabbyCard.
+                    currency: currency, // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    lang: 'en', // Optional, language of snippet and popups.
+                    price: ordertotaltabby, // required, total price or the cart. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    size: 'narrow', // required, can be also 'wide', depending on the width.
+                    theme: 'black', // required, can be also 'default'.
+                    header: false // if a Payment method name present already.
+                });
+                var errorMessage = "@CheckOutPaymentModel.rejectionReason";
+                console.log(errorMessage);
+
+                if (errorMessage) {
+                    document.getElementById("warning-box").style.display = "block";
+                    document.getElementById("warning-box").style.color = "red";
+                }
+            } else {
+                new TabbyCard({
+                    selector: '#tabbyCard', // empty div for TabbyCard.
+                    currency: currency, // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    lang: 'ar', // Optional, language of snippet and popups.
+                    price: ordertotaltabby, // required, total price or the cart. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    size: 'narrow', // required, can be also 'wide', depending on the width.
+                    theme: 'black', // required, can be also 'default'.
+                    header: false // if a Payment method name present already.
+                });
+                var errorMessage = "@CheckOutPaymentModel.rejectionReason";
+                console.log(errorMessage);
+
+                if (errorMessage) {
+                    document.getElementById("warning-box").style.display = "block";
+                    document.getElementById("warning-box").style.color = "red";
+                }
+            }
+        }
+
+        if (country == "4") {
+            if (lang == "en") {
+                new TabbyCard({
+                    selector: '#tabbyCard', // empty div for TabbyCard.
+                    currency: currency, // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    lang: 'en', // Optional, language of snippet and popups.
+                    price: ordertotaltabby, // required, total price or the cart. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    size: 'narrow', // required, can be also 'wide', depending on the width.
+                    theme: 'black', // required, can be also 'default'.
+                    header: false // if a Payment method name present already.
+                });
+                var errorMessage = "@CheckOutPaymentModel.rejectionReason";
+                console.log(errorMessage);
+
+                if (errorMessage) {
+                    document.getElementById("warning-box").style.display = "block";
+                    document.getElementById("warning-box").style.color = "red";
+                }
+            } else {
+                new TabbyCard({
+                    selector: '#tabbyCard', // empty div for TabbyCard.
+                    currency: currency, // required, currency of your product. AED|SAR|KWD|BHD|QAR only supported, with no spaces or lowercase.
+                    lang: 'ar', // Optional, language of snippet and popups.
+                    price: ordertotaltabby, // required, total price or the cart. 2 decimals max for AED|SAR|QAR and 3 decimals max for KWD|BHD.
+                    size: 'narrow', // required, can be also 'wide', depending on the width.
+                    theme: 'black', // required, can be also 'default'.
+                    header: false // if a Payment method name present already.
+                });
+                var errorMessage = "@CheckOutPaymentModel.rejectionReason";
+                console.log(errorMessage);
+
+                if (errorMessage) {
+                    document.getElementById("warning-box").style.display = "block";
+                    document.getElementById("warning-box").style.color = "red";
+                }
+            }
+        }
+    }
+
+
+    //function handleTabby(orderId){
+    //    console.log("Tabby")
+    //    console.log(orderId)
+
+    //    const viewPagesName = document.getElementById("pages");
+    //    var lang = localStorage.getItem("lang")
+
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/CheckOutPayment?handler=TabbyCheckOut",
+    //        data: { "orderId": orderId },
+    //        beforeSend: function (xhr) {
+    //            xhr.setRequestHeader("XSRF-TOKEN",
+    //                $('input:hidden[name="__RequestVerificationToken"]').val());
+    //        },
+
+    //        headers: {
+    //            RequestVerificationToken:
+    //                $('input:hidden[name="__RequestVerificationToken"]').val()
+    //        },
+
+    //        success: function (response) {
+    //            console.log(response)
+    //             viewPagesName.innerHTML = "";
+    //           if(response.IsInstallment==true){
+
+    //                viewPagesName.innerHTML = ` <div class="" style="margin-top: 24px;">
+    //                        <h3 style="font-size: 24px;font-style: normal;font-weight: bold;font-family: Inter, sans-serif;">@sharedResource["Split in 4 interest-free payments"]  ${lang == "en" ? response.currencyEN : response.currencyAR} ${response.downpayment_total}.
+    //                      </h3></div>
+    //                <div class="mt-5" >
+    //                    <div class="relative grid gap-8 row-gap-5 md:row-gap-8 lg:grid-cols-4">
+    //                        <div class="absolute inset-0 flex items-center justify-center sm:hidden lg:flex" >
+    //                            <div class="w-px h-full bg-gray-300 lg:w-full lg:h-px" ></div>
+    //                        </div>
+
+    //                        <div class="relative px-5 h-16 bg-white border rounded-2xl border-gray-300 flex flex-row items-center">
+    //                            <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+    //                                <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+    //                                    <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+
+    //                                    <img alt="25" src="/images/graph-25.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-25.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+    //                                </span>
+    //                            </span>
+    //                            <div class="flex flex-col ps-3">
+    //                                <span class="text-xl">
+    //                                    ${response.Installment}
+    //                                    ${lang == "en" ? response.currencyEN : response.currencyAR}
+
+    //                                </span>
+    //                                <span class="text-xs text-text-light">@sharedResource["Today"]</span>
+    //                            </div>
+    //                        </div>
+
+    //                        <div class="relative px-5 h-16 bg-white border rounded-2xl border-gray-300 flex flex-row items-center">
+    //                            <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+    //                                <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+    //                                    <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+    //                                </span>
+    //                                <img alt="50" src="/images/graph-50.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-50.svg 1x, /images/graph-50.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+    //                            </span>
+    //                            <div class="flex flex-col ps-3">
+    //                                <span class="text-xl">
+    //                                    ${response.InstallmentList[0].amount}
+    //                                    ${lang == "en" ? response.currencyEN : response.currencyAR}
+    //                                </span>
+    //                                <span class="text-xs text-text-light">${response.InstallmentList[0].due_date}</span>
+    //                            </div>
+    //                        </div>
+
+    //                        <div class="relative px-5 h-16 bg-white border rounded-2xl border-gray-300 flex flex-row items-center">
+    //                            <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+    //                                <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+    //                                    <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+    //                                </span>
+    //                                <img alt="75" src="/images/graph-75.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-75.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+    //                            </span>
+    //                            <div class="flex flex-col ps-3">
+    //                                <span class="text-xl">
+    //                                    ${response.InstallmentList[1].amount}
+    //                                    ${lang == "en" ? response.currencyEN : response.currencyAR}
+    //                                </span>
+    //                                <span class="text-xs text-text-light">${response.InstallmentList[1].due_date}</span>
+    //                            </div>
+    //                        </div>
+
+    //                        <div class="relative px-5 h-16 bg-white border-2 rounded-2xl border-gray-300 flex flex-row items-center">
+    //                            <span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;">
+    //                                <span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;">
+    //                                    <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;">
+    //                                </span>
+    //                                <img alt="100" src="/images/graph-100.svg" decoding="async" data-nimg="intrinsic" srcset="/images/graph-100.svg 1x, /images/graph-100.svg 2x" style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;">
+    //                            </span>
+    //                            <div class="flex flex-col ps-3">
+    //                                <span class="text-xl">
+    //                                    ${response.InstallmentList[2].amount}
+    //                                    ${lang == "en" ? response.currencyEN : response.currencyAR}
+    //                                </span>
+    //                                <span class="text-xs text-text-light">${response.InstallmentList[2].due_date}</span>
+    //                            </div>
+    //                        </div>
+
+
+
+    //                    </div>
+    //                </div>
+
+    //                    <div style="color: rgb(41, 41, 41);margin-top: 2rem;padding-left: 1rem;font-size: 24px;font-style: normal;font-weight: bold;">@sharedResource["How it works:"]</div>
+    //<div class="list-wrap">
+
+    //  <div class="list">
+    //        <div  class="row" style="padding-left: 13px;padding-right: 13px;font-size: 19px;font-weight: 600;">@sharedResource["Choose"] <img src="/Jeel/images/tabbyLogo.png" style="height: 29px;width: 98px;"/> @sharedResource["at checkout."]</div>
+    //        <div style="font-size: 19px;font-weight: 600;" >@sharedResource["Enter your information and add your debit or credit card."]</div>
+    //    <div style="font-size: 19px;font-weight: 600;">@sharedResource["Split your purchase in 4 monthly payments."]</div>
+    //        <div style="font-size: 19px;font-weight: 600;">@sharedResource["We’ll send reminders when your next payment is due."]</div>
+    //  </div>
+
+    //</div>
+
+    //                        `
+    //                $('#AddModal').modal('show');
+    //           }
+    //           else if(response.IsInstallment==false){
+
+    //             document.getElementById("rejectionresonID").innerHTML= response.rejectionReason;
+    //                document.getElementById("rejectionresonID").style.color = "red";
+    //            }
+
+    //        },
+    //        failure: function (response) {
+    //            alert(response);
+    //        }
+    //    });
+
+    //}
+    //function handleTabbyPromo() {
+    //    var total = @Model.tabbyorderNet;
+    //    console.log(total + "tabby total");
+    //    var country = localStorage.getItem('Country');
+    //    var lang = localStorage.getItem("lang");
+    //    const button = document.querySelector("button[data-tabby-info]");
+
+    //        const tabbyInfo = button.getAttribute("data-tabby-info");
+    //        const tabbyPrice = button.getAttribute("data-tabby-price");
+    //        const tabbyCurrency = button.getAttribute("data-tabby-currency");
+    //    if (country == "1") {
+    //        if (lang == "en") {
+    //             new TabbyPromo({
+    //    selector: "button[data-tabby-info]", // Specify the selector for the button with data attributes.
+    //    info: tabbyInfo,
+    //    price: tabbyPrice,
+    //    currency: tabbyCurrency,
+    //  });
+    //}
+
+    //        else {
+    //            new TabbyPromo({
+    //                selector: "button[data-tabby-info]", // Specify the selector for the button with data attributes.
+    //                info: tabbyInfo,
+    //                price: tabbyPrice,
+    //                currency: tabbyCurrency,
+    //            });
+    //        }
+    //    }
+    //}
+    function showOrHideWarning() {
+        var errorMessage = "@CheckOutPaymentModel.rejectionReason";
+        let tabbyBtnDefault = document.getElementById("TabbyCheck2");
+        console.log(errorMessage);
+
+        if (errorMessage) {
+            tabbyBtnDefault.checked = true;
+            document.getElementById("warning-box").style.display = "block";
+            document.getElementById("warning-box").style.color = "red";
+            handleTabbyPROMO()
+
+        }
+    }
+
+    function hideErrorMessage() {
+        document.getElementById("warning-box").style.display = "none";
+        document.getElementById("tabbyCard").style.display = "none";
+    }
+</script>

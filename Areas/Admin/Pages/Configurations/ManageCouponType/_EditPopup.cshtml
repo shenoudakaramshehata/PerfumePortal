@@ -1,0 +1,63 @@
+﻿@{
+}
+@model CRM.Models.CouponType
+
+<div class="modal fade" id="showEditModal" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@sharedResource["Edit coupon type"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-area="Admin" asp-page="/Configurations/ManageCouponType/Index" asp-page-handler="EditCouponType" >
+                <div class="modal-body">
+                    <input type="hidden" id="id-field" />
+                    <div class="row g-3">
+                        <!--end col-->
+                        <div class="col-lg-12 hidden">
+                            <div>
+                                <input id="ECouponTypeId" asp-for="@Model.CouponTypeId" hidden />
+
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.CouponTypeAR" class="form-label">@sharedResource["Coupon Type In Arabic"]</label>
+                                <input data-val="true" data-val-required="@sharedResource["Please Enter Coupon Type In Arabic"]" id="ECouponTypeAR" type="text" asp-for="@Model.CouponTypeAR" class="form-control" placeholder="@sharedResource["Enter Coupon Type In Arabic"]" required />
+                                <span asp-validation-for="@Model.CouponTypeAR" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.CouponTypeEN" class="form-label">@sharedResource["Enter Coupon Type In English"]</label>
+                                <input data-val="true" data-val-required="@sharedResource[" Please Enter Coupon Type In English"]" id="ECouponTypeEN" asp-for="@Model.CouponTypeEN" class="form-control" placeholder="@sharedResource["Enter Coupon Type In English"]" required />
+                                <span asp-validation-for="@Model.CouponTypeEN" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!--end col-->
+                        <!--end col-->
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light"
+                                data-bs-dismiss="modal">
+                            @sharedResource["Close"]
+                        </button>
+                        <button type="submit" class="btn btn-success"
+                                id="add-btn">
+                            @sharedResource["Save"]
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,219 @@
+﻿@using CRM.Data
+@inject PerfumeContext _context
+@{
+   var EditCategories = _context.Categories.Select(e => new { e.CategoryId, e.CategoryTlar });
+}
+@model CRM.Models.Item
+
+<div class="modal fade" id="showEditModal" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel" >@sharedResource["Edit Item"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-area="Admin" asp-page="/Configurations/ManageItem/Index" asp-page-handler="EditItem" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" id="id-field" />
+                    <div class="row g-3">
+                        <div class="col-lg-12">
+                            <div class="text-center col-lg-12">
+                                <div class="position-relative d-inline-block">
+                                    <div class="position-absolute bottom-0 end-0">
+                                        <label for="Editfile" class="mb-0" data-bs-toggle="tooltip" data-bs-placement="right" title="Select Image">
+                                            <div class="avatar-xs cursor-pointer">
+                                                <div class="avatar-title bg-light border rounded-circle text-muted">
+                                                    <i class="ri-image-fill"></i>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <input class="form-control d-none" name="Editfile" id="Editfile" type="file"
+                                               accept="image/*">
+                                    </div>
+                                    <div class="avatar-lg p-1">
+                                        <div class="avatar-title bg-light rounded-circle">
+                                            <img src="~/assets/images/users/user-dummy-img.jpg" id="lead-img" class="avatar-md rounded-circle object-cover itemImgCla" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 class="fs-13 mt-3">@(sharedResource["Image"])</h5>
+                            </div>
+                             </div>
+                            <div class="col-lg-6">
+                                <label for="@Model.ItemTitleAr"
+                                       class="form-label">@(sharedResource["TlAr"])</label>
+
+                                <input type="text" asp-for="@Model.ItemTitleAr" id="ItemTLARId" 
+                                       class="form-control" placeholder="@sharedResource["Enter TlAr"]"
+                                       required />
+                                <span asp-validation-for="@Model.ItemTitleAr" class="text-danger"></span>
+                            </div>
+                           
+                                <input asp-for="@Model.ItemId" id="HiddenId" value="@Model.ItemId" hidden>
+                                <input asp-for="@Model.ItemImage" id="PicHiddenId" hidden>
+
+
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.ItemTitleEn"
+                                       class="form-label">@sharedResource["TlEn"]</label> 
+                                <input type="text" asp-for="@Model.ItemTitleEn" id="ItemTLENId" 
+                                       class="form-control"
+                                       placeholder="@sharedResource["Enter TlEn"]" required />
+                                <span asp-validation-for="@Model.ItemTitleEn" class="text-danger"></span>
+                            </div>
+                        </div>
+                          
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.ItemDescriptionAr" class="form-label">@sharedResource["Arabic Description"]</label>
+                                <input type="text" data-val="true" data-val-required="@sharedResource["Please enter arabic description"]" asp-for="@Model.ItemDescriptionAr" id="ItemDescriptionId" class="form-control" placeholder="@sharedResource["Enter Arabic Description"]" required />
+                                <span asp-validation-for="@Model.ItemDescriptionAr" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.ItemDescriptionEn" class="form-label">@sharedResource["English Description"]</label>
+                                <input type="text" data-val="true" data-val-required="@sharedResource["Please enter english description"]" asp-for="@Model.ItemDescriptionEn" id="EItemDescriptionId" class="form-control" placeholder="@sharedResource["Enter English Description"]" required />
+                                <span asp-validation-for="@Model.ItemDescriptionEn" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                         <div class="col-lg-12">
+                                <label asp-for="@Model.CategoryId" for="car-rental-name">@sharedResource["Category"] <small class="text-danger">*</small></label>
+
+                            <select data-val="true" data-val-required="@sharedResource["Please choose a country"]" id="editcatId" asp-for="@Model.CategoryId" class="form-select required" aria-label="Default select example" required>
+                                    <option selected value="Select Type" >@sharedResource["Select Category"]</option>
+                                   
+                                    @{
+                                       if(@EditCategories!=null)
+                                       {
+                                            foreach (var item in @EditCategories)
+                                            {
+
+                                                <option value="@item.CategoryId">@item.CategoryTlar</option>
+
+                                            }
+                                       }
+                                    }
+
+                            </select>
+                            <span asp-validation-for="@Model.CategoryId" class="text-alert"></span>
+                         </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.OrderIndex"  class="form-label">@sharedResource["Order Index"]</label>
+                                <input type="number" data-val="true" data-val-required="@sharedResource["Please enter order index"]" asp-for="@Model.OrderIndex" id="OrderIndexId" class="form-control" placeholder="@sharedResource["Enter Order Index"]" required />
+                                <span asp-validation-for="@Model.OrderIndex" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.Weight" class="form-label">@sharedResource["Weight"]</label>
+                                <input type="text" pattern="\d+(\.\d{1,2})?" title="Please enter a valid decimal value."  data-val-required="@sharedResource["Please enter the weight"]" asp-for="@Model.Weight" id="WeightId" class="form-control" placeholder="@sharedResource["Enter Weight"]" required step="0.01" pattern="^\d+(?:\.\d{1,2})?$" min="0" />
+                                <span asp-validation-for="@Model.Weight" class="text-danger"></span>
+
+                            </div>
+                        </div>
+
+                         <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.Stock" class="form-label">@sharedResource["Stock"]</label>
+                                <input type="number" data-val-required="@sharedResource["Please enter the Stock"]" asp-for="@Model.Stock" id="StockID" class="form-control" min="0" placeholder="@sharedResource["Enter Stock"]" required />
+                                <span asp-validation-for="@Model.Stock" class="text-danger"></span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.OutOfStock" class="form-label">@sharedResource["Out Of Stock"]</label>
+                                <input asp-for="@Model.OutOfStock" class="form-check-input code-switcher" type="checkbox" id="EOutofStock">
+                            </div>
+                        </div>
+                         
+                        <div class="col-md-12 form-group">
+                            <label for="formFile" class="form-label">@sharedResource["Adding Others Images For Item"]</label>
+                            <input class="form-control" multiple name="Editfilepond" type="file">
+                        </div>
+
+                        <!--end col-->
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.IsActive" class="form-label">@sharedResource["IsActive"]</label>
+                                <input asp-for="@Model.IsActive" class="form-check-input code-switcher" type="checkbox" id="IsActiveId">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <!--end col-->
+                        <!--end col-->
+                  
+                @* <div class="row mt-2">
+                            <div class="col-lg-12">
+                               
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title mb-0">@sharedResource["Adding Others Images For Item"]</h4>
+                                            </div><!-- end card header -->
+        
+                                            <div class="card-body">
+                                                <p class="text-muted">@sharedResource["Drop files here or click to upload."]</p>
+                                                <input type="file" 
+                                                    class="filepond filepond-input-multiple"
+                                                    multiple
+                                                    name="Editfilepond"
+                                                    data-allow-reorder="true"
+                                                    data-max-file-size="3MB"
+                                                    data-max-files="3">
+                                            </div>
+                                            <!-- end card body -->
+                                        </div>
+                                        <!-- end card -->
+                                    </div> <!-- end col -->
+        
+                                    
+                                </div>
+                                <!-- end row -->
+                            </div>
+                            <!-- end col -->
+                        </div>*@
+            <div class="row  mt-2" @*style="margin-top:25px"*@ id="images_container">
+                <div class="col-12">
+                    <h3 class="mx-2"> @sharedResource["Item Images"] </h3>
+                    <hr />
+                    <div id="item_images" class="d-flex justify-content-center align-items-center" style="flex-wrap:wrap">
+                        <div class="loader">@sharedResource["Loading..."]</div>
+                        <div class="message d-none">@sharedResource["No Images"]  </div>
+                    </div>
+                </div>
+
+                    </div>
+                   </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light"
+                                data-bs-dismiss="modal">
+                            @sharedResource["Close"]
+                        </button>
+                        <button type="submit" class="btn btn-success"
+                                id="add-btn">
+                            @sharedResource["Save"]
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

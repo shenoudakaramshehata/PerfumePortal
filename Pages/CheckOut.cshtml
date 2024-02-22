@@ -1,0 +1,341 @@
+﻿@page
+@model CRM.Pages.CheckOutModel
+@Html.AntiForgeryToken()
+@inject PerfumeContext _context
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+    @using Microsoft.AspNetCore.Localization
+
+    var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+
+}
+
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+
+<div class="page-title-wrap">
+    <div class="page-title-area " style="background-color:#f5f5f5 !important;">
+       
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black">@sharedResource["Check Out"]</h2>
+                    <ul>
+                        <li>
+                            <a class="text-black" href="/index">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black">@sharedResource["Check Out"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div></div>
+<div class="checkout-area pt-100 pb-70">
+    <div class="container">
+        <div class="row">
+            <form class="row" asp-page-handler="AddCustomerAddress" asp-route-Serial="@Model.newserial">
+                <div class="col-lg-8">
+                    <div class="checkout-item">
+                        <div class="checkout-billing">
+                            <h2>@sharedResource["Billing Address"]</h2>
+                            @*  @if (Model.hasAddress)
+                            {*@
+
+@*                            <form asp-page-handler="AddCustomerAddress" asp-route-Serial="@Model.newserial">
+*@                            <input type="hidden" class="form-control" id="serialCouponId" value="@Model.newserial" value="@Model.newserial">
+
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="Address" asp-for="@Model.customerAddr.Address" placeholder="@sharedResource["Address*"]" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="CityName" asp-for="@Model.customerAddr.CityName" placeholder="@sharedResource["City name*"]" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="AreaName" asp-for="@Model.customerAddr.AreaName" placeholder="@sharedResource["Area name*"]" required>
+                            </div>
+                            <div class="form-group">
+                                    <input type="text" class="form-control" id="BuildingNo" asp-for="@Model.customerAddr.BuildingNo" placeholder="@sharedResource["Building No*"]" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="Mobile" asp-for="@Model.customerAddr.Mobile" placeholder="@sharedResource["Mobile*"]" required>
+                            </div>
+                            <div class="form-group">
+                                    <input type="text" class="form-control" id="CountryENName" asp-for="@Model.CountryENName" placeholder="@sharedResource["Country"]" disabled>
+                            </div>
+                            @*                            <select class="mb-3 w-100" aria-label=".form-select-lg example" asp-for="@Model.countryId" asp-items="ViewBag.selectCountryList" required>
+                            <option disabled selected>@sharedResource["Choose a Country"]</option>
+                            </select>*@
+
+
+                            @*<div class="text-center">
+                                <button type="submit"  class="btn btn-close-white btn-light" style="border-radius: 0; width:100%;" >@sharedResource["Place Order"]</button>
+                            </div>*@
+
+                           
+                            @*}*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="checkout-item">
+                        <div class="checkout-total" style="background-color: darkgray;">
+                            <h2>@sharedResource["Cart Total"]:</h2>
+                            <ul>
+                                @foreach (var item in Model.shoppingCarts)
+                                {
+                                    <li>
+                                        @{
+                                            var total = item.ItemPrice * item.ItemQty;
+                                            if (BrowserCulture == "en-US")
+                                            {
+                                                @item.Item.ItemTitleEn
+                                                <span>@total  @Model.CurrencyNameEN</span>
+                                            }
+                                            else
+                                            {
+                                                @item.Item.ItemTitleAr
+                                                <span>@total  @Model.CurrencyNameAr</span>
+                                            }
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                            @{
+                                if (Model.DeliveryCost != null)
+                                {
+                                    <h3 class="mt-3 display-4 fw-bolder">
+                                        @sharedResource["Shipping Cost"]:
+
+                                        @if (BrowserCulture == "en-US")
+                                        {
+
+                                            <span>@Model.DeliveryCost  @Model.CurrencyNameEN</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@Model.DeliveryCost  @Model.CurrencyNameAr</span>
+                                        }
+
+                                    </h3>
+                                }
+                            }
+                            <h3>
+                                @sharedResource["Total"]:
+
+                                @if (BrowserCulture == "en-US")
+                                {
+
+                                    <span>@Model.TotalAmount  @Model.CurrencyNameEN</span>
+
+                                }
+                                else
+                                {
+                                    <span>@Model.TotalAmount  @Model.CurrencyNameAr</span>
+
+                                }
+
+                            </h3>
+
+
+                            @{
+                                if (Model.TotalAmount > 0)
+                                {
+                                    if (Model.coupon != null)
+                                    {
+                                        <h3 class="mt-3 display-4 fw-bolder">
+                                            @sharedResource["After Discount"]:
+
+                                            @if (BrowserCulture == "en-US")
+                                            {
+
+                                                <span>@Model.TotalAmountAfterDiscount  @Model.CurrencyNameEN</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@Model.TotalAmountAfterDiscount  @Model.CurrencyNameAr</span>
+                                            }
+
+                                        </h3>
+                                    }
+                                }
+                            }
+
+                        </div>
+
+                        <div class="checkout-payment">
+
+                            @* <form method="post" asp-page-handler="UpdatePayment">*@
+
+                            <h2>@sharedResource["Payment Method"]</h2>
+                            @{
+
+
+                                var MyfattorahEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 1).FirstOrDefault().PaymentMethodEN;
+                                var MyfattorahAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 1).FirstOrDefault().PaymentMethodAR;
+                                var CashEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 2).FirstOrDefault().PaymentMethodEN;
+                                var CashAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 2).FirstOrDefault().PaymentMethodAR;
+
+
+                                if (@Model.CountryId == 1)
+                                {
+
+                                ////<input type="text" hidden asp-for="@Model.PaymentId" />
+                                    <div class="checkout-payment">
+                                    <input class="form-check-input my-3" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.FattorahPaymentId" id="defaultCheck2" required>
+
+                                                <img src="~/Jeel/images/Knet-logo.png" class="w-25">
+
+                                        @{
+                                    if (BrowserCulture == "en-US")
+                                    {
+                                                <label class="form-check-label" for="defaultCheck2">@MyfattorahEN</label>
+                                    }
+                                    else
+                                    {
+                                        <label class="form-check-label" for="defaultCheck2">
+                                                    @MyfattorahAR
+                                        </label>
+                                    }
+                                    }
+                                   </div>
+
+
+
+                                    <div class="checkout-payment">
+                                        <input class="form-check-input my-4" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.CahshPaymentId" id="defaultCheck2" required>
+                                        
+
+                                    @{
+                                        <img src="~/Jeel/images/cash.jpg" class="w-25">
+                                            if (BrowserCulture == "en-US")
+                                            {
+                                                <label class="form-check-label" for="defaultCheck2">@CashEN</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="form-check-label" for="defaultCheck2">
+                                                    @CashAR
+                                                </label>
+                                            }
+
+                                        }
+
+                                    </div>
+
+                                }
+                              
+                                
+                                else
+                                {
+                                    <div class="checkout-payment">
+                                        <input type="text" hidden asp-for="@Model.FattorahPaymentId" />
+                                        <input class="form-check-input my-3" style="position: unset!important; opacity: unset!important" name="paymentId" type="radio" asp-for="@Model.PaymentId" value="@Model.FattorahPaymentId" id="defaultCheck2" required>
+                                        @{
+
+                                            <img src="~/Jeel/images/Knet-logo.png" class="w-25">
+
+                                            if (BrowserCulture == "en-US")
+                                            {
+                                                <label class="form-check-label" for="defaultCheck2">@MyfattorahEN</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="form-check-label" for="defaultCheck2">
+                                                    @MyfattorahAR
+                                                </label>
+                                            }
+                                        }
+
+                                    </div>
+
+                                }
+                              
+                            }
+                        </div>
+                        <div class="text-center my-4">
+                            <button type="submit" class="btn btn-close-white btn-light" style="border-radius: 0; width:100%;">@sharedResource["Place Order"]</button>
+                        </div>
+                    </div>
+                </div>  
+            </form>
+        </div>
+
+
+           
+
+        </div>
+    </div>
+</div>
+<script>
+    //function CheckOut() {
+    //    var Country = localStorage.getItem("Country");
+    //    var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+    //    var selectedPayment = document.querySelector('input[name="paymentId"]:checked').value;
+    //    console.log(selectedPayment)
+    //    console.log(typeof(selectedPayment))
+
+    //    //var parsecartItems = JSON.parse(cartItems)
+    //    var parsecartItems = JSON.stringify(cartItems)
+    //    console.log(typeof (parsecartItems))
+    //    var Serial = document.getElementById("serialCouponId").value;
+    //    console.log(Serial)
+    //    let Address = document.getElementById("Address").value;
+    //    let CityName = document.getElementById("CityName").value;
+    //    let AreaName = document.getElementById("AreaName").value;
+    //    let BuildingNo = document.getElementById("BuildingNo").value;
+    //    let Mobile = document.getElementById("Mobile").value;
+    //    let CountryENName = document.getElementById("CountryENName").value;
+    //    console.log(CountryENName)
+
+    //    let Adressobj = {
+    //        "Address": Address,
+    //        "CityName": CityName,
+    //        "AreaName": AreaName,
+    //        "BuildingNo": BuildingNo,
+    //        "Mobile": Mobile,
+    //        "CountryENName": CountryENName
+    //    };
+    //    console.log(Adressobj)
+    //    let ParseAddress = JSON.stringify(Adressobj)
+    //    console.log(ParseAddress)
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/CheckOut?handler=AddCustomerAddress",
+    //        data: { "Serial": Serial, "Country": Country, "Adressobj": Adressobj, "selectedPayment": selectedPayment },
+    //        beforeSend: function (xhr) {
+    //            xhr.setRequestHeader("XSRF-TOKEN",
+    //                $('input:hidden[name="__RequestVerificationToken"]').val());
+    //        },
+
+    //        headers: {
+    //            RequestVerificationToken:
+    //                $('input:hidden[name="__RequestVerificationToken"]').val()
+    //        },
+
+    //        success: function (response) {
+    //            console.log(response)
+    //            //document.getElementById("shippingicon").innerHTML = response
+    //            //localStorage.removeItem('cartItems');
+
+    //        },
+    //        failure: function (response) {
+    //            alert(response);
+    //        }
+    //    });
+
+    //}
+
+</script>

@@ -1,0 +1,230 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@using Microsoft.AspNetCore.Http;
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext _db
+@inject PerfumeContext _context
+@using Microsoft.AspNetCore.Localization;
+
+
+@{
+    string adminRoleId = _db.Roles.Where(e => e.Name == "Admin").FirstOrDefault().Id;
+    var UserAdminId = _db.UserRoles.Where(e => e.RoleId == adminRoleId).FirstOrDefault().UserId;
+    var user = UserManager.Users.Where(e => e.Id == UserAdminId).FirstOrDefault();
+    var currUser = await UserManager.GetUserAsync(User);
+    //var CountryImageGet=HttpContext.Session.GetString("countryImage");
+
+
+    var SocialMedia = _context.SocialMediaLinks.FirstOrDefault();
+
+    //var facebooksocialLink = _context.SocialMediaLinks.FirstOrDefault().Facebook;
+    //var TwittersocialLink = _context.SocialMediaLinks.FirstOrDefault().Twitter;
+    //var InstgramsocialLink = _context.SocialMediaLinks.FirstOrDefault().Instgram;
+    //var LinkedInsocialLink = _context.SocialMediaLinks.FirstOrDefault().LinkedIn;
+    //var YouTubeLink = _context.SocialMediaLinks.FirstOrDefault().Youtube;
+    //var Fax = _context.SocialMediaLinks.FirstOrDefault().Fax;
+    //var Address = _context.SocialMediaLinks.FirstOrDefault().Address;
+    //var ContactEmail = _context.SocialMediaLinks.FirstOrDefault().ContactMail;
+    //var ContactTele = _context.SocialMediaLinks.FirstOrDefault().ContactPhone1;
+}
+
+<div id="topbarid" class="header-area two">
+    <div class="container-fluid">
+
+        @if (SocialMedia != null)
+        {
+            <div  id="topbarid" class="row align-items-center">
+@*                <div class="col-sm-3 col-lg-3">
+                    <div class="left">
+                        <ul>
+                            <li>
+                                <a href="@SocialMedia.Facebook" target="_blank">
+                                    <i class='bx bxl-facebook'></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@SocialMedia.Twitter" target="_blank">
+                                    <i class='bx bxl-twitter'></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@SocialMedia.Instgram" target="_blank">
+                                    <i class='bx bxl-instagram'></i>
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a href="@SocialMedia.Youtube" target="_blank">
+                                    <i class='bx bxl-youtube'></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+*@           
+                 <div>
+                    <div class="right">
+                        <ul>
+                           @* <li style="display:inline-block !important">
+                                <a href="https://wa.me/@SocialMedia.WhatSapp" target="_blank"><span style="font-size:12px !important; font-weight:bolder !important" class="__cf_whatsapp__"><i class="bx bxl-whatsapp"></i></span></a>
+                            </li>*@
+                          @*  <li style="display:inline-block !important">
+
+                                <a href="tel:@SocialMedia.ContactPhone1">@SocialMedia.ContactPhone1</a>
+                            </li>*@
+                            
+                            
+                            
+                            
+                            @* <li>
+                                <div class="dropdown ms-1 topbar-head-dropdown header-item" onclick="RemoveCountryFromLocal()">
+
+                                <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span>@sharedResource["Change Country"]</span>
+                                <img id="CountryImg" src="~/assets/images/flags/kw.svg" alt="Header Language" height="20"
+                                class="rounded">
+                                </button>
+                                </div>
+                                </li>*@
+                            <li>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <select style="display: none;" onchange="ChangeLanguageHandler(this.value)">
+                                            <option >العربيّة</option>
+
+                                            <option>English</option>
+                                        </select>
+                                        <div class="nice-select" tabindex="0">
+                                            @{
+                                                var locale = Context.Request.HttpContext.Features.Get<IRequestCultureFeature>();
+                                                var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+                                                if (BrowserCulture == "en-US")
+                                                {
+                                                    <span class="current">English</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="current">العربيّة</span>
+                                                }
+                                            }
+
+                                            <ul class="list" style="left:0px !important">
+                                                <li data-value="English" class="option" style="width:100px !important;text-align: center;">
+                                                    English
+                                                </li>
+                                                <li data-value="العربيّة" class="option" style="width:100px !important;text-align: center;">
+                                                    العربيّة
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+<script>
+
+    function ChangeLanguageHandler(lang) {
+        console.log(lang)
+        var currentUrl = window.location.href;
+        console.log(currentUrl)
+        var urlParts = currentUrl.split('/');
+
+        // Get the last item in the array, which is the page name
+        var pageName = urlParts[urlParts.length - 1];
+
+        // Output the page name to the console
+        console.log(pageName);
+
+        var anch1 = document.getElementById("ang1");
+        var anch2 = document.getElementById("ang2");
+        var masterPage = document.getElementById("masterPageId");
+
+        if (lang == "English") {
+            localStorage.setItem("lang", "en");
+            window.location.href = "/API/Setting/ChangeLanguage?culture=en-US&url=/" + pageName;
+        }
+        else if (lang == "العربيّة") {
+            localStorage.setItem("lang", "ar");
+            window.location.href = "/API/Setting/ChangeLanguage?culture=ar-EG&url=/" + pageName;
+        }
+
+    }
+
+    function SelectCountry(country)
+    {
+        console.log($('#DropCountry').next().find('li.selected').attr('data-Title'))
+        console.log($('#DropCountry').next().find('li.selected').attr('data-value'))
+
+        let selectedValue = $('#DropCountry').next().find('li.selected').attr('data-value');
+        localStorage.setItem("Country", selectedValue);
+        //localStorage.setItem("CountryTitle", $('#DropCountry').next().find('li.selected').attr('data-Title'));
+
+        var selectcountry = localStorage.getItem("Country");
+        RemoveCountryFromLocal();
+        console.log(selectcountry)
+       
+            location.href="/Index";
+       
+
+    }
+
+    function ChangeLang(lang) {
+
+        var anch1 = document.getElementById("ang1");
+        var anch2 = document.getElementById("ang2");
+        
+        var masterPage = document.getElementById("masterPageId");
+        if (lang == "en") {
+            localStorage.setItem("lang", "en");
+        }
+        if (lang == "ar") {
+
+            localStorage.setItem("lang", "ar");
+        }
+
+    }
+    window.addEventListener('DOMContentLoaded', (event) => {
+        var masterPage = document.getElementById("masterPageId");
+           //document.getElementById("CurentCountry").innerHTML=localStorage.getItem("CountryTitle");
+        var topbar = document.getElementById("topbarid");
+
+        if (localStorage.getItem("lang") != "") {
+            if (localStorage.getItem("lang") == "en") {
+                masterPage.dir = "ltr";
+                LangSelec.innerHTML = "En";
+
+                document.getElementById("masterbodyid").style.textAlign = "left"
+                //document.getElementById("topbarid").style.direction = "rtl"
+
+            }
+            else if (localStorage.getItem("lang") == "ar") {
+
+
+                masterPage.dir = "rtl"
+                LangSelec.innerHTML = "AR";
+                console.log(document.getElementById("masterbodyid"))
+                document.getElementById("masterbodyid").style.textAlign = "right"
+                //document.getElementById("topbarid").style.direction = "initial"
+
+
+
+            }
+        }
+    });
+
+
+</script>

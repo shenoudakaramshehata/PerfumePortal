@@ -1,0 +1,71 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.ManagePaymentMethod.EditModel
+@Html.AntiForgeryToken()
+@{
+	ViewBag.Title = "Payment Method";
+	Layout = "_Layout";
+}
+
+
+	<!-- begin row  Arabic content -->
+	<form method="post" enctype="multipart/form-data">
+	<input type="hidden" asp-for="PaymentMethod.PaymentMethodId" />
+		<div class="row mt-2">
+
+			<table class="table  dt-responsive nowrap  align-middle" style="width:100%">
+
+					
+					<thead class="table-light ">
+						<tr>
+					<th data-ordering="false">@sharedResource["Arabic Payment Title"]</th>
+					<th data-ordering="false">@sharedResource["English Payment Title"]</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr>
+							<td>@Model.PaymentMethod.PaymentMethodAR</td>
+							<td>@Model.PaymentMethod.PaymentMethodEN</td>
+						</tr>
+					</tbody>
+			</table>
+
+		</div>
+		<!-- end row -->
+		<!-- begin row  Arabic content -->
+		<div class="row mt-2">
+				<div class="col-lg-12">
+					<div class="text-center">
+						<div class="position-relative d-inline-block">
+							<div class="position-absolute bottom-0 end-0">
+								<label for="Editfile" class="mb-0" data-bs-toggle="tooltip" data-bs-placement="right" title="Select Image">
+									<div class="avatar-xs cursor-pointer">
+										<div class="avatar-title bg-light border rounded-circle text-muted">
+											<i class="ri-image-fill"></i>
+										</div>
+									</div>
+								</label>
+								<input class="form-control d-none" name="Editfile" id="Editfile" type="file"
+									   accept="image/*">
+							</div>
+							<div class="avatar-lg p-1">
+								<div class="avatar-title bg-light rounded-circle">
+									<img src="~/assets/images/users/user-dummy-img.jpg" id="lead-img" asp-append-version="true" class="avatar-md rounded-circle object-cover " />
+								</div>
+							</div>
+						</div>
+						<h5 class="fs-13 mt-3">@(sharedResource["Image"])</h5>
+					</div>
+		</div>
+
+		<div class="row mt-2">
+			<div class="col-lg-6 m-auto d-flex justify-content-center">
+				<button type="submit" class="btn btn-primary fs-5 me-4">@sharedResource["Update Picture"]</button>
+				<a asp-page="./index" class="btn btn-success   fs-5">@sharedResource["Back"]</a>
+			</div>
+		</div>
+	</form>
+	
+
+
+	

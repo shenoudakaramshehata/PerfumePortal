@@ -1,0 +1,103 @@
+﻿@page
+@model CRM.Pages.Perfume.Pages_Perfume_Cart
+@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext _db
+@inject PerfumeContext _context
+
+@using Microsoft.AspNetCore.Localization;
+
+@{
+    var currUser = await UserManager.GetUserAsync(User);
+}
+@{
+    Layout = "_Layout2";
+}
+<!--section start-->
+<section class="cart-section section-b-space" id="cart_shopping">
+    <div class="container">
+        <div class="row">
+             <div class="col-sm-12 table-responsive">
+                <div class="loader position-absolute w-100 h-100" style="display:none">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </div>
+                <table class="table cart-table">
+                    <thead>
+                        <tr class="table-head">
+                            <th scope="col">@sharedResource["Image"]</th>
+                            <th scope="col">@sharedResource["ProductName"]</th>
+                            <th scope="col">@sharedResource["Price"]</th>
+                            <th scope="col">@sharedResource["Quantity"]</th>
+                            <th scope="col">@sharedResource["Total"]</th>
+                            <th scope="col">@sharedResource["ACTION"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-lg-6 checkout-details">
+                <div class="order-box border p-5 mt-5">
+                    <div class="title-box">
+                        <div>@sharedResource["Total"] <span>@sharedResource["Total"]</span></div>
+                    </div>
+                    <div class="customer-address"></div>
+                    <ul class="nav nav-pills mb-3 tab_address" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link btn-transparent text-dark border-0" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">@sharedResource["Add Address"]</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                            <form onsubmit="addNewAddress(event)">
+                                <div class="form-group mb-3 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="field-label">@sharedResource["Country"]</div>
+                                    <select class="form-control mb-3" id="country_address" required></select>
+                                </div>
+                                <div class="form-group mt-3 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="field-label">@sharedResource["City"]</div>
+                                    <input type="text" class="form-control" id="CityName" value="" placeholder="@sharedResource["City"]" required>
+                                </div>
+                                <div class="form-group mt-3 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="field-label">@sharedResource["Address"]</div>
+                                    <input type="text" class="form-control" id="Address" value="" placeholder="@sharedResource["Address"]" required>
+                                </div>
+                                <div class="form-group mt-3 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="field-label">@sharedResource["Area"]</div>
+                                    <input type="text" class="form-control" id="AreaName" value="" placeholder="@sharedResource["Area"]" required>
+                                </div>
+                                <div class="form-group mt-3 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="field-label">@sharedResource["BuildingNo"]</div>
+                                    <input type="text" class="form-control" id="BuildingNo" value="" placeholder="@sharedResource["BuildingNo"]" required>
+                                </div>
+                                <div class="form-group mt-3 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="field-label">@sharedResource["Mobile"]</div>
+                                    <input type="text" class="form-control" id="Mobile" value="" placeholder="@sharedResource["Mobile"]" required>
+                                </div>
+                                <button class="btn btn-solid rounded-0 border-0 w-100 p-2">@sharedResource["Submit"]</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <ul class="total border-top pt-3 mt-3">
+                        <li>@sharedResource["Total"] <span class="cart_total"></span></li>
+                    </ul>
+                </div>
+                <form class="coupon-row d-flex mt-5" onsubmit="checkCopoun(event)">
+                    <input type="text" name="coupon_code" class="form-control" id="coupon_code" value="" placeholder="@sharedResource["Add New Coupon"]" required>
+                    <button type="submit" class="btn btn-solid" value="استخدام الكود">@sharedResource["Submit"]</button>
+                </form>
+            </div>
+        </div>
+        <div class="row cart-buttons">
+            <div class="col-6"><a asp-page="/" class="btn btn-solid">@sharedResource["ContinueShopping"]</a></div>
+            <div class="col-6"><a asp-page="/Perfume/Checkout" class="btn btn-solid">@sharedResource["Checkout"]</a></div>
+        </div>
+    </div>
+</section>
+<!--section end-->
+@Html.Partial("./layouts/_EditAddressModal");

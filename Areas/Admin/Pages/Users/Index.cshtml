@@ -1,0 +1,572 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Users.IndexModel
+@{
+}
+
+@Html.AntiForgeryToken()
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    Layout = "_Layout";
+    ViewBag.Title = @sharedResource["Users"];
+    ViewBag.pTitle = @sharedResource["Users"];
+    ViewBag.pageTitle = @sharedResource["Users"];
+    ViewData["Title"] = @sharedResource["Users"];
+}
+<!--datatable css-->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css" />
+<!--datatable responsive css-->
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+
+<style>
+    .dataTables_filter {
+        display: none;
+    }
+</style>
+
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card" id="List">
+            <div class="card-header border-0">
+                <input type="text" asp-for="@Model.url" value="@Model.url" hidden id="UrlId" />
+
+                <div class="row g-4 align-items-center">
+                    <div class="col-sm-3">
+                        <div class="search-box">
+                            <input type="text" class="form-control search" id="txtSearch"
+                                   placeholder="@sharedResource["Search for..."]">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-auto ms-auto">
+                        <div class="hstack gap-2">
+
+                            <button type="button" class="btn btn-success add-btn"
+                                    data-bs-toggle="modal" id="create-btn"
+                                    data-bs-target="#AddModal">
+                                <i class="ri-add-line align-bottom me-1"></i> @sharedResource["Add User"]
+                            </button>
+
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="card-body">
+                <div>
+                    <div class="table-responsive table-card">
+                        <table id="myTable" class="table  dt-responsive nowrap  align-middle" style="width:100%">
+                            <thead class="table-light">
+                                <tr>
+
+                                    <th  data-ordering="false">@sharedResource["FullName"]</th>
+                                    <th  data-ordering="false">@sharedResource["Email"]</th>
+                                    <th data-ordering="false">@sharedResource["PhoneNumber"]</th>
+                                    <th class=" text-center" data-ordering="false">@sharedResource["Actions"]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in Model.Users)
+                                    {
+                                        <tr>
+                                            
+                                            <td class="  fw-bold">@item.FullName </td>
+                                            <td class="  fw-bold">@item.Email</td>
+                                            <td class="  fw-bold">@item.PhoneNumber</td>
+                                            <td class=" text-center fw-bold">
+                                                <ul class="list-inline hstack gap-2 mb-0">
+                                                   
+                                                    <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                        <a class="edit-item-btn" href="javascript:void(0)" onclick="editButtonClick('@item.Id')" data-bs-toggle="modal">
+                                                            <i class="ri-pencil-fill align-bottom text-muted" ></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">
+                                                        <a class="remove-item-btn" data-bs-toggle="modal" href="javascript:void(0)">
+                                                            <i class="ri-delete-bin-fill align-bottom text-muted" onclick="deleteUser('@item.Id')"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+
+                                        </tr>
+
+                                    }
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!--end modal-->
+        </div>
+    </div>
+    <!--end col-->
+</div>
+
+
+
+<!--Add Model-->
+<div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="AddModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@sharedResource["Add New User"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form novalidate="true" method="post"  onsubmit="return validateMyForm();">
+                <div class="modal-body">
+                    <input type="hidden" id="id-field" />
+                    <div class="row g-3">
+
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.UserVM.FullName" class="form-label">@(sharedResource["FullName"])</label>
+                                <input type="text" asp-for="@Model.UserVM.FullName" class="form-control" placeholder="@sharedResource["Enter FullName"]" required />
+                                <span asp-validation-for="@Model.UserVM.FullName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.UserVM.Email" class="form-label">@sharedResource["Email"]</label>
+                                <input type="email" asp-for="@Model.UserVM.Email" class="form-control" placeholder="@sharedResource["Enter Email"]" required />
+                                <span asp-validation-for="@Model.UserVM.Email" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.UserVM.PhoneNumber" class="form-label">@sharedResource["PhoneNumber"]</label>
+                                <input type="text" data-val="true" data-val-required="@sharedResource["Please enter PhoneNumber"]" asp-for="@Model.UserVM.PhoneNumber" class="form-control" placeholder="@sharedResource["Enter PhoneNumber"]" required />
+                                <span asp-validation-for="@Model.UserVM.PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <div>
+                                <label for="@Model.UserVM.Password" class="form-label">@sharedResource["Password"]</label>
+                                <input type="password" data-val="true" data-val-required="@sharedResource["Please enter Password"]" asp-for="@Model.UserVM.Password" class="form-control" placeholder="@sharedResource["Enter password"]" required />
+                                <span asp-validation-for="@Model.UserVM.Password" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12">
+                            <label  for="car-rental-name">@sharedResource["Role"] <small class="text-danger">*</small></label>
+
+                            <select data-val="true" data-val-required="@sharedResource["Please choose a Role"]" id="catId" name="RoleName" class="form-select required" aria-label="Default select example" required>
+                                <option selected value="">@sharedResource["Select Role"]</option>
+
+                                @{
+                                    if (Model.Roles != null)
+                                    {
+                                        foreach (var item in Model.Roles)
+
+                                        {
+
+                                            <option value="@item.Name">@item.Name</option>
+
+                                        }
+                                    }
+                                }
+
+                            </select>
+@*                            <span asp-validation-for="@.Name" class="text-danger"></span>
+*@
+                            
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">@sharedResource["Close"]</button>
+                        <button type="submit"  class="btn btn-success" id="add-btn">@sharedResource["Add"]</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<!--End Add Model-->
+<div class="modal fade" id="showEditModal" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-area="Admin" asp-page="/Users/Index" asp-page-handler="EditUser" enctype="multipart/form-data" onsubmit="return validatePasswords()">
+                <div class="modal-body">
+
+                    <input type="hidden" id="id-field" />
+
+                    <div class="row g-3">
+                        <div class="col-lg-12">
+                           
+                            <div>
+                                <label for="@Model.userProfileVM.FullName"
+                                       class="form-label">@sharedResource["Full Name"]</label>
+                                <input type="text" asp-for="@Model.userProfileVM.FullName" id="UserNameId"
+                                       class="form-control" placeholder="@sharedResource["Enter Full Name"]"
+                                       required />
+
+                            </div>
+                            <div>
+                                
+
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+
+                            <div>
+                                <label for="@Model.userProfileVM.CurrentEmail"
+                                       class="form-label">@sharedResource["Email"]</label>
+                                <input type="email" asp-for="@Model.userProfileVM.CurrentEmail" id="CurrentEmailId"
+                                       class="form-control" placeholder="@sharedResource["Enter Email"]"
+                                       required />
+
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.userProfileVM.Mobile"
+                                       class="form-label">@sharedResource["Mobile"]</label>
+                                <input type="text" asp-for="@Model.userProfileVM.Mobile" id="UserMobileId"
+                                       class="form-control" 
+                                       placeholder="@sharedResource["Enter Mobile"]" required />
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+
+                            <div>
+                                <label for="@Model.userProfileVM.CurrentPassword"
+                                       class="form-label">@sharedResource["Current Password"]</label>
+                                <input type="password" asp-for="@Model.userProfileVM.CurrentPassword"
+                                       class="form-control" placeholder="@sharedResource["Enter Current Password"]"
+                                        />
+
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+
+                            <div>
+                                <label for="@Model.userProfileVM.NewPassword"
+                                       class="form-label">@sharedResource["New Password"]</label>
+                                <input type="password" asp-for="@Model.userProfileVM.NewPassword"
+                                       class="form-control" id="userProfileVM_NewPassword" placeholder="@sharedResource["Enter New Password"]" />
+
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12">
+
+                            <div>
+                                <label for="@Model.userProfileVM.ConfirmPassword"
+                                       class="form-label">@sharedResource["Confirm Password"]</label>
+                                <input type="password" asp-for="@Model.userProfileVM.ConfirmPassword"
+                                       class="form-control" id="userProfileVM_ConfirmPassword" placeholder="@sharedResource["Enter Confirm Password"]" />
+
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+
+                            <div>
+                                <label 
+                                       class="form-label">@sharedResource["Confirm Password"]</label>
+                                <input type="hidden" asp-for="@Model.userProfileVM.Id" id="UserID"
+                                       class="form-control" placeholder="@sharedResource["Enter Confirm Password"]" />
+
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <label  for="car-rental-name">@sharedResource["Role"] <small class="text-danger">*</small></label>
+
+                            <select data-val="true" data-val-required="@sharedResource["Select Role"]" id="selectedRoles" name="selectedRoles" class="form-select required" aria-label="Default select example" required>
+                                
+                            </select>
+                        </div>
+
+
+                        <div class="col-lg-12">
+                            <div class="form-check">
+                                <input id="EUsedId" asp-for="@Model.userProfileVM.IsActive" class="form-check-input" type="checkbox">
+                                <label for="@Model.userProfileVM.IsActive" class="form-check-label">@sharedResource["IsActive"]</label>
+                                <span asp-validation-for="@Model.userProfileVM.IsActive" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!--end col-->
+
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light"
+                                data-bs-dismiss="modal">
+                            @sharedResource["Close"]
+                        </button>
+                        <button type="submit" class="btn btn-success"
+                                id="add-btn">
+                           @sharedResource["Edit Profile"]
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1"
+     aria-labelledby="deleteRecordLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close" id="btn-close"></button>
+            </div>
+            <div class="modal-body p-5 text-center">
+                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json"
+                           trigger="loop" colors="primary:#405189,secondary:#f06548"
+                           style="width:90px;height:90px"></lord-icon>
+                <div class="mt-4 text-center">
+
+
+                    <h4 class="fs-semibold">@sharedResource["You are about to delete This User ?"]</h4>
+                    <p class="text-muted fs-14 mb-4 pt-1">
+                        @sharedResource["Deleting it User Item will remove all of its information from its database."]
+                    </p>
+                    <div class="hstack gap-2 justify-content-center remove">
+                        <button class="btn btn-link link-success fw-medium text-decoration-none" id="deleteRecord-close"
+                                data-bs-dismiss="modal">
+                            <i class="ri-close-line me-1 align-middle"></i>
+                            @sharedResource["Close"]
+                        </button>
+                        <form asp-area="Admin" asp-page="/Users/Index" asp-page-handler="DeleteUser">
+                            <input asp-for="@Model.User.Id" id="DeleteUserId" hidden>
+                            <button class="btn btn-danger" type="submit" id="delete-record">
+                                @sharedResource["Yes,"]
+                                @sharedResource["Delete It!!"]
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+@*<partial name="_AddPopup" model="@Model.User" view-data="ViewData" />
+*@
+@*<partial name="_ViewPopup" model="@Model.Country" view-data=" ViewData" />
+*@
+@*<partial name="_EditPopup" model="@Model.userProfileVM" view-data="ViewData" />
+*@@*<partial name="_DatchDelete" model="@Model.Country" view-data="ViewData" />
+*@
+
+<!--datatable js-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+@section scripts{
+    <!-- list.js min js -->
+       <script src="~/assets/libs/list.js/list.min.js"></script>
+    <script src="~/assets/libs/list.pagination.js/list.pagination.min.js"></script>
+    <!-- crm leads init -->
+    <script src="~/assets/js/pages/crm-leads.init.js"></script>
+  
+
+
+<!--End datatable js-->
+}
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        var domainUrl = document.getElementById("UrlId").value;
+        console.log("domainUrl: " + domainUrl);
+        $('#myTable').DataTable({
+            "dom": 'rt<"bottom"ip><"clear">',
+            // ajax: { url: domainUrl + '/api/Lists/GetVideoMaterial' },
+            //columns: [
+            //    {
+            //            "data": "YoutubeURL",
+            //        "render": function (data, row) {
+            //                //return "<embed width = '200' height = '100' src='" + data + "' />";
+            //                //return "<video width='200' controls> < source src = '" + data + "' type = 'video/mp4' >< /video>"
+            //                //return "<iframe width='200' height='100' src = '" + data + "'  autoplay; ></iframe>"
+            //        }
+            //    },
+
+            //        { data: 'ARTitle' },
+            //        { data: 'ENTitle' },
+
+            //        { data: 'videoCategory' },
+            //        { data: "IsActive" },
+            //    {
+            //        data: "Id",
+            //        render: function (data, type, row) {
+
+            //                return '<ul class="list-inline hstack gap-2 mb-0"> <li class="list-inline-item" data-bs-toggle="tooltip"data-bs-trigger="hover" data-bs-placement="top"title="View"><a href="javascript:void(0)" data-bs-toggle="modal"><i class="ri-eye-fill align-bottom text-muted" onclick="ShowViewPopUp(' + data + ')" ></i></a></li> <li class="list-inline-item" data-bs-toggle="tooltip"data-bs-trigger="hover" data-bs-placement="top"title="Edit" ><a class="edit-item-btn" href="javascript:void(0)"data-bs-toggle="modal" > <i class="ri-pencil-fill align-bottom text-muted" onclick="editButtonClick(' + data + ')"></i> </a> </li>    <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top"title="Delete"> <a class="remove-item-btn" data-bs-toggle="modal"href="javascript:void(0)" > <i class="ri-delete-bin-fill align-bottom text-muted" onclick="deleteVideoMaterial(' + data + ')"></i> </a></li></ul>';
+
+            //        },
+            //        className: "dt-body-center"
+            //    },
+
+
+            //],
+
+
+
+        });
+    });
+    $('#txtSearch').keyup(function () {
+        var table = $('#myTable').DataTable();
+        table.search($(this).val()).draw();
+    });
+
+    function editButtonClick(Id) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            }
+            ,
+            url: "/Admin/Users/Index?handler=SingleUsersForEdit",
+
+            data: { "Id": Id },
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                var rolesDropdown = document.getElementById("selectedRoles");
+                    rolesDropdown.innerHTML = "";
+
+
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.innerText = 'Select Role';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                rolesDropdown.appendChild(defaultOption);
+                const roles = ['Operator', 'Store'];
+
+                for (const role of roles) {
+                    const option = document.createElement('option');
+                    option.value = role;
+                    option.innerText = role;
+                   for(let i= 0; i<response.userRoles.length; i++){
+                    console.log(response.userRoles[i]);
+                        if (role === response.userRoles[i]) {
+                            option.selected = true;
+                        }
+                  
+                    }
+
+
+                   
+
+                    rolesDropdown.appendChild(option);
+                }
+                
+                document.getElementById("UserID").value = response.userProfileVM.Id
+                document.getElementById("UserNameId").value = response.userProfileVM.FullName
+                document.getElementById("CurrentEmailId").value = response.userProfileVM.CurrentEmail
+                document.getElementById("UserMobileId").value = response.userProfileVM.Mobile
+                document.getElementById("EUsedId").checked = response.userProfileVM.IsActive
+                console.log(response);
+                $('#showEditModal').modal('show');
+            },
+
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+   
+        function validatePasswords() {
+            var newPassword = document.getElementById('userProfileVM_NewPassword').value;
+            var confirmPassword = document.getElementById('userProfileVM_ConfirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                alert("New password and Confirm password do not match.");
+                return false;
+            }
+
+            return true;
+        }
+    function deleteUser(Id) {
+            $.ajax({
+                type: "GET",
+            url: "/Admin/Users/Index?handler=UsersForDelete",
+            data: { "Id": Id },
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                document.getElementById("DeleteUserId").value = response.Id
+                    $('#deleteRecordModal').modal('show');
+
+
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+        }
+    
+</script>      

@@ -1,0 +1,155 @@
+﻿/*.banner-area {
+    height: 400px !important; 
+}
+.banner-content h1 {
+    font-size: 70px !important;
+}
+.banner-content {
+    margin-top: 120px !important;
+}*/
+
+.sticky-top {
+    padding-bottom: 110px !important;
+}
+
+.header-area.two {
+    background-color: #f5f5f5 !important;
+}
+
+.header-area .right ul li .nice-select ul li {
+    margin-left: initial;
+    padding-left: initial;
+    padding-right: initial;
+}
+
+.nice-select .option.focus, .nice-select .option.selected.focus, .nice-select .option:hover {
+    margin-left: initial;
+    padding-left: initial;
+    padding-right: initial;
+}
+
+.main-nav.two {
+    background: white !important;
+    border-top: 1px solid #e2e0e0;
+    border-bottom: 1px solid #e2e0e0;
+}
+
+
+@media only screen and (max-width: 991px) {
+    .mean-container .mean-bar {
+        background-color: white;
+        border-top: 1px solid #fff;
+        z-index: unset;
+    }
+    .mean-container a.meanmenu-reveal span {
+      
+        background-color: #8e8484;
+       
+    }
+    .mean-container a.meanmenu-reveal {
+        color: #8e8484;
+    }
+}
+.theme-dark .main-nav nav .navbar-nav .nav-item a {
+    color: #6b6b6b !important;
+}
+@font-face {
+    font-family: 'Tajawal Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Tajawal Regular'), url('../fonts/Tajawal-Regular.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'Tajawal ExtraLight';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Tajawal ExtraLight'), url('../fonts/Tajawal-ExtraLight.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'Tajawal Light';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Tajawal Light'), url('../fonts/Tajawal-Light.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'Tajawal Medium';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Tajawal Medium'), url('../fonts/Tajawal-Medium.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'Tajawal Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Tajawal Bold'), url('../fonts/Tajawal-Bold.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'Tajawal ExtraBold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Tajawal ExtraBold'), url('../fonts/Tajawal-ExtraBold.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'Tajawal Black';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Tajawal Black'), url('../fonts/Tajawal-Black.woff') format('woff');
+}
+
+.page-title-area
+{
+    height:150px !important;
+}
+
+
+@media only screen and (min-width: 1800px){
+
+ .page-title-area .title-content {
+     margin-top:initial !important ;
+}
+  }
+
+
+@media only screen and (max-width: 767px) {
+    .page-title-area .title-content {
+         margin-top: initial !important;
+    }
+}
+
+.pt-50 {
+    padding-top: 50px;
+}
+.banner-area {
+    height: 250px !important;
+}
+
+.banner-content h1 {
+    margin-bottom:initial !important;
+}
+.banner-content {
+    margin-top: initial !important;
+}
+
+@media only screen and (max-width: 767px) {
+    .banner-area {
+         padding-top: initial !important; 
+         padding-bottom: initial !important; 
+    }
+}
+
+.row > * {
+    flex-shrink: 0 !important;
+   
+}

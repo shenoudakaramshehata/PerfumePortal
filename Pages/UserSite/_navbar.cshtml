@@ -1,0 +1,165 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject PerfumeContext _context
+@{
+    var ItemsInCart = 0;
+    var currentuser = await UserManager.GetUserAsync(User);
+    if (currentuser != null)
+    {
+        var CustomerId = _context.CustomerNs.Where(c => c.Email == currentuser.Email).FirstOrDefault().CustomerId;
+        var cartNumbers = _context.ShoppingCart.Where(s => s.CustomerId == CustomerId).Count();
+        ItemsInCart = cartNumbers;
+    };
+
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+<div id="navbarid" class="navbar-area sticky-top">
+
+    <div class="mobile-nav">
+        <a href="/index" class="logo">
+            <img src="~/Jeel/images/logo.png" alt="Logo" style="width:55px;">
+        </a>
+    </div>
+
+    <div class="main-nav two">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-md navbar-light">
+                <a class="navbar-brand" href="/index">
+                    <img src="~/Jeel/images/logo.png" alt="Logo" style="width:100px">
+                </a>
+                <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a href="/Index" class="nav-link dropdown-toggle active">@sharedResource["HOME"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="About" class="nav-link">@sharedResource["ABOUT US"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="TERMS" class="nav-link">@sharedResource["TERMS"]</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="~/TRACKINGORDER" class="nav-link">@sharedResource["TRACKING ORDER"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="ContactUs" class="nav-link">@sharedResource["CONTACT"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link dropdown-toggle">@sharedResource["My_Account"] <i class="bx bx-plus"></i></a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item">
+                                    <a href="/ViewProfile" class="nav-link">@sharedResource["Profile"]</a>
+                                </li>
+                               @* <li class="nav-item">
+                                    <a href="/ViewCart" class="nav-link">@sharedResource["View_Cart"]</a>
+                                </li>*@
+                                @*  <li class="nav-item">
+                                <a href="/checkout" class="nav-link">@sharedResource["Checkout"]</a>
+                                </li>*@
+                                <li class="nav-item">
+                                    <a href="/wishlist" class="nav-link ">@sharedResource["Wishlist"]</a>
+                                </li>
+                                @if (currentuser == null)
+                                {
+                                    <li class="nav-item">
+                                        <a href="/Login" class="nav-link">@sharedResource["Login"]</a>
+                                    </li>
+
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a href="/identity/account/Logout" class="nav-link">@sharedResource["Logout"]</a>
+                                    </li>
+
+                                }
+
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="side-nav two">
+                       
+
+
+                       @* @{
+                            if (currentuser == null)
+                            {
+                                <a class="common-btn two nav-btn" href="/Login">@sharedResource["Login"]</a>
+
+                            }
+                            else
+                            {
+                                <a class="common-btn two nav-btn" asp-area="Identity" asp-page="/Account/Logout">@sharedResource["Logout"]</a>
+
+                            }
+
+                        }*@
+                        <a onclick="DisplayCartItems()" id="displaypopup" class="cart" href="javascript:void(0)" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+
+                            <svg style="color:#6b6b6b;width: 1rem;" xmlns="http://www.w3.org/2000/svg" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16" style="padding-top: -38rem;width: 1rem;padding-bottom: -5px;" width="60">
+                                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" style="width: ;"></path>
+                            </svg>
+                            <span id="shippingicon" style="padding-bottom: -2rem;margin-top: -0.5rem;">2</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    function ShoppingCartIcon() {
+        
+        var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+        //var parsecartItems = JSON.parse(cartItems)
+        var parsecartItems = JSON.stringify(cartItems)
+
+        console.log(typeof (parsecartItems))
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=ShoppingCartIcon",
+            data: { "parsecartItems": parsecartItems },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+
+            success: function (response) {
+                console.log(response)
+                if (response.IsRegister==false){
+                    document.getElementById("shippingicon").innerHTML = response.countA
+
+                }
+               else if (response.IsRegister == true) {
+                  
+                    document.getElementById("shippingicon").innerHTML = response.Count
+                }
+                else{
+                    document.getElementById("shippingicon").innerHTML = 0
+
+
+                }
+
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+   
+ 
+</script>

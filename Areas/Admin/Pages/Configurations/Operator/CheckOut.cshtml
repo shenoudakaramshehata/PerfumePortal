@@ -1,0 +1,521 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.Operator.CheckOutModel
+@Html.AntiForgeryToken()
+@inject PerfumeContext _context
+@using Microsoft.AspNetCore.Identity
+@using CRM.Data
+@using Microsoft.AspNetCore.Localization;
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@{
+    ViewBag.Title = sharedResource["Checkout"];
+    ViewBag.pTitle = sharedResource["Checkout"];
+    ViewBag.pageTitle = sharedResource["Order"];
+    Layout = "_Layout";
+     var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+}
+@{
+    if (Model.shoppingCarts != null)
+    {
+        if (Model.shoppingCarts.Count > 0)
+        {
+            <div class="row">
+                <div class="col-xl-8">
+                    <div class="card">
+                        <div class="card-body checkout-tab">
+
+                            <form method="post">
+                                <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
+
+                                    <ul class="nav nav-pills nav-justified custom-nav" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link fs-15 p-3 active" id="pills-bill-info-tab"
+                                            data-bs-toggle="pill" data-bs-target="#pills-bill-info"
+                                            type="button" role="tab" aria-controls="pills-bill-info"
+                                            aria-selected="true">
+                                                <i class="ri-user-2-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
+                                                @sharedResource["Personal Info"]
+                                            </button>
+                                        </li>
+
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link fs-15 p-3" id="pills-payment-tab"
+                                            data-bs-toggle="pill" data-bs-target="#pills-payment"
+                                            type="button" role="tab" aria-controls="pills-payment"
+                                            aria-selected="false">
+                                                <i class="ri-bank-card-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
+                                                @sharedResource["Payment Info"]
+                                            </button>
+                                        </li>
+                                        @* <li class="nav-item" role="presentation">
+                            <button class="nav-link fs-15 p-3" id="pills-finish-tab"
+                            data-bs-toggle="pill" data-bs-target="#pills-finish"
+                            type="button" role="tab" aria-controls="pills-finish"
+                            aria-selected="false">
+                            <i class="ri-checkbox-circle-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>Finish
+                            </button>
+                            </li>*@
+                                    </ul>
+                                </div>
+
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="pills-bill-info" role="tabpanel"
+                                 aria-labelledby="pills-bill-info-tab">
+                                        <div>
+                                            <h5 class="mb-1">@sharedResource["Order Information"]</h5>
+                                            <p class="text-muted mb-4">@sharedResource["Please fill all information below"]</p>
+                                        </div>
+
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label for="billinginfo-firstName"
+                                                       class="form-label">
+                                                            @sharedResource["FullName"]
+                                                        </label>
+                                                        <input type="text" class="form-control"
+                                                       required id="billinginfo-firstName" asp-for="@Model.FastOrderVM.FullName"
+                                                   placeholder="@sharedResource["Enter FullName"]">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label for="billinginfo-email" class="form-label">
+                                                            @sharedResource["Email"]
+
+                                                        </label>
+                                                        <input type="email" class="form-control"
+                                                       required id="billinginfo-email" asp-for="@Model.FastOrderVM.Email" placeholder="@sharedResource["Enter Email"]">
+                                                    </div>
+                                                </div>
+                                                @* <div class="col-sm-6">
+                                    <div class="mb-3">
+                                    <label for="billinginfo-lastName"
+                                    class="form-label">
+                                    Last
+                                    Name
+                                    </label>
+                                    <input type="text" class="form-control"
+                                    id="billinginfo-lastName"
+                                    placeholder="Enter last name" value="">
+                                    </div>
+                                    </div>*@
+                                            </div>
+
+                                            <div class="row">
+
+
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label for="billinginfo-phone"
+                                                       class="form-label">@sharedResource["Phone"]</label>
+                                                        <input type="text" class="form-control"
+                                                   id="billinginfo-phone" asp-for="@Model.FastOrderVM.PhoneNumber"
+                                                   placeholder=" @sharedResource[" Enter phone no."]" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label for="billinginfo-phone"
+                                                       class="form-label">@sharedResource["Address"]</label>
+                                                        <input type="text" class="form-control"
+                                                   id="billinginfo-phone" asp-for="@Model.FastOrderVM.Address"
+                                                   placeholder=" @sharedResource["Enter Address"]" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label for="@Model.FastOrderVM.Cityname" class="form-label">
+                                                            @sharedResource["City name"]
+
+                                                        </label>
+                                                        <input type="text" class="form-control" asp-for="@Model.FastOrderVM.Cityname"
+                                                       required id="billinginfo-Cityname" placeholder="@sharedResource["Enter City name"]">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label for="@Model.FastOrderVM.Areaname" class="form-label">
+                                                            @sharedResource["Area name"]
+
+                                                        </label>
+                                                        <input type="text" class="form-control" asp-for="@Model.FastOrderVM.Areaname"
+                                                       required id="billinginfo-Areaname" placeholder="@sharedResource["Enter Area name"]">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label for="@Model.FastOrderVM.BuildingNo"
+                                                       class="form-label">@sharedResource["Building No"]</label>
+                                                        <input type="text" class="form-control"
+                                                   id="billinginfo-phone" asp-for="@Model.FastOrderVM.BuildingNo"
+                                                   placeholder=" @sharedResource["Enter Building No"]" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label for="Country"
+                                                       class="form-label">@sharedResource["Country"]</label>
+                                                        <input type="text" class="form-control"
+                                                   id="billinginfo-Country" asp-for="@Model.CountryENName"
+                                                   placeholder=" @sharedResource["Country"]" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex align-items-start gap-3 mt-3">
+                                                <button type="button"
+                                                class="btn btn-primary btn-label right ms-auto nexttab"
+                                                data-nexttab="pills-payment-tab">
+                                                    <i class="ri-bank-card-line label-icon align-middle fs-16 ms-2"></i>@sharedResource["Continue to Payment"]"
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end tab pane -->
+                                    <!-- end tab pane -->
+
+                                    <div class="tab-pane fade" id="pills-payment" role="tabpanel"
+                                 aria-labelledby="pills-payment-tab">
+                                        <div>
+                                            <h5 class="mb-1">@sharedResource["Payment Selection"]"</h5>
+                                            <p class="text-muted mb-4">
+                                                @sharedResource["Please select and enter your billing information"]"
+
+                                            </p>
+                                        </div>
+
+                                        <div class="row g-4">
+
+                                            @{
+
+
+                                                var MyfattorahEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 1).FirstOrDefault().PaymentMethodEN;
+                                                var MyfattorahAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 1).FirstOrDefault().PaymentMethodAR;
+                                                var CashEN = _context.paymentMehods.Where(e => e.PaymentMethodId == 2).FirstOrDefault().PaymentMethodEN;
+                                                var CashAR = _context.paymentMehods.Where(e => e.PaymentMethodId == 2).FirstOrDefault().PaymentMethodAR;
+                                            }
+                                            <div class="col-lg-4 col-sm-6">
+                                                <div data-bs-toggle="collapse"
+                                             data-bs-target="#paymentmethodCollapse" aria-expanded="true"
+                                             aria-controls="paymentmethodCollapse">
+                                                    <div class="form-check card-radio">
+                                                        <input id="paymentMethod02" name="paymentMethod" value="@Model.FattorahPaymentId"
+                                                       type="radio" class="form-check-input" required checked>
+                                                        <label class="form-check-label" for="paymentMethod02">
+                                                            <span class="fs-16 text-muted me-2">
+                                                                <i class="ri-bank-card-fill align-bottom"></i>
+                                                            </span>
+                                                            <span class="fs-14 text-wrap">
+                                                                @{
+                                                                    if (BrowserCulture == "en-US")
+                                                                    {
+                                                                        @MyfattorahEN
+                                                                    }
+                                                                    else
+                                                                    {
+
+                                                                        @MyfattorahAR
+
+                                                                    }
+                                                                }
+
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4 col-sm-6">
+                                                <div data-bs-toggle="collapse"
+                                             data-bs-target="#paymentmethodCollapse.show"
+                                             aria-expanded="false" aria-controls="paymentmethodCollapse">
+                                                    <div class="form-check card-radio">
+                                                        <input id="paymentMethod03" name="paymentMethod" value="@Model.CahshPaymentId"
+                                                       type="radio" class="form-check-input">
+                                                        <label class="form-check-label" for="paymentMethod03">
+                                                            <span class="fs-16 text-muted me-2">
+                                                                <i class="ri-money-dollar-box-fill align-bottom"></i>
+                                                            </span>
+
+                                                            @{
+                                                                <img src="~/Jeel/images/cash.jpg" class="w-25">
+
+                                                                if (BrowserCulture == "en-US")
+                                                                {
+                                                                    <span class="fs-14 text-wrap">
+
+
+                                                                        @CashEN
+                                                                    </span>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="fs-14 text-wrap">
+
+
+                                                                        @CashAR
+                                                                    </span>
+
+                                                                }
+
+                                                            }
+
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="d-flex align-items-start gap-3 mt-4">
+                                            <button type="button" class="btn btn-light btn-label previestab"
+                                            data-previous="pills-bill-info-tab">
+                                                <i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>
+                                                @sharedResource["Back to Personal Info"]"
+                                            </button>
+                                            <button type="submit"
+                                            class="btn btn-primary btn-label right ms-auto nexttab">
+                                                <i class="ri-shopping-basket-line label-icon align-middle fs-16 ms-2"></i>@sharedResource["Complete Order"]"
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- end tab pane -->
+
+
+                                </div>
+                                <!-- end tab content -->
+                            </form>
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-0">@sharedResource["Order Summary"]</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive table-card">
+                                <table class="table table-borderless align-middle mb-0">
+                                    <thead class="table-light text-muted">
+                                        <tr>
+                                            <th style="width: 90px;" scope="col">@sharedResource["Product"]</th>
+                                            <th scope="col">@sharedResource["Product Info"]</th>
+                                            <th scope="col" class="text-end">@sharedResource["Price"]</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            if (Model.shoppingCarts != null)
+                                            {
+                                                if (Model.shoppingCarts.Count > 0)
+                                                {
+                                                    foreach (var item in Model.shoppingCarts)
+                                                    {
+
+                                                        <tr>
+                                                            <td>
+                                                                <div class="avatar-md bg-light rounded p-1">
+                                                                    <img src="~/@item.Item.ItemImage" alt=""
+                                             class="img-fluid d-block">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <h5 class="fs-14">
+                                                                    @{
+                                                                        if (BrowserCulture == "en-US")
+                                                                        {
+                                                                            <a class="text-dark">@item.Item.ItemTitleEn</a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="text-dark">@item.Item.ItemTitleAr</a>
+                                                                        }
+                                                                    }
+
+                                                                </h5>
+                                                                @{
+                                                                    if (BrowserCulture == "en-US")
+                                                                    {
+                                                                        <p class="text-muted mb-0">@Model.CurrencyNameEN @item.ItemPrice x @item.ItemQty</p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p class="text-muted mb-0">@Model.CurrencyNameAr @item.ItemPrice x @item.ItemQty</p>
+                                                                    }
+                                                                }
+
+                                                            </td>
+                                                            @{
+                                                                if (BrowserCulture == "en-US")
+                                                                {
+                                                                    <td class="text-end">@Model.CurrencyNameEN @item.ItemTotal</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="text-end">@Model.CurrencyNameAr  @item.ItemTotal</td>
+                                                                }
+                                                            }
+
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+
+                                        }
+
+
+                                        <tr>
+                                            <td class="fw-semibold" colspan="2">@sharedResource["Sub Total :"]</td>
+                                            @{
+                                                if (BrowserCulture == "en-US")
+                                                {
+                                                    <td class="fw-semibold text-end">@Model.CurrencyNameEN @Model.Subtotal</td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="fw-semibold text-end">@Model.CurrencyNameAr  @Model.Subtotal</td>
+                                                }
+                                            }
+
+                                        </tr>
+                                        @* <tr>
+                            <td colspan="2">
+                            Discount <span class="text-muted">(VELZON15)</span>
+                            :
+                            </td>
+                            <td class="text-end">- $ 50.00</td>
+                            </tr>*@
+                                        <tr>
+                                            <td colspan="2">@sharedResource["Shipping Charge :"]</td>
+
+                                            @{
+                                                if (BrowserCulture == "en-US")
+                                                {
+                                                    <td class="text-end">@Model.CurrencyNameEN  @Model.DeliveryCost</td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="text-end">@Model.CurrencyNameAr  @Model.DeliveryCost</td>
+                                                }
+                                            }
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">@sharedResource["Tax :"] (@Model.tax %) </td>
+
+                                             @{
+                                            if (@Model.tax == 0)
+                                            {
+                                                    <td class="text-end">@Model.OrdernetByTax</td>
+
+                                            }
+                                            else
+                                            {
+                                            @if (BrowserCulture == "en-US")
+                                            {
+                                                        <td class="text-end">@Model.CurrencyNameEN  @Model.OrdernetByTax </td>
+
+                                               
+
+                                            }
+                                            else
+                                            {
+                                                        <td class="text-end">@Model.CurrencyNameAr  @Model.OrdernetByTax</td>
+                                                
+
+                                            }
+                                       }
+                                       } 
+                                           
+                                        </tr>
+                                        <tr class="table-active">
+                                            <th colspan="2">@sharedResource["Total:"]</th>
+                                            @{
+                                                if (BrowserCulture == "en-US")
+                                                {
+                                                    <td class="text-end">
+                                                        <span class="fw-semibold">
+                                                            @Model.CurrencyNameEN @Model.TotalAmount
+                                                        </span>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="text-end">
+                                                        <span class="fw-semibold">
+                                                            @Model.CurrencyNameAr @Model.TotalAmount
+                                                        </span>
+                                                    </td>
+                                                }
+                                            }
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+            </div>
+        }
+
+
+
+
+    }
+
+    if (Model.shoppingCarts == null || Model.shoppingCarts.Count == 0)
+    {
+        
+            <div class="text-center py-5">
+
+
+                <h5>@sharedResource["There are no items in the Shopping Cart"]</h5>
+
+            </div>
+        
+       
+        }
+    
+}
+
+<!-- end row -->
+<!-- removeItemModal -->
+
+
+    <!-- init js -->
+    <script src="~/assets/js/pages/ecommerce-product-checkout.init.js"></script>
+
+    <!-- App js -->
+    <script src="~/assets/js/app.js"></script>

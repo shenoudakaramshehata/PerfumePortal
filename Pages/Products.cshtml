@@ -1,0 +1,177 @@
+﻿@page
+@model CRM.Pages.ProductsModel
+@inject PerfumeContext _context
+@Html.AntiForgeryToken()
+
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+   
+}
+
+@{
+    var locale = Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+}
+
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+
+<div class="page-title-wrap">
+    <div class="page-title-area style=" background-color:#f5f5f5 !important;"">
+       
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black"> @sharedResource["OUR PRODUCTS"]</h2>
+                    <ul>
+                        <li>
+                            <a href="/index" class="text-black"> @sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black"> @sharedResource["OUR PRODUCTS"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="shop-page-area ptb-100">
+    <div class="shop-shape">
+        <img src="~/Jeel/images/shop/shop-shape2.png" alt="Shape">
+        <img src="~/Jeel/images/shop/shop-shape2.png" alt="Shape">
+    </div>
+    <div class="container">
+
+        <div class="row">
+            @if (Model.ItemsList != null)
+            {
+                @foreach (var item in Model.ItemsList)
+                {
+
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="shop-item">
+                            <div class="top">
+                                <img src="~/@item.ItemImage" alt="Shop">
+                                <ul>
+                                    <li>
+                                        <a href="#" onclick="AddToCart(@item.ItemId)">
+                                            <i class="bx bx-cart"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" onclick="addFavorite(@item.ItemId)">
+                                            <i class="bx bxs-heart"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="bottom">
+                                <h3>
+                                    <a href="/PerfumeDetails?id=@item.ItemId">
+                                        @{
+
+                                            @if (BrowserCulture == "en-US")
+                                            {
+                                                @item.ItemTitleEn
+
+
+                                            }
+                                            else
+                                            {
+                                                @item.ItemTitleAr
+                                            }
+
+                                        }
+                                    </a>
+                                </h3>
+                                <span>
+                                    @{
+                                        @if (BrowserCulture == "en-US")
+                                        {
+                                            @Html.FormatValue(_context.itemPriceNs.Where(c => c.ItemId == item.ItemId && c.CountryId == 2).FirstOrDefault().Price.ToString(), "{0} KD")
+
+                                        }
+                                        else
+                                        {
+                                            @Html.FormatValue(_context.itemPriceNs.Where(c => c.ItemId == item.ItemId && c.CountryId == 2).FirstOrDefault().Price.ToString(), "{0} د.ك")
+                                        }
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+    </div>
+</div>
+<script>
+    window.onload = function () {
+
+        var country = localStorage.getItem("countryId");
+
+    }
+    var lang = localStorage.getItem("lang");
+
+    var categIdglobal = 0;
+
+    function addFavorite(ItemId) {
+
+        console.log(ItemId);
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=AddToFavorate",
+            data: { ItemId: ItemId },
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+        })
+            .done(function (result) {
+                //console.log(result);
+                if (result) {
+                    //var country = localStorage.getItem("countryId");
+                    //getItems(categIdglobal, country);
+                    //window.location.href = '/default'
+                }
+                else {
+                    window.location.href = '/Login'
+                }
+            });
+    }
+
+
+    function AddToCart(ItemId) {
+
+        $.ajax({
+            type: "POST",
+            url: "/Index?handler=AddToCart",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { ItemId: ItemId },
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+        })
+            .done(function (result) {
+                //console.log(result);
+                if (result) {
+                    //var country = localStorage.getItem("countryId");
+                    //getItems(categIdglobal, country);
+                    //window.location.href = '/default'
+                }
+                else {
+                    window.location.href = '/Login'
+                }
+            });
+    }
+
+</script>

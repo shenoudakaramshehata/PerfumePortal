@@ -1,0 +1,96 @@
+﻿@page
+@model RegisterModel
+@using Microsoft.AspNetCore.Localization;
+
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> sharedResource
+@{
+    //Layout = "~/Pages/UserSite/_Layout.cshtml";
+}
+
+@*
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")*@
+
+
+<div class="page-title-wrap">
+    <div class="page-title-area title-img-one">
+       
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2>@sharedResource["Register"]</h2>
+                    <ul>
+                        <li>
+                            <a href="index.html">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span>@sharedResource["Register"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="user-area ptb-100">
+    <div class="container">
+        <div class="user-item">
+            <div class="user-shape">
+                <img src="~/Jeel/images/contact-shape1.png" alt="Shape">
+                <img src="~/Jeel/images/contact-shape2.png" alt="Shape">
+            </div>
+            <h2>@sharedResource["Sign Up"]</h2>
+            <form  novalidate="true"   asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" asp-for="Input.FullName" placeholder="@sharedResource["Enter username"]" required="" data-error="@sharedResource["Please enter username"]">
+                <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                    
+                    <input type="email" asp-for="Input.Email" class="form-control" placeholder="@sharedResource["Enter Email"]" required="" data-error="@sharedResource["Please enter email"]">
+                 <div class="help-block with-errors"></div>
+                </div>
+                 <div class="form-group">
+
+                    <input type="text" asp-for="Input.Phone" class="form-control" placeholder="@sharedResource["Enter Phone"]">
+                    <span asp-validation-for="Input.Phone" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+
+                    <input type="text" asp-for="Input.Phone" class="form-control" placeholder="@sharedResource["Enter Phone"]">
+                    <span asp-validation-for="Input.Phone" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Input.Password" type="Password" class="form-control" placeholder="@sharedResource["Enter password"]" required="" data-error="@sharedResource["Please enter password"]">
+                 <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                    <input type="Password" asp-for="Input.ConfirmPassword" class="form-control" placeholder="@sharedResource["Confirm Password"]" required="" data-error="@sharedResource["Please enter Confirm password"]">
+                 <div class="help-block with-errors"></div>
+                </div>
+                 <div class="form-group">
+                    <div class="form-check">
+                        <input   class="form-check-input" type="checkbox"  id="defaultCheck7" required>
+                        <label class="form-check-label" for="defaultCheck7">
+                           @sharedResource["Accept"]  <a asp-page="/Terms">@sharedResource["Terms and Condition"]</a>@sharedResource["and"]  <a asp-page="/Privacy">@sharedResource["Privacy Policy"]</a>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn common-btn two">@sharedResource["Sign Up"]</button>
+               
+                <h4>@sharedResource["Have any account?"] <a href="Login">@sharedResource["Sign In"]</a></h4>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

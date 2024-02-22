@@ -1,0 +1,184 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Configurations.ManageOrder.CreateOrderModel
+ @using CRM.Data
+@inject PerfumeContext _context
+@{
+   var Countries = _context.Country.Select(e => new { e.CountryId, e.CountryTlen,e.CountryTlar });
+}
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0">@sharedResource["Checkout"]</h4>
+
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                <li class="breadcrumb-item active">Checkout</li>
+                            </ol>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <form method="post">
+                               
+                                        <div>
+                                            <h5 class="mb-1">@sharedResource["Order Information"]</h5>
+                                <p class="text-muted mb-4">@sharedResource["Please fill all information below"]</p>
+                                        </div>
+
+                                        <div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="billinginfo-firstName"
+                                                   class="form-label">
+                                                @sharedResource["FullName"]
+                                            </label>
+                                            <input type="text" class="form-control"
+                                                   required id="billinginfo-firstName" asp-for="@Model.FastOrderVM.FullName"
+                                                   placeholder="@sharedResource["Enter FullName"]">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="billinginfo-email" class="form-label">
+                                                @sharedResource["Email"]
+
+                                            </label>
+                                            <input type="email" class="form-control"
+                                                   required id="billinginfo-email" asp-for="@Model.FastOrderVM.Email" placeholder="@sharedResource["Enter Email"]">
+                                        </div>
+                                    </div>
+                                    @* <div class="col-sm-6">
+                                    <div class="mb-3">
+                                    <label for="billinginfo-lastName"
+                                    class="form-label">
+                                    Last
+                                    Name
+                                    </label>
+                                    <input type="text" class="form-control"
+                                    id="billinginfo-lastName"
+                                    placeholder="Enter last name" value="">
+                                    </div>
+                                    </div>*@
+                                </div>
+
+                                <div class="row">
+
+
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="billinginfo-phone"
+                                                   class="form-label">@sharedResource["Phone"]</label>
+                                            <input type="text" class="form-control"
+                                                   id="billinginfo-phone" asp-for="@Model.FastOrderVM.PhoneNumber"
+                                                   placeholder=" @sharedResource[" Enter phone no."]" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="billinginfo-phone"
+                                                   class="form-label">@sharedResource["Address"]</label>
+                                            <input type="text" class="form-control"
+                                                   id="billinginfo-phone" asp-for="@Model.FastOrderVM.Address"
+                                                   placeholder=" @sharedResource["Enter Address"]" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="mb-3">
+                                            <label for="@Model.FastOrderVM.Cityname" class="form-label">
+                                                @sharedResource["City name"]
+
+                                            </label>
+                                            <input type="text" class="form-control" asp-for="@Model.FastOrderVM.Cityname"
+                                                   required id="billinginfo-Cityname" placeholder="@sharedResource["Enter City name"]">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="mb-3">
+                                            <label for="@Model.FastOrderVM.Areaname" class="form-label">
+                                                @sharedResource["Area name"]
+
+                                            </label>
+                                            <input type="text" class="form-control" asp-for="@Model.FastOrderVM.Areaname"
+                                                   required id="billinginfo-Areaname" placeholder="@sharedResource["Enter Area name"]">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="mb-3">
+                                            <label for="@Model.FastOrderVM.BuildingNo"
+                                                   class="form-label">@sharedResource["Building No"]</label>
+                                            <input type="text" class="form-control"
+                                                   id="billinginfo-phone" asp-for="@Model.FastOrderVM.BuildingNo"
+                                                   placeholder=" @sharedResource["Enter Building No"]" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="mb-3">
+                                            <label for="car-rental-name">@sharedResource["Country"] <small class="text-danger">*</small></label>
+
+                                            <select data-val="true" data-val-required="@sharedResource["Please choose a country"]" id="CountryID" name="Country"  class="form-select required" aria-label="Default select example" required>
+                                                <option selected value="Select Type">@sharedResource["Select Country"]</option>
+
+                                                @{
+                                                    if (@Countries != null)
+                                                    {
+                                                        foreach (var item in @Countries)
+
+                                                        {
+
+                                                            <option value="@item.CountryId">@item.CountryTlar</option>
+
+                                                        }
+                                                    }
+                                                }
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                            <div class="d-flex align-items-start gap-3 mt-3">
+                                                <button type="submit" class="btn btn-primary btn-label right ms-auto">
+                                        <i class="ri-bank-card-line label-icon align-middle fs-16 ms-2"></i>Proceed to Checkout
+                                                </button>
+                                            </div>
+                                        </div>
+                                   
+                                    <!-- end tab pane -->
+
+                                  
+                                
+                                <!-- end tab content -->
+                            </form>
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+
+      

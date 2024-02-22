@@ -1,0 +1,528 @@
+﻿@using Microsoft.AspNetCore.Localization;
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> sharedResource
+
+
+<!DOCTYPE html>
+<html  id="masterPageId">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashaer - Perfume</title>
+    <link rel="icon" type="image/png" href="~/jeel/images/logofooter.png">
+    @Html.Partial("_HeaderCss.cshtml")
+    <script src="https://kit.fontawesome.com/fb2a8bbabd.js" crossorigin="anonymous"></script>
+
+    <!-- start -->
+    <!-- start -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '735010820716684');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+             src="https://www.facebook.com/tr?id=735010820716684&ev=PageView&noscript=1" />
+    </noscript>
+    <!-- start -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-215903400-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-215903400-1');
+    </script>
+    <!-- End -->
+    <!-- End -->
+<!-- End -->
+   @* <style>
+        .number li {
+            list-style-type: none;
+            display: flex !important;
+        }
+    </style>*@
+</head>
+
+<body id="masterbodyid" onload="loadFunctions()">
+
+
+    @Html.Partial("_Loader.cshtml")
+
+   
+    @RenderBody()
+
+    @Html.Partial("_CountryPopUp.cshtml")
+    @Html.Partial("_QuickView.cshtml")
+    @Html.Partial("_CartPopUp.cshtml")
+    @Html.Partial("_footer.cshtml")
+
+
+
+    @Html.Partial("_scriptLibrary.cshtml")
+    @await RenderSectionAsync("Scripts", required: false)
+    @await Component.InvokeAsync("NToastNotify")
+
+    <script>
+        //function DefaultLanguage(){
+        //    console.log("language")
+        //    var language = localStorage.getItem("lang")
+        //    console.log(language)
+        //    if (localStorage.getItem("lang") == null){
+        //        localStorage.setItem("lang", "ar");
+        //        window.location.href = "/API/Setting/ChangeLanguage?culture=ar-EG&url=/";
+        //    }
+        //}
+        //window.addEventListener('DOMContentLoaded', (event) => {
+        //    var masterPage = document.getElementById("masterPageId");
+        //    //document.getElementById("CurentCountry").innerHTML=localStorage.getItem("CountryTitle");
+
+        //    if (localStorage.getItem("lang") != "") {
+        //        if (localStorage.getItem("lang") == "en") {
+        //            masterPage.dir = "ltr";
+        //            //LangSelec.innerHTML = "En";
+
+        //            document.getElementById("masterbodyid").style.textAlign = "left"
+
+
+        //        }
+        //        else if (localStorage.getItem("lang") == "ar") {
+
+
+        //            masterPage.dir = "rtl"
+        //            //LangSelec.innerHTML = "AR";
+        //            console.log(document.getElementById("masterbodyid"))
+        //            document.getElementById("masterbodyid").style.textAlign = "right"
+
+
+
+        //        }
+        //    }
+        //});
+
+
+
+        function SelectedCountry() {
+            let selectedValue = $('#DropCountry').val();
+
+            localStorage.setItem("Country", selectedValue);
+            $.ajax({
+                type: "POST",
+                url: "/Index?handler=Cartcleared",
+                //data: { "parsecartItems": parsecartItems },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+
+                success: function (response) {
+                    console.log(response)
+                    if (response == false) {
+                        var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+                        console.log(cartItems)
+                        localStorage.removeItem("cartItems");
+                    }
+                    //document.getElementById("shippingicon").innerHTML = response
+                               window.location.href = "/Index";
+
+
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+
+        }
+
+
+
+       // function SelectedCountry() {
+       //     console.log("selectedCountry")
+       //     console.log($('#DropCountry').next().find('li.selected').attr('data-Title'))
+       //     console.log($('#DropCountry').next().find('li.selected').attr('data-value'))
+
+       //let selectedValue = $('#DropCountry').val();
+       
+       //localStorage.setItem("Country", selectedValue);
+       //     //localStorage.setItem("CountryTitle", $('#DropCountry').next().find('li.selected').attr('data-Title'));
+
+       //     var selectcountry = localStorage.getItem("Country");
+       //     var PassItem = 0;
+       //     $.ajax({
+       //         type: "GET",
+       //         url: "/Index?handler=Cartcleared",
+       //         //data: { "PassItem": PassItem },
+       //         //beforeSend: function (xhr) {
+       //         //    xhr.setRequestHeader("XSRF-TOKEN",
+       //         //        $('input:hidden[name="__RequestVerificationToken"]').val());
+       //         //},
+
+       //         //headers: {
+       //         //    RequestVerificationToken:
+       //         //        $('input:hidden[name="__RequestVerificationToken"]').val()
+       //         //},
+
+       //         success: function (response) {
+       //             console.log(response)
+       //             var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+       //             console.log(cartItems)
+       //             localStorage.removeItem("cartItems");
+
+
+
+
+
+       //         },
+       //         failure: function (response) {
+       //             alert(response);
+
+       //         }
+       //     });
+
+       //     console.log(selectcountry)
+
+       //     location.href = "/Index";
+
+
+       // }
+
+
+
+
+        function chooseCountry() {
+            var country = localStorage.getItem('Country');
+            var Language = localStorage.getItem('lang');
+
+            var navbar = document.getElementById("navbarid")
+            var banner = document.getElementById("bannerid")
+            var Footer = document.getElementById("contactIdForScrolling")
+            var product = document.getElementById("productid")
+            var topbar = document.getElementById("topbarid")
+            var masherSection = document.getElementById("masherSection")
+            
+            if (country == null) {
+                navbar.style.display = "none"
+                banner.style.display = "block"
+                masherSection.style.display = "block"
+                Footer.style.display = "none"
+                product.style.display = "none"
+                topbar.style.display = "none"
+
+                $('#CountryModal').modal('show');
+
+            }
+        }
+
+        function StorageinSession() {
+            var cartItemsData = JSON.parse(localStorage.getItem("cartItems"));
+
+            var country = localStorage.getItem('Country')
+            var parsecartItems = JSON.stringify(cartItemsData)
+            console.log(typeof (parsecartItems))
+            console.log(typeof (country))
+            //var countryPic = localStorage.getItem('countryPic');
+            $.ajax({
+                type: "POST",
+                url: "/Index?handler=Storedata",
+                data: { "parsecartItems": parsecartItems, "country": country },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+
+                success: function (response) {
+                    console.log(response)
+                    //console.log(response.CountryTlen);
+                    //console.log(response.CountryTlar);
+                    //if(localStorage.getItem("lang")=="en"){
+                    //    document.getElementById("CurentCountry").innerHTML=response.CountryTlen;
+                    //}
+                    //else{
+                    //    document.getElementById("CurentCountry").innerHTML=response.CountryTlar;
+
+                    //}
+                    var countryPic = response.Pic;
+                    document.getElementById("CurentCountryPic").src = "/"+countryPic
+
+                    
+                    //document.getElementById("CurentCountry").innerHTML=response;
+                    //document.getElementById("shippingicon").innerHTML = response
+                    //localStorage.setItem("countryPic", response);
+                    //var countryPic = localStorage.getItem('countryPic');
+                    //var CountryImg = document.getElementById("CountryImg").src = "/"+response
+                    //localStorage.setItem("CountryTitle",response);
+                    //document.getElementById("CurentCountry").innerHTML=response;
+
+
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+
+            //sessionStorage.setItem('cartItemsData', JSON.stringify(cartItemsData));
+        }
+
+        //////Check User Login 
+             function AddCartUser() {
+            var cartItemsData = JSON.parse(localStorage.getItem("cartItems"));
+            var parsecartItems = JSON.stringify(cartItemsData)
+            console.log(typeof (parsecartItems))
+            $.ajax({
+                type: "POST",
+                url: "/Index?handler=UserCart",
+                data: { "parsecartItems": parsecartItems },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+
+                success: function (response) {
+                    console.log(response)
+                    if (response==true){
+                        console.log("dfdfdf")
+                        localStorage.removeItem('cartItems');
+                    }
+                    //document.getElementById("shippingicon").innerHTML = response
+
+
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+
+        }
+//////////////////////////////////
+
+        let Productdata = [];
+        const viewPages = document.querySelector("#ProductsSection");
+        function GetProducts() {
+            console.log("sdsdsd")
+            var country = localStorage.getItem('Country')
+
+            console.log(country)
+
+            $.ajax({
+                type: "GET",
+                url: "/Index?handler=AllItems",
+                data: { "country": country },
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response)
+                    let dataVewItemDetails = "";
+
+                    Productdata = [...response];
+                    console.log(Productdata)
+                    //var stockImage = "~/images/out-of-stock.png"
+                    var lang = localStorage.getItem("lang")
+                    dataVewItemDetails += Productdata.map((e) =>
+
+                        `
+                                                                        <div  class="col-6 col-sm-2 col-md-2 col-xs-2 col-lg-2 productDiv">
+                                                 <div class="shop-item">
+                                                        <div class="top">
+                                                ${(e.OutOfStock || e.Stock === 0) ? `  <img src="/images/soldout.png" asp-append-version="true" style="position:absolute; right:19px;left: 6px; bottom:44px; width:156px;height:100px;" /><img src = "${'/' + e.ItemImage}" alt = "Shop" />`
+                                                                                :
+                            `<img src = "${'/' + e.ItemImage}" alt = "Shop" />`}
+        
+                                                        
+                                                            <ul>
+                                                                <li>
+                                                                                ${(e.OutOfStock || e.Stock === 0) ? `<a class="bg-white">
+                                                                                <i class="bx bx-cart" style="opacity:0.5; "></i>
+                                                                                </a>`: ` <a href="#" onclick="AddCart(${e.ItemId},${e.price})">
+                                                                                <i class="bx bx-cart"></i>
+                                                                            </a>` }
+
+                                                                </li>
+
+                                                                <li>
+                                                                   ${e.FavorateItem == true ? `<a href="#" onclick="addFavorite(${e.ItemId})">
+                                                                                    <i id="${e.ItemId}" class="bx bxs-heart" style="color: #000;"></i>
+                                                                                </a>`: `<a href="#" onclick="addFavorite(${e.ItemId})">
+                                                                                    <i id="${e.ItemId}" class="bx bx-heart"></i>
+                                                                            </a>`}
+
+                                                                </li>
+
+                                                                 <li>
+                                                                           <a href="javascript:void(0)" data-bs-toggle="modal" onclick="QuickView(${e.ItemId})">
+                                                                                   <i class="fa fa-solid fa-eye" style="color: #000;" id="${e.ItemId}"></i>
+                                                                                   
+                                                                                </a>
+
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="bottom">
+                                                            <h3>
+                                                                                <a href="/PerfumeDetails?id=${e.ItemId}">
+                                                                        ${lang == "en" ? e.ItemTitleEn : e.ItemTitleAr}
+
+                                                                </a>
+
+
+
+                                                            </h3>
+
+                                                                   
+
+                                                                 <span>
+                  <p>
+          ${e.price == null
+                            ? `0 ${e.CurrencyEN == null ? 0 : e.CurrencyEN}`
+                            : `
+                                ${e.Beforeprice && e.Beforeprice !== 0 ? `<span style="text-decoration: line-through;color: red;">${lang == "en" ? `${e.Beforeprice} ${e.CurrencyEN}` : `${e.Beforeprice} ${e.CurrencyAR}`}</span>` : ""}
+                <span>${lang == "en" ? `${e.price} ${e.CurrencyEN}` : `${e.price} ${e.CurrencyAR}`}</span>
+              `
+                        }
+        </p>
+
+                                                                </span>
+
+                                                        </div>
+                                                    </div>
+                                                        </div>
+                                                `
+
+
+
+                    ).join("")
+
+                    viewPages.innerHTML = dataVewItemDetails;
+
+
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+
+
+
+        }
+
+        
+
+       
+
+        
+        function loadFunctions() {
+            //var countryPic = localStorage.getItem('countryPic');
+            //var CountryImg = document.getElementById("CountryImg").src = "/"+countryPic
+             chooseCountry();
+             //DefaultLanguage();
+            StorageinSession();
+            GetProducts();
+             ShoppingCartIcon();
+             AddCartUser();
+        }    
+
+        
+            function IncreaseQuantity(ItemId) {
+                var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+                for (var i = 0; i < cartItems.length; i++) {
+                    if (cartItems[i].ItemId == ItemId) {
+                        console.log("asde")
+                        cartItems[i].Qunatity++;
+                        console.log(cartItems[i].Qunatity)
+
+                    }
+                }
+                var updatedCartItemsJson = JSON.stringify(cartItems);
+                localStorage.setItem("cartItems", updatedCartItemsJson);
+                StorageinSession();
+                ShoppingCartIcon();
+                DisplayCartItems();
+
+            }
+
+            function DeacreaseQuantity(ItemId) {
+                var cartItems = JSON.parse(localStorage.getItem("cartItems"));
+                for (var i = 0; i < cartItems.length; i++) {
+                    if (cartItems[i].ItemId == ItemId) {
+                        if (cartItems[i].Qunatity > 1) {
+                            console.log("asde")
+                            cartItems[i].Qunatity--;
+                            console.log(cartItems[i].Qunatity)
+                        }
+
+
+                    }
+                }
+                var updatedCartItemsJson = JSON.stringify(cartItems);
+                localStorage.setItem("cartItems", updatedCartItemsJson);
+                StorageinSession()
+                ShoppingCartIcon();
+                DisplayCartItems();
+            }
+
+            function removeFromCart(ItemId) {
+                var cartData = JSON.parse(localStorage.getItem("cartItems"));
+                var productIndex = -1;
+                for (var i = 0; i < cartData.length; i++) {
+                    if (cartData[i].ItemId == ItemId) {
+                        productIndex = i;
+                        break;
+                    }
+                }
+                if (productIndex !== -1) {
+                    cartData.splice(productIndex, 1);
+                }
+                localStorage.setItem("cartItems", JSON.stringify(cartData));
+
+                StorageinSession()
+           
+             DisplayCartItems()
+            ShoppingCartIcon()
+                //location.href = "/Index"
+            }
+
+
+     function RemoveCountryFromLocal() {
+        
+   
+
+        
+
+    }
+
+
+   
+
+    </script>
+</body>
+
+</html>
+

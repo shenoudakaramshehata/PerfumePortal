@@ -1,0 +1,48 @@
+﻿@page
+@model CRM.Pages.Perfume.Auth.LoginModel
+@{
+    Layout = "_Layout2";
+}
+<!--section start-->
+<section class="login-page section-b-space">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-6">
+                <h3 class="text-center">@sharedResource["Login"]</h3>
+                <div class="theme-card d-flex justify-content-center ">
+                    <div class="text-center">
+                   <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                   </div>
+                    <form class="theme-form  col-lg-12"  method="post">
+                        <div class="form-group">
+                            <label asp-for="Input.Email"> @sharedResource["Email"]</label>
+                            <input asp-for="Input.Email" type="text" class="form-control" placeholder="@sharedResource["Enter Email"]" >
+                             <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.Password">@sharedResource["Password"]</label>
+                            <input asp-for="Input.Password" type="password" class="form-control" placeholder="@sharedResource["Enter password"]"  />
+                             <span asp-validation-for="Input.Password" class="text-danger"></span>
+                         
+                        </div>
+                        <div class="form-check">
+                          <input  asp-for="Input.RememberMe" class="form-check-input" type="checkbox"  >
+                            <label class="form-check-label ms-2" for="Input.RememberMe">@sharedResource["Remember me"]</label>
+                                                   
+                       </div>
+
+                        <button  class="btn btn-primary w-100 rounded-0 p-3" type="submit">@sharedResource["Sign In"]</button>
+                        
+                        <p>@sharedResource["Don't have an account ?"] </p><a asp-page="/Perfume/Profile">@sharedResource["Create an Account"]</a></p>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<!--Section ends-->

@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+	  <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+	  <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-CRM-FE19C71A-5FC3-4BE3-9817-BA307A34FB5D</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Admin\Pages\Configurations\ManageCountries\**" />
+    <Compile Remove="Areas\Admin\Pages\Configurations\ManageCurrencies\**" />
+    <Compile Remove="Pages\Categories\**" />
+    <Compile Remove="Views\Categories\**" />
+    <Content Remove="Areas\Admin\Pages\Configurations\ManageCountries\**" />
+    <Content Remove="Areas\Admin\Pages\Configurations\ManageCurrencies\**" />
+    <Content Remove="Pages\Categories\**" />
+    <Content Remove="Views\Categories\**" />
+    <EmbeddedResource Remove="Areas\Admin\Pages\Configurations\ManageCountries\**" />
+    <EmbeddedResource Remove="Areas\Admin\Pages\Configurations\ManageCurrencies\**" />
+    <EmbeddedResource Remove="Pages\Categories\**" />
+    <EmbeddedResource Remove="Views\Categories\**" />
+    <None Remove="Areas\Admin\Pages\Configurations\ManageCountries\**" />
+    <None Remove="Areas\Admin\Pages\Configurations\ManageCurrencies\**" />
+    <None Remove="Pages\Categories\**" />
+    <None Remove="Views\Categories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Shared\_head_css_ar.cshtml" />
+    <Content Remove="Pages\Shared\_Language.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
+    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
+    <PackageReference Include="NToastNotify" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+    <Folder Include="Pages\Currencies\" />
+    <Folder Include="wwwroot\images\Category\" />
+    <Folder Include="wwwroot\images\Country\" />
+  </ItemGroup>
+
+</Project>

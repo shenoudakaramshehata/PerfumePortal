@@ -1,0 +1,10 @@
+@media (min-width: 992px) {
+    /* Adjustments for web view */
+    .card {
+        width: 50%;
+    }
+
+    .card-body {
+        width: 100%;
+    }
+}

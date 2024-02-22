@@ -1,0 +1,39 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div id="popupExample" class="popup">
+    <div class="popup-header">
+        <h5 class="popup-title" id="popupExampleLabel">@sharedResource["Cart"]</h5>
+        <button type="button" class="btn-close text-reset" onclick="closePopup()" aria-label="Close"></button>
+    </div>
+    <div id="cardbodyid" class="popup-content">
+        <div class="cart-area">
+            <div id="tableId" class="table-item">
+                <table class="table">
+                    <thead id="theadid">
+                        <!-- Table header content -->
+                        <tr>
+                            <th scope="col">@sharedResource["Image"]</th>
+                            <th scope="col">@sharedResource["Product Name"]</th>
+                            <th scope="col">@sharedResource["Price"]</th>
+                            <th scope="col">@sharedResource["Quantity"]</th>
+                            <th scope="col">@sharedResource["Remove"]</th>
+                        </tr>
+                    </thead>
+                    <tbody id="popid">
+                        <!-- Table body content -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="cartPopupId">
+                <!-- Additional content within the cart popup -->
+            </div>
+            <div id="popupcarttotal" class="cart-total popup-total mb-5">
+                <!-- Popup cart total content -->
+            </div>
+        </div>
+    </div>
+</div>
+

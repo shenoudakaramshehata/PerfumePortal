@@ -1,0 +1,60 @@
+﻿@page
+@model CRM.Pages.TERMSModel
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+}
+
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+
+<div class="page-title-wrap">
+    <div class="page-title-area" style="background-color:#f5f5f5 !important;">
+       
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black">@sharedResource["Terms and Condition"]</h2>
+                    <ul>
+                        <li>
+                            <a asp-page="index" class="text-black">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black">@sharedResource["Terms and Condition"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="service-details-area pt-100 pb-70">
+    <div class="container">
+        <div class="details-spa">
+            <h3 style="color:black">@sharedResource["Terms and Condition"]</h3>
+            <p>
+                @{
+                    if (Model.BrowserCulture == "en-US")
+                    {
+                        @Html.Raw(@Model.ContentEn)
+                        ;
+
+                    }
+                    else
+                    {
+                        @Html.Raw(@Model.ContentAr)
+                        ;
+
+
+                    }
+                }
+            </p>
+        </div>
+
+    </div>
+</div>

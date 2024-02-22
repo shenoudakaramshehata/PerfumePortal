@@ -1,0 +1,82 @@
+﻿@using CRM.Data
+@using Microsoft.AspNetCore.Localization;
+@inject PerfumeContext _context
+@{
+    var locale = Context.Features.Get<IRequestCultureFeature>();
+
+    var BrowserCulture = locale.RequestCulture.UICulture.ToString();
+    var status = _context.OrderStatuses.Select(e => new { e.OrderStatusId, e.Status });
+}
+@model CRM.ViewModels.EditOrder
+
+<div class="modal fade" id="showEditModal" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">@(sharedResource["Edit"])</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form asp-area="Admin" asp-page="/Configurations/Operator/EditOrder" asp-page-handler="Editorder" asp-route-Id="@Model.OrderId" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" id="id-field" />
+                    <div class="row g-3">
+
+
+                        <!--end col-->
+                        <div class="col-lg-12 hidden">
+                            <div>
+                                <input id="OrderId" asp-for="@Model.OrderId" hidden />
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="@Model.DiscountAmount" class="form-label">@sharedResource["Discount Amount"]</label>
+                                <input type="text" asp-for="@Model.DiscountAmount" id="discountAmount"
+                                       data-val="true" data-val-regex="Invalid amount format. Please enter a valid amount."
+                                       data-val-regex-pattern="^\d+(\.\d{1,2})?$"
+                                       data-val-required="@sharedResource["Enter Discount Amount"]"
+                                       class="form-control"
+                                       placeholder="@sharedResource["Enter Discount Amount"]" />
+                                <span asp-validation-for="@Model.DiscountAmount" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="datepicker-publish-input" class="form-label">@sharedResource["Order Date"]</label>
+                                <input type="text" class="form-control" data-provider="flatpickr"
+                                       data-date-format="d M Y" data-range-date="true" name="datepicker"
+                                       id="demo-datepicker" placeholder=@sharedResource["Select date"]>
+                            </div>
+                        </div>
+                       
+                        <!--End Customer-->
+                        <!--Order-->
+
+
+                        
+                        <!--end col-->
+                        <!--end col-->
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light"
+                                data-bs-dismiss="modal">
+                            @sharedResource["Close"]
+                        </button>
+                        <button type="submit" class="btn btn-success"
+                                id="add-btn">
+                            @sharedResource["Save"]
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

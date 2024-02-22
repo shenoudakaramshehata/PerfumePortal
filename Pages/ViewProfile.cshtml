@@ -1,0 +1,274 @@
+﻿@page
+@model CRM.Pages.ViewProfileModel
+@{
+    Layout = "~/Pages/UserSite/_Layout.cshtml";
+}
+
+
+@Html.Partial("~/Pages/UserSite/_TopBar.cshtml")
+
+
+@Html.Partial("~/Pages/UserSite/_navbar.cshtml")
+
+
+<div class="page-title-wrap">
+    <div class="page-title-area " style="background-color:#f5f5f5 !important;">
+       
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2 class="text-black">@sharedResource["Profile"]</h2>
+                    <ul>
+                        <li>
+                            <a asp-page="index" class="text-black">@sharedResource["HOME"]</a>
+                        </li>
+                        <li>
+                            <span class="text-black">@sharedResource["Profile"]</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<body>
+    <div class="product-details-area user-area ptb-100">
+        <div class="container">
+            <div class="row align-items-center">
+                @*<div class="col-lg-6">
+                <div class="shop-item">
+                <div class="top">
+                <form asp-page-handler="ChangeImage" enctype="multipart/form-data">
+                @*<form asp-page-handler="ChangeImage" enctype="multipart/form-data" onsubmit="return validateMyForm();">
+
+                <div class="position-absolute bottom-0 end-0">
+                <label for="file" class="mb-0" data-bs-toggle="tooltip" data-bs-placement="right" title="Select Image">
+                <div class="avatar-xs cursor-pointer">
+                <div class="avatar-title bg-light border rounded-circle text-muted">
+                <i class="ri-image-fill"></i>
+                </div>
+                </div>
+                </label>
+                <input class="form-control d-none hidefromHere" name="file" id="file" type="file"
+                accept="image/*" required>
+                </div>
+                </form>
+                <img src="~/assets/images/users/user-dummy-img.jpg" alt="user">
+                </div>
+                </div>
+                </div>*@
+                <div class="col-lg-6 m-auto text-center">
+                    <div class="shop-details">
+                        <h4 class="p-2" style="color:#000;">@sharedResource["PERSONAL INFORMATION"]</h4>
+                        <h6>@sharedResource["Name"] : <span>@Model.customer.CustomerName</span></h6>
+                        <h6>@sharedResource["Phone number"] : <span>@Model.customer.Phone</span></h6>
+                        <h6>@sharedResource["Joining date"] : <span>@Model.customer.RegisterDate</span></h6>
+
+                    </div>
+                </div>
+            </div>
+            <div class="send-review-area ">
+
+                <ul class="nav nav-pills justify-content-center " id="pills-tab" role="tablist">
+
+                    <li class="nav-item mb-1" role="presentation">
+                        <a class="btn btn-close-white btn-outline-light text-black" style="border-radius: 0;" id="pills-orders-tab" data-bs-toggle="pill" href="#pills-orders" role="tab" aria-controls="pills-orders" aria-selected="false">@sharedResource["My orders"]</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="btn btn-close-white btn-outline-light text-black" style="border-radius: 0;" id="pills-profile-tab" data-bs-toggle="pill" href="#pills-password" role="tab" aria-controls="pills-password" aria-selected="false">@sharedResource["Change Password"]</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="btn btn-close-white btn-outline-light text-black" style="border-radius: 0;" id="pills-home-tab" data-bs-toggle="pill" href="#pills-address" role="tab" aria-controls="pills-address" aria-selected="true">@sharedResource["Edit Address"]</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="btn btn-close-white btn-outline-light text-black" style="border-radius: 0;" id="pills-signout-tab" data-bs-toggle="pill" href="#pills-signout" role="tab" aria-controls="pills-signout" aria-selected="false">@sharedResource["Sign Out"]</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content " id="pills-tabContent">
+
+                    <div class="tab-pane fade show active" id="pills-orders" role="tabpanel" aria-labelledby="pills-orders-tab">
+
+
+                        <div class="review-item">
+                            @{
+                                @if (Model.orders.Count > 0)
+                                {
+                                    <table class="table table-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"><p>@sharedResource["Serial number"]</p></th>
+                                                <th scope="col"><p>@sharedResource["Order Date"]</p></th>
+                                                <th scope="col"><p>@sharedResource["Total order"]</p></th>
+                                                <th scope="col"><p>@sharedResource["Order Status"]</p></th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var order in Model.orders)
+                                            {
+                                                <tr>
+                                                    <td><p>@order.OrderSerial</p></td>
+                                                    <td><p>@order.OrderDate</p></td>
+                                                    <td><p>@order.OrderNet</p></td>
+                                                    <td><p>@order.OrderStatus.Status</p></td>
+                                                </tr>
+                                            }
+
+
+                                        </tbody>
+                                    </table>
+                                }
+                                else
+                                {
+
+                                    <p class="text-center">@sharedResource["No orders"]</p>
+
+                                }
+                            }
+                        </div>
+
+
+
+
+                    </div>
+
+                    <div class="tab-pane user-item fade col-lg-6  m-auto" style="background-color:#F5F5F5 !important;" id="pills-address" role="tabpanel" aria-labelledby="pills-address-tab">
+
+                        <div class="user-shape">
+                            <img src="~/Jeel/images/contact-shape1.png" alt="Shape">
+                            <img src="~/Jeel/images/contact-shape2.png" alt="Shape">
+                        </div>
+
+
+                        <h2 class="text-center text-dark mb-4">@sharedResource["Billing Address"]</h2>
+
+                        <form asp-page-handler="AddCustomerAddress" class="mb-4">
+
+                            <div class="form-group mb-3">
+                                <input type="text" class="form-control" asp-for="@Model.customerAddr.Address" placeholder="@sharedResource["Address*"]" required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <input type="text" class="form-control" asp-for="@Model.customerAddr.CityName" placeholder="@sharedResource["City name*"]" required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <input type="text" class="form-control" asp-for="@Model.customerAddr.AreaName" placeholder="@sharedResource["Area name*"]" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <input type="text" class="form-control" asp-for="@Model.customerAddr.ZIPCode" placeholder="@sharedResource["Zip Code*"]" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <input type="text" class="form-control" asp-for="@Model.customerAddr.BuildingNo" placeholder="@sharedResource["Building No*"]" required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <input type="text" class="form-control" asp-for="@Model.customerAddr.Mobile"  placeholder="@sharedResource["Mobile*"]" required>
+                            </div>
+
+                            <div class="text-center mt-5">
+                                <button class="btn btn-close-white btn-light" style="border-radius: 0; width:100%;">@sharedResource["Change Address"]</button>
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                    <div class="tab-pane user-item fade col-lg-9 m-auto py-5" style="background-color:#F5F5F5 !important;" id="pills-password" role="tabpanel" aria-labelledby="pills-password-tab">
+
+
+                        <div class="user-shape">
+                            <img src="~/Jeel/images/contact-shape1.png" alt="Shape">
+                            <img src="~/Jeel/images/contact-shape2.png" alt="Shape">
+                        </div>
+
+                        <form asp-page-handler="EditPassword" class="col-8 m-auto">
+
+                            <h2 class="text-center text-dark mb-5">@sharedResource["Change Password"]</h2>
+
+                            <div class="form-group mb-4">
+                                <input asp-for="@Model.resetPasswordVM.CurrentPassword" required type="Password" class="form-control" placeholder="@sharedResource["Old Password"]">
+                                <span asp-validation-for="@Model.resetPasswordVM.CurrentPassword" class="text-danger"></span>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <input type="Password" asp-for="@Model.resetPasswordVM.NewPassword" required class="form-control" placeholder="@sharedResource["New Password"]">
+                                <span asp-validation-for="@Model.resetPasswordVM.NewPassword" class="text-danger"></span>
+
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <input type="Password" required asp-for="@Model.resetPasswordVM.ConfirmPassword" class="form-control" placeholder="@sharedResource["Confirm Password"]">
+                                <span asp-validation-for="@Model.resetPasswordVM.ConfirmPassword" class="text-danger"></span>
+
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="text-center mt-5">
+                                <button class="btn btn-close-white btn-light" style="border-radius: 0; width:100%;">@sharedResource["Change Password"]</button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                    <div class="tab-pane fade col-2 m-auto" id="pills-signout" role="tabpanel" aria-labelledby="pills-signout-tab">
+
+                        <a href="/identity/account/Logout" class="btn common-btn two text-dark">@sharedResource["Sign Out"]</a>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+    <script src="assets/js/form-validator.min.js"></script>
+
+    <script src="assets/js/contact-form-script.js"></script>
+
+    <script src="assets/js/jquery.ajaxchimp.min.js"></script>
+
+    <script src="assets/js/jquery.meanmenu.js"></script>
+
+    <script src="assets/js/wow.min.js"></script>
+
+    <script src="assets/js/owl.carousel.min.js"></script>
+
+    <script src="assets/js/jquery-modal-video.min.js"></script>
+
+    <script src="assets/js/odometer.min.js"></script>
+    <script src="assets/js/jquery.appear.min.js"></script>
+
+    <script src="assets/js/jquery.themepunch.tools.min.js"></script>
+    <script src="assets/js/jquery.themepunch.revolution.min.js"></script>
+
+    <script src="assets/js/extensions/revolution.extension.actions.min.js"></script>
+    <script src="assets/js/extensions/revolution.extension.carousel.min.js"></script>
+    <script src="assets/js/extensions/revolution.extension.kenburn.min.js"></script>
+    <script src="assets/js/extensions/revolution.extension.layeranimation.min.js"></script>
+    <script src="assets/js/extensions/revolution.extension.migration.min.js"></script>
+    <script src="assets/js/extensions/revolution.extension.navigation.min.js"></script>
+    <script src="assets/js/extensions/revolution.extension.parallax.min.js"></script>
+    <script src="assets/js/extensions/revolution.extension.slideanims.min.js"></script>
+    <script src="assets/js/extensions/revolution.extension.video.min.js"></script>
+
+    <script src="assets/js/jquery.nice-select.min.js"></script>
+
+    <script src="assets/js/custom.js"></script>
+</body>
+
+
+
+

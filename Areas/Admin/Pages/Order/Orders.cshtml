@@ -1,0 +1,307 @@
+﻿@page
+@model CRM.Areas.Admin.Pages.Order.OrdersModel
+@{
+    Layout = null;
+}
+@Html.AntiForgeryToken()
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+<!doctype html>
+
+<html lang="en" dir="ltr" id="masterPageId" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg">
+
+<head>
+    
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+    <link href="~/css/devextreme/dx.common.css" rel="stylesheet" />
+    <link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
+    @*<script type='text/javascript' src='https://knockoutjs.com/downloads/knockout-3.5.0.debug.js'></script>
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js'></script>
+        <script src="~/js/devextreme/jquery.js"></script>
+        <script src="~/js/devextreme/bootstrap.js"></script>
+        <script src="~/js/devextreme/dx.all.js"></script>
+        <script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
+        <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>*@
+    <script type='text/javascript' src='https://knockoutjs.com/downloads/knockout-3.5.0.debug.js'></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js'></script>
+
+    @*<script src="~/Admin/lib/popper/js/popper.js"></script>*@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/devextreme/dx.all.js"></script>
+    <script src="~/js/devextreme/aspnet/dx.aspnet.mvc.js"></script>
+    <script src="~/js/devextreme/aspnet/dx.aspnet.data.js"></script>
+   <partial name="_Links"/>
+   <style>
+    @@media (min-width: 576px)
+.modal-dialog {
+    max-width: none !important;
+        
+}
+
+</style>
+@*           <link href="~/assets/css/custom-rtl.min.css" rel="stylesheet" type="text/css" />
+*@    </head>
+    <body id="masterbodyid">
+ <!-- Begin page -->
+    <div id="layout-wrapper">
+       <partial name="_menu" />
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+                    <partial name="_page_title" />
+
+              
+
+<div class="row">
+    <div class="col-xxl-12 col-xl-12">
+        <div class="card card-height-100">
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">@sharedResource["Orders"]</h4>
+               
+            </div>
+            <!-- end card header -->
+            <!-- card body -->
+            <div class="card-body">
+                @(Html.DevExtreme().DataGrid<CRM.ViewModels.OrdersDataGrid>()
+                    .ID("gridContainer")
+                                        .DataSource(Model.orders
+
+                                        )
+                    .Columns(columns =>
+                    {
+                   columns.AddFor(m => m.ORDERDATE).Visible(true).Fixed(true).Caption(sharedResource["Order Date"]);
+                                            columns.AddFor(m => m.orderId).Visible(true).Fixed(true).SortOrder(SortOrder.Desc).Caption(sharedResource["Order Id"]);
+                   columns.AddFor(m => m.SHIPMENTNUMBER).Visible(true).Caption(sharedResource["ShippingNo"]);
+                                            columns.AddFor(m => m.customerName).Visible(true).Fixed(true).Caption(sharedResource["Customer"]);
+                   columns.AddFor(m => m.country).Visible(true).Caption(sharedResource["Country"]);
+                   columns.AddFor(m => m.city).Visible(true).Caption(sharedResource["CustomerAddressCity"]);
+                   columns.AddFor(m => m.area).Visible(true).Caption(sharedResource["CustomerAddressArea"]);
+                   columns.AddFor(m => m.Address).Visible(true).Caption(sharedResource["CustomerAddressAddress"]);
+                                            columns.AddFor(m => m.customerPhone).Visible(true).Fixed(true).Caption(sharedResource["Phone"]);
+                                            columns.AddFor(m => m.Perfume1).Visible(true).Caption(sharedResource["PERFUME1"]);
+                                            columns.AddFor(m => m.quantity1).Visible(true).Caption(sharedResource["Q1"]);
+                                            columns.AddFor(m => m.Perfume2).Visible(true).Caption(sharedResource["PERFUME2"]);
+                                            columns.AddFor(m => m.quantity2).Visible(true).Caption(sharedResource["Q2"]);
+
+                                            columns.AddFor(m => m.Perfume3).Visible(true).Caption(sharedResource["PERFUME3"]);
+                                            columns.AddFor(m => m.quantity3).Visible(true).Caption(sharedResource["Q3"]);
+
+                                            columns.AddFor(m => m.Perfume4).Visible(true).Caption(sharedResource["PERFUME4"]);
+                                            columns.AddFor(m => m.quantity4).Visible(true).Caption(sharedResource["Q4"]);
+
+                                            columns.AddFor(m => m.Perfume5).Visible(true).Caption(sharedResource["PERFUME5"]);
+                                            columns.AddFor(m => m.quantity5).Visible(true).Caption(sharedResource["Q5"]);
+
+                                            columns.AddFor(m => m.Perfume6).Visible(true).Caption(sharedResource["PERFUME6"]);
+                                            columns.AddFor(m => m.quantity6).Visible(true).Caption(sharedResource["Q6"]);
+
+
+                                            columns.AddFor(m => m.Perfume7).Visible(true).Caption(sharedResource["PERFUME7"]);
+                                            columns.AddFor(m => m.quantity7).Visible(true).Caption(sharedResource["Q7"]);
+
+
+                                            columns.AddFor(m => m.Perfume8).Visible(true).Caption(sharedResource["PERFUME8"]);
+                                            columns.AddFor(m => m.quantity8).Visible(true).Caption(sharedResource["Q8"]);
+
+
+                                            columns.AddFor(m => m.Perfume9).Visible(true).Caption(sharedResource["PERFUME9"]);
+                                            columns.AddFor(m => m.quantity9).Visible(true).Caption(sharedResource["Q9"]);
+
+
+                                            columns.AddFor(m => m.Perfume10).Visible(true).Caption(sharedResource["PERFUME10"]);
+                                            columns.AddFor(m => m.quantity10).Visible(true).Caption(sharedResource["Q10"]);
+
+                                            columns.AddFor(m => m.orderTotal).Visible(true).Caption(sharedResource["Order Total"]);
+
+                                            columns.AddFor(m => m.discount).Visible(true).Caption(sharedResource["Order Discount"]);
+                                            columns.AddFor(m => m.delieveryCost).Visible(true).Caption(sharedResource["Delivery cost"]);
+                                            columns.AddFor(m => m.tax).Visible(true).Caption(sharedResource["Tax"]);
+                                            columns.AddFor(m => m.orderNet).Visible(true).Caption(sharedResource["Order Net"]);
+                                            columns.AddFor(m => m.paymentMethod).Visible(true).Caption(sharedResource["Payment Method"]);
+                                            columns.AddFor(m => m.notes).Visible(true).Caption(sharedResource["Notes"]);
+
+                                            columns.AddFor(m => m.email).Visible(true).Fixed(true).Caption(sharedResource["Email"]);
+                                            columns.AddFor(m => m.status).Visible(true).Fixed(true).Caption(sharedResource["Status"]);
+                                        })
+                    .ShowColumnLines(true)
+                    .ShowRowLines(true)
+                    .Export(e => e.Enabled(true).AllowExportSelectedData(true))
+                    .OnExporting("exporting")
+                    .RowAlternationEnabled(true)
+                    .RemoteOperations(false)
+                    .FilterRow(f => f.Visible(true))
+                    .HeaderFilter(f => f.Visible(true))
+                    .GroupPanel(p => p.Visible(true))
+                    .Scrolling(scrolling => scrolling.RowRenderingMode(GridRowRenderingMode.Virtual))
+                    .Selection(s => s.Mode(SelectionMode.Multiple))
+                    .Paging(paging => paging.PageSize(10))
+                    .AllowColumnReordering(true)
+                    .AllowColumnResizing(true)
+                    .ColumnAutoWidth(true)
+                    .ShowBorders(true)
+                    .ColumnChooser(c => c.Enabled(true))
+                    .ColumnFixing(c => c.Enabled(true))
+                    .ShowBorders(true)
+                    .Grouping(g => g.AutoExpandAll(false))
+                    .Pager(pager =>
+                    {
+                        pager.Visible(true);
+                        pager.DisplayMode(GridPagerDisplayMode.Full);
+                        pager.ShowPageSizeSelector(true);
+                        pager.AllowedPageSizes(new JS("[5,10,20,50,100,'all']"));
+                        pager.ShowInfo(true);
+                        pager.ShowNavigationButtons(true);
+                    })
+                    .SearchPanel(searchPanel => searchPanel
+                    .Visible(true)
+                    .Width(240)
+                    .Placeholder(sharedResource["SearchTxt"]))
+
+                    .RemoteOperations(true)
+                    .RtlEnabled(bool.Parse(sharedResource["Direction"]))
+                    )
+
+
+                @* PopUp *@
+
+                @(Html.DevExtreme().Popup()
+                    .ID("ViewPopup")
+                    .Width(360)
+                    .Height(320)
+                    .Visible(false)
+                    .Title("Downtown Inn")
+                    .CloseOnOutsideClick(true)
+                    .ShowCloseButton(true)
+                    .ContentTemplate(new TemplateName("popup-template"))
+                    .ToolbarItems(barItems =>
+                    {
+                        barItems.Add()
+                        .Toolbar(Toolbar.Bottom)
+                        .Location(ToolbarItemLocation.Center)
+                        .Widget(widget => widget.Button()
+                        .Text("Print")
+                        .Type(ButtonType.Default)
+                        .StylingMode(ButtonStylingMode.Contained)
+                        .Width(300)
+                        .OnClick("hidePopup")
+                        );
+                    })
+                    )
+
+
+                @using (Html.DevExtreme().NamedTemplate("popup-template"))
+                {
+                    @(Html.DevExtreme().ScrollView()
+                        .Width("100%")
+                        .Height("100%")
+                        .Content(@<text>
+                            <div class="caption">Description</div>
+                            In the heart of LA&apos;s business district, the Downtown Inn has a welcoming staff
+                            and award winning restaurants that remain open 24 hours a day.
+                            Use our conference room facilities to conduct meetings and have a drink
+                            at our beautiful rooftop bar.
+                            <br><br>
+                            <div class="content">
+                                <div>
+                                    <div class="caption">Features</div>
+                                    <div>Concierge</div>
+                                    <div>Restaurant</div>
+                                    <div>Valet Parking</div>
+                                    <div>Fitness Center</div>
+                                    <div>Sauna</div>
+                                    <div>Airport Shuttle</div>
+                                </div>
+                                <div>
+                                    <div class="caption">Rooms</div>
+                                    <div>Climate control</div>
+                                    <div>Air conditioning</div>
+                                    <div>Coffee/tea maker</div>
+                                    <div>Iron/ironing</div>
+                                </div>
+                            </div>
+                        </text>)
+                        )
+                }
+
+
+            </div>
+            <!-- end card body -->
+        </div><!-- end card -->
+    </div>
+</div>
+                </div>
+            </div>
+            <partial name="_footer"/>
+            
+        </div>
+
+    </div>
+    <!-- END layout-wrapper -->
+ @*   @Html.Partial("_customizer.cshtml")*@
+  <partial name="_vendor_scripts"/>
+     <partial name="_ValidationScriptsPartial" />
+
+  
+   
+
+    @await Component.InvokeAsync("NToastNotify")
+   
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.10.1/polyfill.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/3.8.0/exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+
+
+<script>
+
+    //window.addEventListener('DOMContentLoaded', (event) => {
+    //    if (localStorage.getItem("lang") != "") {
+
+    //        if (localStorage.getItem("lang") == "ar") {
+    //            console.log("In Page")
+    //            dataGrid = $("#gridContainerID").dxDataGrid("instance");
+    //            //dataGrid.option("rtlEnabled", isRTL);
+    //            //dataGrid.option("searchPanel.placeholder", (isRTL) ? "بحث" : "Search...");
+    //            //dataGrid = $("#AssetLookupListId").dxDataGrid("instance");
+    //            dataGrid.option("rtlEnabled", true);
+    //        }
+    //    }
+    //});
+
+    function exporting(e) {
+        var workbook = new ExcelJS.Workbook();
+        var worksheet = workbook.addWorksheet('Orders');
+
+        DevExpress.excelExporter.exportDataGrid({
+            component: e.component,
+            worksheet: worksheet,
+            autoFilterEnabled: true
+        }).then(function () {
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                var currentdate = new Date();
+                var datetime = currentdate.getDate() + "_"
+                    + (currentdate.getMonth() + 1) + "_"
+                    + currentdate.getFullYear() + "_"
+                    + currentdate.getHours() + "_"
+                    + currentdate.getMinutes() + "_"
+                    + currentdate.getSeconds();
+                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Orders_' + datetime + '.xlsx');
+            });
+        });
+        e.cancel = true;
+    }
+
+ 
+</script>
+</body>
+</html>
